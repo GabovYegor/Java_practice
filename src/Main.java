@@ -1,5 +1,3 @@
-import DataClasses.Example;
-import Visualization.DrawingPanel;
 import Visualization.MainWindow;
 
 public class Main {
@@ -9,3 +7,4 @@ public class Main {
         mainWindow.setVisible(true);
     }
 }
+

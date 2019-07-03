@@ -1,3 +1,9 @@
+/** TODO
+ *  1) Рассмотреть repaint
+ *  2) Рисовать граф - принимать положения вершин + ребра + цвета ребер
+ */
+
+
 package Visualization;
 
 import javax.swing.*;

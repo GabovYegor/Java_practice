@@ -1,5 +1,11 @@
 package Visualization;
 
+/** TODO
+ *  1) Отдельный метод для рисования линии
+ *  2) Создать интерфейс - разобраться с Layout
+ *  3) Получить интерфейс и реализовать интерфейс к кнопкам
+ */
+
 import Visualization.DrawingPanel;
 import javax.swing.*;
 import java.awt.*;
@@ -38,7 +44,7 @@ public class MainWindow extends JFrame {
         btn_3 = new JButton("button_3");
 
         DrawingPanel pnl_paint = new DrawingPanel();
-        Dimension d = new Dimension(10000, 10000);
+        Dimension d = new Dimension(1000, 1000);
         pnl_paint.setPreferredSize(d);
 
         JScrollPane scrollPane = new JScrollPane(pnl_paint);
@@ -55,7 +61,6 @@ public class MainWindow extends JFrame {
         box_text.add(lbl_2);
         box_text.add(Box.createHorizontalStrut(10));
         box_text.add(txtf_2);
-
 
         box_buttons.add(btn_1);
         box_buttons.add(Box.createHorizontalStrut(10));
@@ -76,6 +81,7 @@ public class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent event) {
                 JOptionPane.showMessageDialog(null, "hello");
             }
+
         });
         btn_2.addActionListener(new ActionListener() {
             @Override
