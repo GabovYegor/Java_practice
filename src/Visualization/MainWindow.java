@@ -18,6 +18,7 @@ public class MainWindow extends JFrame {
         super(title);
         WindowSettings();
         LayoutSettins();
+        buttonsSettings();
     }
 
     private void WindowSettings(){
@@ -37,14 +38,12 @@ public class MainWindow extends JFrame {
         btn_3 = new JButton("button_3");
 
         DrawingPanel pnl_paint = new DrawingPanel();
-        Dimension d = new Dimension(1000, 1000);
+        Dimension d = new Dimension(10000, 10000);
         pnl_paint.setPreferredSize(d);
 
-        //JPanel pnl_paint = new JPanel();
         JScrollPane scrollPane = new JScrollPane(pnl_paint);
         Box box_text = Box.createHorizontalBox();
         Box box_buttons = Box.createHorizontalBox();
-        //JPanel pnl_main = new JPanel(new GridBagLayout());
         Box box_main = Box.createVerticalBox();
 
         pnl_paint.setBackground(new Color(20, 180, 250));
@@ -57,6 +56,21 @@ public class MainWindow extends JFrame {
         box_text.add(Box.createHorizontalStrut(10));
         box_text.add(txtf_2);
 
+
+        box_buttons.add(btn_1);
+        box_buttons.add(Box.createHorizontalStrut(10));
+        box_buttons.add(btn_2);
+        box_buttons.add(Box.createHorizontalStrut(10));
+        box_buttons.add(btn_3);
+        box_buttons.add(Box.createHorizontalGlue());
+
+        box_main.add(scrollPane);
+        box_main.add(box_text);
+        box_main.add(box_buttons);
+        setContentPane(box_main);
+    }
+
+    private void buttonsSettings(){
         btn_1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
@@ -72,20 +86,6 @@ public class MainWindow extends JFrame {
                     JOptionPane.showMessageDialog(null, "message empty");
             }
         });
-        box_buttons.add(btn_1);
-        box_buttons.add(btn_2);
-        box_buttons.add(btn_3);
-
-        box_main.add(scrollPane);
-        box_main.add(box_text);
-        box_main.add(box_buttons);
-//
-//        pnl_main.add(scrollPane, new GridBagConstraints(0,0,1,1,1.0,1.0,18, GridBagConstraints.BOTH, new Insets(1,1,0,0),0,400));
-//        pnl_main.add(box_text, new GridBagConstraints(0,1,1,1,1.0,1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 0),100,0));
-//        pnl_main.add(box_buttons, new GridBagConstraints(0,2,1,1,1.0,1.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0),0,0));
-        setContentPane(box_main);
-
-
     }
 
 }
