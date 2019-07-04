@@ -46,6 +46,9 @@ public class Graph {
         return nodeIndex(name) >= 0;
     }
 
+
+
+
     // Вершина графа.
     private class Node {
 
@@ -73,6 +76,9 @@ public class Graph {
         private int edgeCount() {
             return adjacencyList.size();
         }
+
+
+
 
         // Ребро графа для списка смежности adjacencyList.
         private class Edge {
