@@ -1,11 +1,10 @@
-import DataClasses.Example;
+import DataClasses.Graph;
 
 public class Main {
 
     public static void main(String[] args) {
-
-        System.out.println("Hello World!");
-        Example ex = new Example();
-        ex.write();
+        Graph graph = new Graph();
+        graph.addEdge('s', 'r', 5);
+        System.out.println(graph.nodeCount());
     }
 }
