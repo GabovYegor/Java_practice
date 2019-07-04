@@ -2,30 +2,29 @@
  *  1) Рассмотреть repaint
  *  2) Рисовать граф - принимать положения вершин + ребра + цвета ребер
  */
-
-
 package Visualization;
 
+import DataClasses.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.Vector;
 
-public class DrawingPanel extends JPanel {
-    private static final int RADIUS = 50;
-    private static final int X = 50;
-    private static final int Y = 50;
-    private int moveXBy;
+class DrawingPanel extends JPanel {
+    Vector points = new Vector();
+    DrawingPanel(Vector new_odj){
+        points = new_odj;
+    }
 
     @Override
     protected void paintComponent ( Graphics g ) {
         super.paintComponent ( g );
         Graphics2D g2 = (Graphics2D) g;
-        g2.drawRect ( 50, RADIUS, X, Y );
-        g2.drawRect ( 100, RADIUS, X, Y );
-        g2.drawRect ( 150, RADIUS, X, Y );
-        g2.drawRect ( 200, RADIUS, X, Y );
-        g2.drawRect ( 250, RADIUS, X, Y );
-        g2.setColor ( Color.RED );
-        g2.fillOval ( moveXBy, RADIUS, X, Y ) ;
+        for(int i = 0; i < points.size(); ++i) {
+            Example point = (Example) points.get(i);
+            g2.fillOval(point.x, point.y, point.width, point.height);
+        }
 
         g2.setColor(Color.black);
         g2.setStroke(new BasicStroke(8.0f));  // толщина равна 10

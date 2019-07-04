@@ -1,4 +1,4 @@
-import Visualization.MainWindow;
+import Visualization.*;
 
 public class Main {
 
