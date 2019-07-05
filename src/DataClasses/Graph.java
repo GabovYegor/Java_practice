@@ -2,6 +2,7 @@ package DataClasses;
 
 import java.util.ArrayList;
 
+
 public class Graph {
 
     private ArrayList<Node> nodeList; // Список вершин графа.
@@ -11,7 +12,7 @@ public class Graph {
         nodeList = new ArrayList<>();
     }
 
-    // Добавить вершину в граф и вернуть её индекс в nodeList.
+    // Добавить вершину в граф (если такой вершины ещё нет) и вернуть её индекс в nodeList.
     public int addNode(char name) {
         int index = nodeIndex(name);
         if (index == -1) {
@@ -41,10 +42,21 @@ public class Graph {
         return -1;
     }
 
+    // Возвращает имя вершины с индексом index.
+    public char nodeName(int index) {
+        return nodeList.get(index).name;
+    }
+
     // Проверяет, существует ли вершина с именем name.
     public boolean isNodeExists(char name) {
         return nodeIndex(name) >= 0;
     }
+
+    // Количество рёбер исходящих из вершины с индексом index.
+    public int countOfEdgesFromNode(int index) {
+        return nodeList.get(index).edgeCount();
+    }
+
 
     // Вершина графа.
     private class Node {
@@ -73,8 +85,6 @@ public class Graph {
         private int edgeCount() {
             return adjacencyList.size();
         }
-
-
 
 
         // Ребро графа для списка смежности adjacencyList.
