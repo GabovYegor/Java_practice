@@ -7,7 +7,8 @@ public class Main {
         Graph graph = new Graph();
         graph.addEdge('a', 'b', 12);
         System.out.println(graph.nodeCount());
-        MainWindow mainWindow = new MainWindow("Dijkstra");
+        MainWindow mainWindow = new MainWindow("Dijkstra", graph);
         mainWindow.setVisible(true);
+        System.out.println(graph.nodeCount());
     }
 }

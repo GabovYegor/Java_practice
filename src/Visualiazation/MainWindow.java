@@ -1,10 +1,11 @@
+/*
+    1) Добавить в inputPane поле для начальной вершины
+    2) Добавить в outPane возможность узнать расстояние до вершины
+ */
+
 package Visualiazation;
 
-/** TODO
- *  1) Отдельный метод для рисования линии
- *  2) Создать интерфейс - разобраться с Layout
- *  3) Получить интерфейс и реализовать интерфейс к кнопкам
- */
+import DataClasses.Graph;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,14 +25,16 @@ public class MainWindow extends JFrame {
     private JTextArea txtaLog;
 
     private DrawingPanel drawingPanel;
-
     private Box boxVOutputPanel;
     private JButton btnNextStep;
     private JButton btnPreviousStep;
     private JButton btnReset;
 
-    public MainWindow(String title){
+    private Graph graph;
+
+    public MainWindow(String title, Graph graph){
         super(title);
+        this.graph = graph;
         initVariables();
         windowSettings();
         layoutSettins();
@@ -54,7 +57,7 @@ public class MainWindow extends JFrame {
         txtaLog.setLineWrap(true);
         txtaLog.setWrapStyleWord(true);
 
-        drawingPanel = new DrawingPanel();
+        drawingPanel = new DrawingPanel(graph);
 
         boxVOutputPanel = Box.createVerticalBox();
         btnNextStep = new JButton("next step");
@@ -63,7 +66,7 @@ public class MainWindow extends JFrame {
     }
 
     private void windowSettings(){
-        setSize(700, 800);
+        setSize(700, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocation(new Point(400, 400));
         setResizable(true);
@@ -88,7 +91,19 @@ public class MainWindow extends JFrame {
                 repaint();
             }
         });
+///////////////////////////////////////////////////////////////////////////////////
+        btnNodeAdd.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!txtfNode.getText().isEmpty())
+                    graph.addNode(txtfNode.getText().charAt(0));
+                else
+                    JOptionPane.showMessageDialog(null, "message empty");
+            }
+        });
 
+        // TODO:
+        // add logic for clear drawingpane and clear graph
         btnReset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -146,7 +161,7 @@ public class MainWindow extends JFrame {
     }
 
     private void layoutDrawingPanelSettings(){
-        drawingPanel = new DrawingPanel();
+        drawingPanel = new DrawingPanel(graph);
         drawingPanel.setPreferredSize(new Dimension(1000, 1000));
         drawingPanel.setBackground(new Color(100, 100, 200));
     }

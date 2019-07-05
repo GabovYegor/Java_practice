@@ -1,9 +1,17 @@
 package Visualiazation;
 
+import DataClasses.Graph;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class DrawingPanel extends JPanel {
+    private Graph graph;
+
+    DrawingPanel(Graph graph){
+        calculateNodesLocation(graph);
+    }
+
     @Override
     protected void paintComponent ( Graphics g ) {
         repaint();
@@ -29,5 +37,9 @@ public class DrawingPanel extends JPanel {
     private void drawLine(Graphics2D g2, Point from, Point to){
         drawBlackLine(g2, from, to);
         drawWhiteLine(g2, from, to);
+    }
+
+    private void calculateNodesLocation(Graph graph){
+
     }
 }

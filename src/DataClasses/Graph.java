@@ -75,8 +75,6 @@ public class Graph {
         }
 
 
-
-
         // Ребро графа для списка смежности adjacencyList.
         private class Edge {
             private char endNodeName; // имя вершины, в которую ведёт ребро
