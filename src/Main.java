@@ -1,4 +1,5 @@
 import DataClasses.Graph;
+import Visualiazation.*;
 
 public class Main {
 
@@ -6,5 +7,7 @@ public class Main {
         Graph graph = new Graph();
         graph.addEdge('a', 'b', 12);
         System.out.println(graph.nodeCount());
+        MainWindow mainWindow = new MainWindow("Dijkstra");
+        mainWindow.setVisible(true);
     }
 }
