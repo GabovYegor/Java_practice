@@ -5,21 +5,22 @@ import DataClasses.Graph;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.Random;
+import java.util.Scanner;
 
 public class MainWindow extends JFrame {
     private static final int MAINWINDOW_WIDTH = 900;
     private static final int MAINWINDOW_HEIGHT = 700;
     private static final int BIGRADIUS = 30;
-    public static final int BOUND = 500;
+    private static final int BOUND_WIDTH = 500;
+    private static final int BOUND_HEIGHT = 400;
 
     private Box boxVInputPanel;
-    private JLabel lblStartNode;
     private JLabel lblNode;
     private JLabel lblEdgeFrom;
     private JLabel lblEdgeTo;
     private JLabel lblWeight;
-    private JTextField txtfStartNode;
     private JTextField txtfNode;
     private JTextField txtfEdgeFrom;
     private JTextField txtfEdgeTo;
@@ -31,10 +32,13 @@ public class MainWindow extends JFrame {
     private JButton btnFinish;
 
     private Box boxVOutputPanel;
+    private JLabel lblStartNode;
     private JLabel lblAimNode;
     private JLabel lblLegthToAimNode;
+    private JTextField txtfStartNode;
     private JTextField txtfAimNode;
     private JTextField txtfLengthToAimNode;
+    private JButton btnStartAlgorithm;
     private JButton btnCalculateLength;
     private JButton btnNextStep;
     private JButton btnPreviousStep;
@@ -57,13 +61,11 @@ public class MainWindow extends JFrame {
 
     private void initVariables(){
         boxVInputPanel = Box.createVerticalBox();
-        lblStartNode = new JLabel("input start Node");
-        lblNode      = new JLabel("input Node");
+        lblNode      = new JLabel("Name");
         lblEdgeFrom  = new JLabel("From");
         lblEdgeTo    = new JLabel("To");
         lblWeight    = new JLabel("Edge Weight");
 
-        txtfStartNode  = new JTextField(2);
         txtfNode       = new JTextField(2);
         txtfEdgeFrom   = new JTextField(2);
         txtfEdgeTo     = new JTextField(2);
@@ -80,11 +82,14 @@ public class MainWindow extends JFrame {
         txtaLog.setLineWrap(true);
         txtaLog.setWrapStyleWord(true);
 
+        lblStartNode = new JLabel("input start Node");
         lblAimNode = new JLabel("Aim Node");
         lblLegthToAimNode = new JLabel("Length to Node");
+        txtfStartNode  = new JTextField(2);
         txtfAimNode = new JTextField(2);
         txtfLengthToAimNode = new JTextField(2);
         boxVOutputPanel = Box.createVerticalBox();
+        btnStartAlgorithm = new JButton("start algorithm");
         btnCalculateLength = new JButton("Get length");
         btnNextStep = new JButton("next step");
         btnPreviousStep = new JButton("previous step");
@@ -108,6 +113,28 @@ public class MainWindow extends JFrame {
     }
 
     private void buttonsSettings(){
+
+        btnFromFile.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileopen = new JFileChooser();
+                File file = null;
+                if (fileopen.showDialog(null, "Открыть файл") == JFileChooser.APPROVE_OPTION)
+                    file = fileopen.getSelectedFile();
+
+                try{
+                    FileInputStream fstream = new FileInputStream(file);
+                    BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+                    String strLine;
+                    while ((strLine = br.readLine()) != null){
+                        txtaLog.append(strLine + '\n');
+                        // parce Graph Data
+                    }
+                }catch (IOException exception){
+                    JOptionPane.showMessageDialog(null, "FILE ERROR");
+                }
+            }
+        });
+
         btnNodeAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -116,7 +143,7 @@ public class MainWindow extends JFrame {
                     txtfNode.setText("");
                 }
                 else
-                    JOptionPane.showMessageDialog(null, "message empty");
+                    JOptionPane.showMessageDialog(null, "Node`s name empty");
             }
         });
 
@@ -147,7 +174,7 @@ public class MainWindow extends JFrame {
                 }
 
                 if(!flag)
-                    JOptionPane.showMessageDialog(null, "message empty");
+                    JOptionPane.showMessageDialog(null, "Edge fields Empty");
             }
         });
 
@@ -156,7 +183,7 @@ public class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Random random = new Random();
                 for(int i = 0; i < graph.nodeCount(); ++i){
-                    graph.getNodeByIndex(i).setLocation(new Point(random.nextInt(BOUND) + BIGRADIUS, random.nextInt(BOUND) + BIGRADIUS));
+                    graph.getNodeByIndex(i).setLocation(new Point(random.nextInt(BOUND_WIDTH) + BIGRADIUS, random.nextInt(BOUND_HEIGHT) + BIGRADIUS));
                 }
             }
         });
@@ -189,26 +216,17 @@ public class MainWindow extends JFrame {
         boxVInputPanel.setPreferredSize(new Dimension(150, 0));
 
         boxVInputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetUpStartNodeLbl = Box.createHorizontalBox();
-        boxHSetUpStartNodeLbl.add(Box.createHorizontalStrut(5));
-        boxHSetUpStartNodeLbl.add(lblStartNode);
-        boxHSetUpStartNodeLbl.add(Box.createHorizontalStrut(5));
-        boxHSetUpStartNodeLbl.add(txtfStartNode);
-        boxHSetUpStartNodeLbl.add(Box.createHorizontalStrut(5));
-        boxVInputPanel.add(boxHSetUpStartNodeLbl);
-
-        boxVInputPanel.add(Box.createVerticalStrut(10));
         Box boxHSetUpFromFileBtn = Box.createHorizontalBox();
         boxHSetUpFromFileBtn.add(btnFromFile);
         boxVInputPanel.add(boxHSetUpFromFileBtn);
 
         boxVInputPanel.add(Box.createVerticalStrut(50));
         Box boxHSetUpNodeLbl = Box.createHorizontalBox();
-        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(5));
+        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(25));
         boxHSetUpNodeLbl.add(lblNode);
         boxHSetUpNodeLbl.add(Box.createHorizontalStrut(5));
         boxHSetUpNodeLbl.add(txtfNode);
-        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(25));
+        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(60));
         boxVInputPanel.add(boxHSetUpNodeLbl);
 
         boxVInputPanel.add(Box.createVerticalStrut(10));
@@ -267,6 +285,20 @@ public class MainWindow extends JFrame {
         boxVOutputPanel.setPreferredSize(new Dimension(150, 0));
 
         boxVOutputPanel.add(Box.createVerticalStrut(10));
+        Box boxHSetUpStartNodeLbl = Box.createHorizontalBox();
+        boxHSetUpStartNodeLbl.add(Box.createHorizontalStrut(5));
+        boxHSetUpStartNodeLbl.add(lblStartNode);
+        boxHSetUpStartNodeLbl.add(Box.createHorizontalStrut(5));
+        boxHSetUpStartNodeLbl.add(txtfStartNode);
+        boxHSetUpStartNodeLbl.add(Box.createHorizontalStrut(5));
+        boxVOutputPanel.add(boxHSetUpStartNodeLbl);
+
+        boxVOutputPanel.add(Box.createVerticalStrut(10));
+        Box boxHSetStartAlgorithmBtn = Box.createHorizontalBox();
+        boxHSetStartAlgorithmBtn.add(btnStartAlgorithm);
+        boxVOutputPanel.add(boxHSetStartAlgorithmBtn);
+
+        boxVOutputPanel.add(Box.createVerticalStrut(40));
         Box boxHSetUpAimNodeLbl = Box.createHorizontalBox();
         boxHSetUpAimNodeLbl.add(Box.createHorizontalStrut(5));
         boxHSetUpAimNodeLbl.add(lblAimNode);

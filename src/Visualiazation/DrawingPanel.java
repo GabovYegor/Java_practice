@@ -25,7 +25,7 @@ public class DrawingPanel extends JPanel {
                     if (!txtfNode.getText().isEmpty())
                         graph.getNodeByIndex(graph.addNode(txtfNode.getText().charAt(0))).setLocation(e.getPoint());
                     else
-                        JOptionPane.showMessageDialog(null, "message empty");
+                        JOptionPane.showMessageDialog(null, "Node`s name empty");
                     txtfNode.setText("");
                 }
                 if(e.getButton() == MouseEvent.BUTTON3){
@@ -68,7 +68,13 @@ public class DrawingPanel extends JPanel {
             for(int j = 0; j < currentAdjacencyList.size(); ++j){
                 Point nodeToLocation = new Point(graph.getNodeByName(currentAdjacencyList.get(j).getEndNodeName()).getLocation());
                 Point vector2D = new Point(nodeToLocation.x - nodeFromLocation.x, nodeToLocation.y - nodeFromLocation.y);
-                drawLine(g2, new Point(nodeFromLocation.x, nodeFromLocation.y), new Point(nodeToLocation.x, nodeToLocation.y));
+
+                // Here change nodeFromLocation and nodeToLocation
+//                nodeFromLocation.x -= nodeFromLocation *
+                // Here paint arrow
+                // Here print edge`s weight
+
+                drawLine(g2, nodeFromLocation, nodeToLocation);
             }
         }
     }
