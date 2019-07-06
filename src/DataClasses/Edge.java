@@ -1,4 +1,4 @@
-package Visualiazation;
+package DataClasses;
 
 // Ребро графа для списка смежности adjacencyList.
 public class Edge {
