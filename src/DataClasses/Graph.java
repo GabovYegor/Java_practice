@@ -1,5 +1,10 @@
 package DataClasses;
 
+
+import Visualiazation.Edge;
+import Visualiazation.Node;
+
+import java.awt.*;
 import java.util.ArrayList;
 
 
@@ -23,7 +28,7 @@ public class Graph {
     }
 
     // Добавить ребро в граф (предварительно создав вершины start и end, если их ещё нет).
-    public void addEdge(char start, char end, double weight) {
+    public void addEdge(char start, char end, int weight) {
         nodeList.get(addNode(start)).addEdge(end, weight);
         addNode(end);
     }
@@ -36,7 +41,7 @@ public class Graph {
     // Возвращает индекс вершины с именем name в nodeList или -1, если такой вершины не существует.
     public int nodeIndex(char name) {
         for (int i = 0; i < nodeCount(); i++) {
-            if (nodeList.get(i).name == name)
+            if (nodeList.get(i).getName() == name)
                 return i;
         }
         return -1;
@@ -44,7 +49,7 @@ public class Graph {
 
     // Возвращает имя вершины с индексом index.
     public char nodeName(int index) {
-        return nodeList.get(index).name;
+        return nodeList.get(index).getName();
     }
 
     // Проверяет, существует ли вершина с именем name.
@@ -57,47 +62,18 @@ public class Graph {
         return nodeList.get(index).edgeCount();
     }
 
+    // Вернуть вершину по индексу
+    public Node getNodeByIndex(int index){ return nodeList.get(index);}
 
-    // Вершина графа.
-    private class Node {
-
-        private char name;
-        private ArrayList<Edge> adjacencyList; // Список смежности.
-
-        // Конструктор.
-        private Node(char name) {
-            this.name = name;
-            adjacencyList = new ArrayList<>();
+    public Node getNodeByName(char name){
+        for(Node node: nodeList){
+            if(node.getName() == name)
+                return node;
         }
-
-        // Добавить ребро в список смежности (если такое ребро уже есть, вес ребра будет заменён на новый).
-        private void addEdge(char endNodeName, double weight) {
-            for (int i = 0; i < edgeCount(); i++) {
-                if (adjacencyList.get(i).endNodeName == endNodeName) {
-                    adjacencyList.get(i).weight = weight;
-                    return;
-                }
-            }
-            adjacencyList.add(new Edge(endNodeName, weight));
-        }
-
-        // Количество рёбер, исходящих из данной вершины.
-        private int edgeCount() {
-            return adjacencyList.size();
-        }
-
-
-        // Ребро графа для списка смежности adjacencyList.
-        private class Edge {
-            private char endNodeName; // имя вершины, в которую ведёт ребро
-            private double weight; // вес ребра
-
-            // Конструктор.
-            private Edge(char endNodeName, double weight) {
-                this.endNodeName = endNodeName;
-                this.weight = weight;
-            }
-        }
+        return new Node('\0');
     }
 
+
 }
+
+

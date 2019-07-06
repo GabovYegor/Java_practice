@@ -1,9 +1,3 @@
-/*
-    1) Добавить в inputPane поле для начальной вершины
-    2) Добавить в outPane возможность узнать расстояние до вершины
-    3) Каждый Layout можно вынести в отдальный файл
- */
-
 package Visualiazation;
 
 import DataClasses.Graph;
@@ -112,6 +106,7 @@ public class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if(!txtfNode.getText().isEmpty()) {
                     graph.addNode(txtfNode.getText().charAt(0));
+                    DrawingPanel.calculateNodesLocation(graph);
                     txtfNode.setText("");
                 }
                 else
@@ -123,7 +118,8 @@ public class MainWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(!txtfEdgeTo.getText().isEmpty() && !txtfEdgeFrom.getText().isEmpty() && !txtfEdgeWeight.getText().isEmpty()) {
-                    graph.addEdge(txtfEdgeFrom.getText().charAt(0), txtfEdgeTo.getText().charAt(0), 3);
+                    graph.addEdge(txtfEdgeFrom.getText().charAt(0), txtfEdgeTo.getText().charAt(0), txtfEdgeWeight.getText().charAt(0));
+                    DrawingPanel.calculateNodesLocation(graph);
                     txtfEdgeFrom.setText("");
                     txtfEdgeTo.setText("");
                     txtfEdgeWeight.setText("");
