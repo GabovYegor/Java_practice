@@ -11,9 +11,13 @@ public class Edge {
         this.weight = weight;
     }
 
-    public char getEndNodeName(){ return endNodeName; }
+    public char getEndNodeName(){
+        return endNodeName;
+    }
 
-    public int getWeight(){ return weight; }
+    public int getWeight(){
+        return weight;
+    }
 
     public void setWeight(int newValue){
         weight = newValue;
