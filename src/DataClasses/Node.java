@@ -53,7 +53,9 @@ public class Node {
         return name;
     }
 
-    public ArrayList<Edge> getAdjacencyList(){ return adjacencyList; }
+    public ArrayList<Edge> getAdjacencyList(){
+        return adjacencyList;
+    }
 
     public Color getColor() {
         return color;
