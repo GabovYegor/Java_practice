@@ -11,6 +11,8 @@ public class Node {
 
     private char name;
     private ArrayList<Edge> adjacencyList; // Список смежности.
+    private double distance; // Расстояние от стартовой вершины.
+    private ArrayList<char> path; // Пусть от стартовой вершины.
     private Point location;
     private Color color;
     public static final int BIGRADIUS = 30;
@@ -20,6 +22,8 @@ public class Node {
     public Node(char name) {
         this.name = name;
         adjacencyList = new ArrayList<>();
+        distance = Double.POSITIVE_INFINITY;
+        path = new ArrayList<>();
         Random random = new Random();
         location = new Point(random.nextInt(BOUND) + BIGRADIUS, random.nextInt(BOUND) + BIGRADIUS);
         color = Color.black;
