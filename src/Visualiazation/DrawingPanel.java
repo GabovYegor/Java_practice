@@ -12,11 +12,17 @@ public class DrawingPanel extends JPanel {
     private static final int BIGRADIUS = 30;
     private static final int LITTLERADIUS = 24;
     private static final int OFFSETFORNAME = 7;
-    private static final int BORDER = 100;
 
     DrawingPanel(Graph graph){
         this.graph = graph;
         calculateNodesLocation(this.graph);
+    }
+
+    public static void calculateNodesLocation(Graph graph){
+        Random random = new Random();
+        for(int i = 0; i < graph.nodeCount(); ++i){
+            graph.getNodeByIndex(i).setLocation(new Point(random.nextInt(500) + BIGRADIUS, random.nextInt(500) + BIGRADIUS));
+        }
     }
 
     @Override
@@ -24,24 +30,17 @@ public class DrawingPanel extends JPanel {
         repaint();
         super.paintComponent ( g );
         Graphics2D g2 = (Graphics2D) g;
-        printNodes(g2);
-        printEdges(g2);
+        drawNodes(g2);
+        drawEdges(g2);
     }
 
-    private void printNodes(Graphics2D g2){
+    private void drawNodes(Graphics2D g2){
         for(int i = 0; i < graph.nodeCount(); ++i){
-            Point tempLocation = graph.getNodeByIndex(i).getLocation();
-            g2.setColor(Color.black);
-            g2.fillOval(tempLocation.x - BIGRADIUS / 2, tempLocation.y - BIGRADIUS /2, BIGRADIUS, BIGRADIUS);
-            g2.setColor(Color.WHITE);
-            g2.fillOval(tempLocation.x - LITTLERADIUS / 2, tempLocation.y - LITTLERADIUS /2, LITTLERADIUS, LITTLERADIUS);
-            g2.setColor(Color.black);
-            g2.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-            g2.drawString(String.valueOf(graph.nodeName(i)), tempLocation.x - OFFSETFORNAME, tempLocation.y + OFFSETFORNAME);
+            drawOneNode(g2, String.valueOf(graph.getNodeByIndex(i).getName()),  graph.getNodeByIndex(i).getLocation());
         }
     }
 
-    private void printEdges(Graphics2D g2){
+    private void drawEdges(Graphics2D g2){
         for(int i = 0; i < graph.nodeCount(); ++i){
             Point nodeFromLocation = new Point(graph.getNodeByIndex(i).getLocation());
             ArrayList <Edge> currentAdjacencyList = graph.getNodeByIndex(i).getAdjacencyList();
@@ -70,10 +69,17 @@ public class DrawingPanel extends JPanel {
         drawWhiteLine(g2, from, to);
     }
 
-    public static void calculateNodesLocation(Graph graph){
-        Random random = new Random();
-        for(int i = 0; i < graph.nodeCount(); ++i){
-            graph.getNodeByIndex(i).setLocation(new Point(random.nextInt(500 + BORDER), random.nextInt(500 + BORDER)));
-        }
+    private void printStringInPoint(Graphics2D g2, String string, Point point){
+        g2.setColor(Color.black);
+        g2.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+        g2.drawString(string, point.x - OFFSETFORNAME, point.y + OFFSETFORNAME);
+    }
+
+    private void drawOneNode(Graphics2D g2, String string, Point point){
+        g2.setColor(Color.black);
+        g2.fillOval(point.x - BIGRADIUS / 2, point.y - BIGRADIUS /2, BIGRADIUS, BIGRADIUS);
+        g2.setColor(Color.WHITE);
+        g2.fillOval(point.x - LITTLERADIUS / 2, point.y - LITTLERADIUS /2, LITTLERADIUS, LITTLERADIUS);
+        printStringInPoint(g2, string, point);
     }
 }

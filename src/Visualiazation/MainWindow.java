@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class MainWindow extends JFrame {
+    private static final int MAINWINDOW_WIDTH = 900;
+    private static final int MAINWINDOW_HEIGHT = 700;
+
     private Box boxVInputPanel;
     private JLabel lblStartNode;
     private JLabel lblNode;
@@ -21,10 +24,8 @@ public class MainWindow extends JFrame {
     private JButton btnFromFile;
     private JButton btnEdgeAdd;
     private JButton btnNodeAdd;
+    private JButton btnRepaint;
     private JButton btnFinish;
-    private JTextArea txtaLog;
-
-    private DrawingPanel drawingPanel;
 
     private Box boxVOutputPanel;
     private JLabel lblAimNode;
@@ -35,6 +36,10 @@ public class MainWindow extends JFrame {
     private JButton btnNextStep;
     private JButton btnPreviousStep;
     private JButton btnReset;
+
+    private JTextArea txtaLog;
+
+    private DrawingPanel drawingPanel;
 
     private Graph graph;
 
@@ -50,21 +55,22 @@ public class MainWindow extends JFrame {
     private void initVariables(){
         boxVInputPanel = Box.createVerticalBox();
         lblStartNode = new JLabel("input start Node");
-        lblNode = new JLabel("input Node");
-        lblEdgeFrom = new JLabel("From");
-        lblEdgeTo = new JLabel("To");
-        lblWeight = new JLabel("Edge Weight");
+        lblNode      = new JLabel("input Node");
+        lblEdgeFrom  = new JLabel("From");
+        lblEdgeTo    = new JLabel("To");
+        lblWeight    = new JLabel("Edge Weight");
 
-        txtfStartNode = new JTextField(2);
-        txtfNode = new JTextField(2);
-        txtfEdgeFrom = new JTextField(2);
-        txtfEdgeTo = new JTextField(2);
+        txtfStartNode  = new JTextField(2);
+        txtfNode       = new JTextField(2);
+        txtfEdgeFrom   = new JTextField(2);
+        txtfEdgeTo     = new JTextField(2);
         txtfEdgeWeight = new JTextField(2);
 
-        btnFromFile = new JButton("From File");
-        btnNodeAdd = new JButton("add Node");
-        btnEdgeAdd = new JButton("add Edge");
-        btnFinish = new JButton("Finish");
+        btnFromFile  = new JButton("From File");
+        btnNodeAdd   = new JButton("add Node");
+        btnEdgeAdd   = new JButton("add Edge");
+        btnRepaint   = new JButton("Repaint Graph");
+        btnFinish    = new JButton("Finish");
 
         txtaLog = new JTextArea(10, 0);
         txtaLog.setText("Algorithm steps\n");
@@ -85,7 +91,7 @@ public class MainWindow extends JFrame {
     }
 
     private void windowSettings(){
-        setSize(700, 600);
+        setSize(MAINWINDOW_WIDTH, MAINWINDOW_HEIGHT);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocation(new Point(400, 400));
         setResizable(true);
@@ -126,6 +132,13 @@ public class MainWindow extends JFrame {
                 }
                 else
                     JOptionPane.showMessageDialog(null, "message empty");
+            }
+        });
+
+        btnRepaint.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DrawingPanel.calculateNodesLocation(graph);
             }
         });
 
@@ -212,6 +225,11 @@ public class MainWindow extends JFrame {
         boxVInputPanel.add(boxHSetUpEdgeBtn);
 
         boxVInputPanel.add(Box.createVerticalStrut(50));
+        Box boxHSetUpRepaintBtn = Box.createHorizontalBox();
+        boxHSetUpRepaintBtn.add(btnRepaint);
+        boxVInputPanel.add(boxHSetUpRepaintBtn);
+
+        boxVInputPanel.add(Box.createVerticalStrut(10));
         Box boxHSetUpFinishBtn = Box.createHorizontalBox();
         boxHSetUpFinishBtn.add(btnFinish);
         boxVInputPanel.add(boxHSetUpFinishBtn);

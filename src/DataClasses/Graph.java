@@ -1,10 +1,6 @@
 package DataClasses;
 
-
-import Visualiazation.Edge;
 import Visualiazation.Node;
-
-import java.awt.*;
 import java.util.ArrayList;
 
 
@@ -19,7 +15,7 @@ public class Graph {
 
     // Добавить вершину в граф (если такой вершины ещё нет) и вернуть её индекс в nodeList.
     public int addNode(char name) {
-        int index = nodeIndex(name);
+        int index = getIndexByName(name);
         if (index == -1) {
             nodeList.add(new Node(name));
             return nodeCount() - 1;
@@ -27,8 +23,19 @@ public class Graph {
         return index;
     }
 
+    // Возвращает индекс вершины с именем name в nodeList или -1, если такой вершины не существует.
+    private int getIndexByName(char name) {
+        for (int i = 0; i < nodeCount(); i++) {
+            if (nodeList.get(i).getName() == name)
+                return i;
+        }
+        return -1;
+    }
+
     // Добавить ребро в граф (предварительно создав вершины start и end, если их ещё нет).
     public void addEdge(char start, char end, int weight) {
+        if(start == end)
+            return;
         nodeList.get(addNode(start)).addEdge(end, weight);
         addNode(end);
     }
@@ -38,41 +45,30 @@ public class Graph {
         return nodeList.size();
     }
 
-    // Возвращает индекс вершины с именем name в nodeList или -1, если такой вершины не существует.
-    public int nodeIndex(char name) {
-        for (int i = 0; i < nodeCount(); i++) {
-            if (nodeList.get(i).getName() == name)
-                return i;
-        }
-        return -1;
-    }
-
-    // Возвращает имя вершины с индексом index.
-    public char nodeName(int index) {
-        return nodeList.get(index).getName();
-    }
-
-    // Проверяет, существует ли вершина с именем name.
-    public boolean isNodeExists(char name) {
-        return nodeIndex(name) >= 0;
-    }
-
-    // Количество рёбер исходящих из вершины с индексом index.
-    public int countOfEdgesFromNode(int index) {
-        return nodeList.get(index).edgeCount();
-    }
-
     // Вернуть вершину по индексу
     public Node getNodeByIndex(int index){ return nodeList.get(index);}
 
     public Node getNodeByName(char name){
-        for(Node node: nodeList){
-            if(node.getName() == name)
-                return node;
-        }
-        return new Node('\0');
+        return getNodeByIndex(getIndexByName(name));
     }
 
+    // Для графа не актуально, если нужно для алгоритма оставить, иначе - убрать
+//    // Возвращает имя вершины с индексом index.
+//    private char nodeName(int index) {
+//        return nodeList.get(index).getName();
+//    }
+
+    // Для графа не актуально, если нужно для алгоритма оставить, иначе - убрать
+//    // Проверяет, существует ли вершина с именем name.
+//    public boolean isNodeExists(char name) {
+//        return nodeIndex(name) >= 0;
+//    }
+
+    // Для графа не актуально, если нужно для алгоритма оставить, иначе -  убрать
+//    // Количество рёбер исходящих из вершины с индексом index.
+//    public int countOfEdgesFromNode(int index) {
+//        return nodeList.get(index).edgeCount();
+//    }
 
 }
 

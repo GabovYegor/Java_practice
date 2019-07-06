@@ -9,11 +9,14 @@ public class Node {
     private char name;
     private ArrayList<Edge> adjacencyList; // Список смежности.
     private Point location;
+    private Color color;
 
     // Конструктор.
     public Node(char name) {
         this.name = name;
         adjacencyList = new ArrayList<>();
+        location = new Point(0, 0);
+        color = Color.white;
     }
 
     // Добавить ребро в список смежности (если такое ребро уже есть, вес ребра будет заменён на новый).
@@ -40,13 +43,17 @@ public class Node {
         return location;
     }
 
-    public void setName(char name) {
-        this.name = name;
-    }
-
     public char getName() {
         return name;
     }
 
     public ArrayList<Edge> getAdjacencyList(){ return adjacencyList; }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
 }
