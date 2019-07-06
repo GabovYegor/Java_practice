@@ -45,12 +45,17 @@ public class Graph {
     }
 
     // Вернуть вершину по индексу
-    public Node getNodeByIndex(int index){
+    public Node getNodeByIndex(int index) {
         return nodeList.get(index);
     }
 
-    public Node getNodeByName(char name){
+    public Node getNodeByName(char name) {
         return getNodeByIndex(getIndexByName(name));
+    }
+    
+    // Очистить граф.
+    public void clear() {
+        nodeList = new ArrayList<>();
     }
 
     // Для графа не актуально, если нужно для алгоритма оставить, иначе - убрать
