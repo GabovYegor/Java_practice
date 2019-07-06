@@ -4,6 +4,7 @@ import DataClasses.Edge;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 // Вершина графа.
 public class Node {
@@ -12,13 +13,16 @@ public class Node {
     private ArrayList<Edge> adjacencyList; // Список смежности.
     private Point location;
     private Color color;
+    public static final int BIGRADIUS = 30;
+    public static final int BOUND = 500;
 
     // Конструктор.
     public Node(char name) {
         this.name = name;
         adjacencyList = new ArrayList<>();
-        location = new Point(0, 0);
-        color = Color.white;
+        Random random = new Random();
+        location = new Point(random.nextInt(BOUND) + BIGRADIUS, random.nextInt(BOUND) + BIGRADIUS);
+        color = Color.black;
     }
 
     // Добавить ребро в список смежности (если такое ребро уже есть, вес ребра будет заменён на новый).

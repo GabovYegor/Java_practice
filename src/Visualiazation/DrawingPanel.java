@@ -4,25 +4,46 @@ import DataClasses.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class DrawingPanel extends JPanel {
     private Graph graph;
-    private static final int BIGRADIUS = 30;
+    public static final int BIGRADIUS = 30;
     private static final int LITTLERADIUS = 24;
     private static final int OFFSETFORNAME = 7;
 
-    DrawingPanel(Graph graph){
+    DrawingPanel(Graph graph, JTextField txtfNode){
         this.graph = graph;
-        calculateNodesLocation(this.graph);
-    }
-
-    public static void calculateNodesLocation(Graph graph){
-        Random random = new Random();
-        for(int i = 0; i < graph.nodeCount(); ++i){
-            graph.getNodeByIndex(i).setLocation(new Point(random.nextInt(500) + BIGRADIUS, random.nextInt(500) + BIGRADIUS));
-        }
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(e.getButton() == MouseEvent.BUTTON1) {
+                    if (!txtfNode.getText().isEmpty())
+                        graph.getNodeByIndex(graph.addNode(txtfNode.getText().charAt(0))).setLocation(e.getPoint());
+                    else
+                        JOptionPane.showMessageDialog(null, "message empty");
+                    txtfNode.setText("");
+                }
+                if(e.getButton() == MouseEvent.BUTTON3){
+                    for(int i = 0; i < graph.nodeCount(); ++i){
+                        if(graph.getNodeByIndex(i).getLocation().x <= e.getPoint().x + BIGRADIUS / 2 &&
+                                graph.getNodeByIndex(i).getLocation().x >= e.getPoint().x - BIGRADIUS / 2 &&
+                                graph.getNodeByIndex(i).getLocation().y <= e.getPoint().y + BIGRADIUS / 2 &&
+                                graph.getNodeByIndex(i).getLocation().y >= e.getPoint().y - BIGRADIUS / 2)
+                            if(graph.getNodeByIndex(i).getColor() == Color.black)
+                                graph.getNodeByIndex(i).setColor(Color.BLUE);
+                            else if (graph.getNodeByIndex(i).getColor() == Color.BLUE)
+                                graph.getNodeByIndex(i).setColor(Color.YELLOW);
+                            else
+                                graph.getNodeByIndex(i).setColor(Color.black);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -36,7 +57,7 @@ public class DrawingPanel extends JPanel {
 
     private void drawNodes(Graphics2D g2){
         for(int i = 0; i < graph.nodeCount(); ++i){
-            drawOneNode(g2, String.valueOf(graph.getNodeByIndex(i).getName()),  graph.getNodeByIndex(i).getLocation());
+            drawOneNode(g2, String.valueOf(graph.getNodeByIndex(i).getName()),  graph.getNodeByIndex(i).getLocation(), graph.getNodeByIndex(i).getColor());
         }
     }
 
@@ -75,8 +96,8 @@ public class DrawingPanel extends JPanel {
         g2.drawString(string, point.x - OFFSETFORNAME, point.y + OFFSETFORNAME);
     }
 
-    private void drawOneNode(Graphics2D g2, String string, Point point){
-        g2.setColor(Color.black);
+    private void drawOneNode(Graphics2D g2, String string, Point point, Color color){
+        g2.setColor(color);
         g2.fillOval(point.x - BIGRADIUS / 2, point.y - BIGRADIUS /2, BIGRADIUS, BIGRADIUS);
         g2.setColor(Color.WHITE);
         g2.fillOval(point.x - LITTLERADIUS / 2, point.y - LITTLERADIUS /2, LITTLERADIUS, LITTLERADIUS);

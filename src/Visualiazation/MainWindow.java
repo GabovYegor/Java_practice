@@ -5,10 +5,13 @@ import DataClasses.Graph;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Random;
 
 public class MainWindow extends JFrame {
     private static final int MAINWINDOW_WIDTH = 900;
     private static final int MAINWINDOW_HEIGHT = 700;
+    private static final int BIGRADIUS = 30;
+    public static final int BOUND = 500;
 
     private Box boxVInputPanel;
     private JLabel lblStartNode;
@@ -77,8 +80,6 @@ public class MainWindow extends JFrame {
         txtaLog.setLineWrap(true);
         txtaLog.setWrapStyleWord(true);
 
-        drawingPanel = new DrawingPanel(graph);
-
         lblAimNode = new JLabel("Aim Node");
         lblLegthToAimNode = new JLabel("Length to Node");
         txtfAimNode = new JTextField(2);
@@ -112,7 +113,6 @@ public class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if(!txtfNode.getText().isEmpty()) {
                     graph.addNode(txtfNode.getText().charAt(0));
-                    DrawingPanel.calculateNodesLocation(graph);
                     txtfNode.setText("");
                 }
                 else
@@ -123,14 +123,30 @@ public class MainWindow extends JFrame {
         btnEdgeAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                boolean flag = false;
                 if(!txtfEdgeTo.getText().isEmpty() && !txtfEdgeFrom.getText().isEmpty() && !txtfEdgeWeight.getText().isEmpty()) {
-                    graph.addEdge(txtfEdgeFrom.getText().charAt(0), txtfEdgeTo.getText().charAt(0), txtfEdgeWeight.getText().charAt(0));
-                    DrawingPanel.calculateNodesLocation(graph);
+                    graph.addEdge(txtfEdgeFrom.getText().charAt(0), txtfEdgeTo.getText().charAt(0), (int)txtfEdgeWeight.getText().charAt(0));
                     txtfEdgeFrom.setText("");
                     txtfEdgeTo.setText("");
                     txtfEdgeWeight.setText("");
+                    repaint();
+                    flag = true;
                 }
-                else
+
+                for(int i = 0; i < graph.nodeCount(); ++i){
+                    if(graph.getNodeByIndex(i).getColor() == Color.BLUE) {
+                        for (int j = 0; j < graph.nodeCount(); ++j) {
+                            if (graph.getNodeByIndex(j).getColor() == Color.YELLOW) {
+                                if(!txtfEdgeWeight.getText().isEmpty()) {
+                                    graph.addEdge(graph.getNodeByIndex(i).getName(), graph.getNodeByIndex(j).getName(), (int)txtfEdgeWeight.getText().charAt(0));
+                                    flag = true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if(!flag)
                     JOptionPane.showMessageDialog(null, "message empty");
             }
         });
@@ -138,7 +154,10 @@ public class MainWindow extends JFrame {
         btnRepaint.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DrawingPanel.calculateNodesLocation(graph);
+                Random random = new Random();
+                for(int i = 0; i < graph.nodeCount(); ++i){
+                    graph.getNodeByIndex(i).setLocation(new Point(random.nextInt(BOUND) + BIGRADIUS, random.nextInt(BOUND) + BIGRADIUS));
+                }
             }
         });
 
@@ -238,7 +257,8 @@ public class MainWindow extends JFrame {
     }
 
     private void layoutDrawingPanelSettings(){
-        drawingPanel = new DrawingPanel(graph);
+
+        drawingPanel = new DrawingPanel(graph, txtfNode);
         drawingPanel.setPreferredSize(new Dimension(1000, 1000));
         drawingPanel.setBackground(new Color(230, 230, 230));
     }
