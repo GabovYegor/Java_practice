@@ -1,0 +1,74 @@
+@startuml
+
+package "DataClasses" #DDDDDD{
+class Graph {
+- nodeList : ArrayList<Node>;
++ Graph()
++ addNode(name:char)
++ addEdge(start:char, end:char, weight:double)
++ nodeCount() : int
++ nodeIndex(name:char)
++ nodeName(index:int)
++ isNodeExists(name:char)
++ countOfEdgesFromNode(index:int)
+}
+class Node {
+- name : char;
+- adjacencyList : ArrayList<Edge>;
+- Node(name:char)
+- addEdge(endNodeName:char, weight:double)
+- edgeCount() : int
+}
+Node *-- Graph: contains
+class Node << (C,orchid) >>
+class Edge {
+- endNodeName : char;
+- weight : double;
+- Edge(endNodeName : char, weight : double)
+}
+Edge *-- Node: contains
+class Edge << (C,orchid) >>
+}
+
+
+package "Visualiazation" #63ffdb{
+
+class DrawingPanel extends JPanel{
+    - Graph graph;
+    DrawingPanel(graph:Graph)
+    # paintComponent (g:Graphics)
+    - drawBlackLine(g2:Graphics2D, from:Point, to:Point)
+    - drawWhiteLine(g2:Graphics2D, from:Point, to:Point)
+    - drawLine(g2:Graphics2D, from:Point, to:Point)
+    - calculateNodesLocation(graph:Graph)
+}
+
+class MainWindow extends JFrame {
+    - boxVInputPanel : Box;
+    - lblNode : JLabel;
+    - lblEdgeFrom : JLabel;
+    - JLabel lblEdgeTo : JLabel;
+    - txtfNode : JTextField;
+    - txtfEdgeFrom : JTextField;
+    - txtfEdgeTo : JTextField;
+    - btnEdgeAdd : JButton;
+    - btnNodeAdd : JButton;
+    - btnFinish : JButton;
+    - txtaLog : JTextArea;
+    - drawingPanel : DrawingPanel;
+    - boxVOutputPanel : Box;
+    - btnNextStep : JButton;
+    - btnPreviousStep : JButton;
+    - btnReset : JButton;
+    - graph : Graph;
+
+    + MainWindow(title:String, graph:Graph)
+    - initVariables() : void
+    - windowSettings() : void
+    - layoutSettins() : void
+    - buttonsSettings() : void
+    - layoutInputSettings() : void
+    - layoutDrawingPanelSettings() : void
+    - layoutOutputSettings() : void
+}
+@enduml
