@@ -6,6 +6,7 @@ import java.awt.*;
 public class Edge {
     private char endNodeName; // имя вершины, в которую ведёт ребро
     private int weight; // вес ребра
+    public static final int MAX_WEIGHT = 1000000;
     private Color color;
 
     // Конструктор.
@@ -23,8 +24,8 @@ public class Edge {
         return weight;
     }
 
-    public void setWeight(int newValue){
-        weight = newValue;
+    public void setWeight(int weight){
+        this.weight = weight;
     }
     
     public Color getColor() {

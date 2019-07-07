@@ -11,7 +11,7 @@ public class Node {
 
     private char name;
     private ArrayList<Edge> adjacencyList; // Список смежности.
-    private double distance; // Расстояние от стартовой вершины.
+    private int distance; // Расстояние от стартовой вершины.
     private ArrayList<Character> path; // Пусть от стартовой вершины.
     private Point location;
     private Color color;
@@ -22,7 +22,7 @@ public class Node {
     public Node(char name) {
         this.name = name;
         adjacencyList = new ArrayList<>();
-        distance = Double.POSITIVE_INFINITY;
+        distance = Integer.MAX_VALUE; // Integer.MAX_VALUE считается бесконечностью.
         path = new ArrayList<>();
         Random random = new Random();
         location = new Point(random.nextInt(BOUND) + BIGRADIUS, random.nextInt(BOUND) + BIGRADIUS);
