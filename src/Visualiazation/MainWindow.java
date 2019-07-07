@@ -118,19 +118,9 @@ public class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileopen = new JFileChooser();
                 File file = null;
-                if (fileopen.showDialog(null, "Открыть файл") == JFileChooser.APPROVE_OPTION)
+                if (fileopen.showDialog(null, "Открыть файл") == JFileChooser.APPROVE_OPTION) {
                     file = fileopen.getSelectedFile();
-
-                try{
-                    FileInputStream fstream = new FileInputStream(file);
-                    BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-                    String strLine;
-                    while ((strLine = br.readLine()) != null){
-                        txtaLog.append(strLine + '\n');
-                        // parce Graph Data
-                    }
-                }catch (IOException exception){
-                    JOptionPane.showMessageDialog(null, "FILE ERROR");
+                    parseGraph(file);
                 }
             }
         });
@@ -337,5 +327,24 @@ public class MainWindow extends JFrame {
         boxVOutputPanel.add(boxHSetUpResetBtn);
 
         boxVOutputPanel.add(Box.createVerticalStrut((int)Double.POSITIVE_INFINITY));
+    }
+
+    // MUST BE CHECKER FOR FILE
+    private void parseGraph(File file){
+        try{
+            FileInputStream fstream = new FileInputStream(file);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+            String strLine;
+            while ((strLine = br.readLine()) != null){
+                if(strLine.isEmpty())
+                    continue;
+                if(strLine.length() == 1)
+                    graph.addNode(strLine.charAt(0));
+                if(strLine.length() == 5)
+                    graph.addEdge(strLine.charAt(0), strLine.charAt(2), (int)strLine.charAt(4));
+            }
+        }catch (IOException exception){
+            JOptionPane.showMessageDialog(null, "FILE ERROR");
+        }
     }
 }
