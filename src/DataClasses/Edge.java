@@ -1,15 +1,18 @@
 package DataClasses;
 
+import java.awt.*;
+
 // Ребро графа для списка смежности adjacencyList.
 public class Edge {
     private char endNodeName; // имя вершины, в которую ведёт ребро
     private int weight; // вес ребра
-    private Color color; 
+    private Color color;
 
     // Конструктор.
     public Edge(char endNodeName, int weight) {
         this.endNodeName = endNodeName;
         this.weight = weight;
+        color = Color.black;
     }
 
     public char getEndNodeName(){

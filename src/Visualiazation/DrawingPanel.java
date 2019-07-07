@@ -81,28 +81,28 @@ public class DrawingPanel extends JPanel {
             ArrayList <Edge> currentAdjacencyList = graph.getNodeByIndex(i).getAdjacencyList();
             for(int j = 0; j < currentAdjacencyList.size(); ++j){
                 Point nodeToLocation = new Point(graph.getNodeByName(currentAdjacencyList.get(j).getEndNodeName()).getLocation());
-                drawLine(g2, nodeFromLocation, nodeToLocation);
+                drawLine(g2, nodeFromLocation, nodeToLocation, currentAdjacencyList.get(j).getColor());
                 drawArrows(g2, nodeFromLocation, nodeToLocation);
                 printEdgeWeightInPoint(g2, String.valueOf(currentAdjacencyList.get(j).getWeight()), nodeFromLocation, nodeToLocation);
             }
         }
     }
 
-    private void drawBlackLine(Graphics2D g2, Point from, Point to){
-        g2.setColor(Color.black);
-        g2.setStroke(new BasicStroke(2.0f));  // толщина равна 10
+    private void drawMainLine(Graphics2D g2, Point from, Point to, Color color){
+        g2.setColor(color);
+        g2.setStroke(new BasicStroke(2.0f));
         g2.drawLine(from.x, from.y, to.x, to.y);
     }
 
     private void drawWhiteLine(Graphics2D g2, Point from, Point to){
         g2.setColor(Color.white);
-        g2.setStroke(new BasicStroke(6.0f));  // толщина равна 10
+        g2.setStroke(new BasicStroke(6.0f));
         g2.drawLine(from.x, from.y, to.x, to.y);
     }
 
-    private void drawLine(Graphics2D g2, Point from, Point to){
+    private void drawLine(Graphics2D g2, Point from, Point to, Color color){
         drawWhiteLine(g2, from, to);
-        drawBlackLine(g2, from, to);
+        drawMainLine(g2, from, to, color);
     }
 
     private void printStringInPoint(Graphics2D g2, String string, Point point){
