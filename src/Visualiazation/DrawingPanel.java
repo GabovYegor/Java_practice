@@ -7,12 +7,13 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class DrawingPanel extends JPanel {
     private Graph graph;
     public static final int BIGRADIUS = 30;
     private static final int LITTLERADIUS = 24;
+    private static final int ARROWANGLE = 100;
+    private static final int ARROWLENGTH = 30;
     private static final int OFFSETFORNAME = 7;
 
     DrawingPanel(Graph graph, JTextField txtfNode){
@@ -51,8 +52,8 @@ public class DrawingPanel extends JPanel {
         repaint();
         super.paintComponent ( g );
         Graphics2D g2 = (Graphics2D) g;
-        drawNodes(g2);
         drawEdges(g2);
+        drawNodes(g2);
     }
 
     private void drawNodes(Graphics2D g2){
@@ -61,45 +62,62 @@ public class DrawingPanel extends JPanel {
         }
     }
 
+    private void drawArrows(Graphics2D g2, Point nodeFromLocation, Point nodeToLocation){
+        g2.setColor(Color.black);
+        g2.setStroke(new BasicStroke(2.0f));
+        double  edgeAngle = Math.atan2(nodeFromLocation.y - nodeToLocation.y, nodeFromLocation.x - nodeToLocation.x);
+        g2.drawLine((int)(nodeToLocation.x + BIGRADIUS / 2 * Math.cos(edgeAngle)), (int)(nodeToLocation.y + BIGRADIUS / 2 * Math.sin(edgeAngle)),
+                (int)(nodeToLocation.x + ARROWLENGTH * Math.cos(edgeAngle + ARROWANGLE)),
+                (int)(nodeToLocation.y + ARROWLENGTH * Math.sin(edgeAngle + ARROWANGLE)));
+
+        g2.drawLine((int)(nodeToLocation.x + 15 * Math.cos(edgeAngle)), (int)(nodeToLocation.y + 15 * Math.sin(edgeAngle)),
+                (int)(nodeToLocation.x + ARROWLENGTH * Math.cos(edgeAngle - ARROWANGLE)),
+                (int)(nodeToLocation.y + ARROWLENGTH * Math.sin(edgeAngle - ARROWANGLE)));
+    }
+
     private void drawEdges(Graphics2D g2){
         for(int i = 0; i < graph.nodeCount(); ++i){
             Point nodeFromLocation = new Point(graph.getNodeByIndex(i).getLocation());
             ArrayList <Edge> currentAdjacencyList = graph.getNodeByIndex(i).getAdjacencyList();
             for(int j = 0; j < currentAdjacencyList.size(); ++j){
                 Point nodeToLocation = new Point(graph.getNodeByName(currentAdjacencyList.get(j).getEndNodeName()).getLocation());
-                Point vector2D = new Point(nodeToLocation.x - nodeFromLocation.x, nodeToLocation.y - nodeFromLocation.y);
-
-                // Here change nodeFromLocation and nodeToLocation
-//                nodeFromLocation.x -= nodeFromLocation *
-                // Here paint arrow
-                // Here print edge`s weight
-
                 drawLine(g2, nodeFromLocation, nodeToLocation);
+                drawArrows(g2, nodeFromLocation, nodeToLocation);
+                printEdgeWeightInPoint(g2, String.valueOf(currentAdjacencyList.get(j).getWeight()), nodeFromLocation, nodeToLocation);
             }
         }
     }
 
     private void drawBlackLine(Graphics2D g2, Point from, Point to){
         g2.setColor(Color.black);
-        g2.setStroke(new BasicStroke(8.0f));  // толщина равна 10
+        g2.setStroke(new BasicStroke(2.0f));  // толщина равна 10
         g2.drawLine(from.x, from.y, to.x, to.y);
     }
 
     private void drawWhiteLine(Graphics2D g2, Point from, Point to){
         g2.setColor(Color.white);
-        g2.setStroke(new BasicStroke(2.0f));  // толщина равна 10
+        g2.setStroke(new BasicStroke(6.0f));  // толщина равна 10
         g2.drawLine(from.x, from.y, to.x, to.y);
     }
 
     private void drawLine(Graphics2D g2, Point from, Point to){
-        drawBlackLine(g2, from, to);
         drawWhiteLine(g2, from, to);
+        drawBlackLine(g2, from, to);
     }
 
     private void printStringInPoint(Graphics2D g2, String string, Point point){
         g2.setColor(Color.black);
         g2.setFont(new Font("TimesRoman", Font.PLAIN, 20));
         g2.drawString(string, point.x - OFFSETFORNAME, point.y + OFFSETFORNAME);
+    }
+
+    private void printEdgeWeightInPoint(Graphics2D g2, String weight, Point nodeFromLocation, Point nodeToLocation){
+        g2.setColor(Color.black);
+        g2.setStroke(new BasicStroke(2.0f));
+        double edgeAngle = Math.atan2(nodeFromLocation.y - nodeToLocation.y, nodeFromLocation.x - nodeToLocation.x);
+
+        int length  = 50; //(int)Math.sqrt(Math.pow(nodeFromLocation.x - nodeToLocation.x, 2) + Math.pow(nodeFromLocation.y - nodeToLocation.y, 2));
+        printStringInPoint(g2, weight, new Point((int)(nodeToLocation.x + length * Math.cos(edgeAngle)), (int)(nodeToLocation.y + length * Math.sin(edgeAngle))));
     }
 
     private void drawOneNode(Graphics2D g2, String string, Point point, Color color){
