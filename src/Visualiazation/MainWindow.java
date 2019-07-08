@@ -55,8 +55,8 @@ public class MainWindow extends JFrame {
     public MainWindow(String title, Graph graph){
         super(title);
         this.graph = graph;
-        this.graphStates = graph.retGraphs();
-        graphStates.add(0, graph);
+        //this.graphStates = graph.retGraphs();
+//        graphStates.add(0, graph);
         algorithmStep = 0;
         initVariables();
         windowSettings();
@@ -331,7 +331,7 @@ public class MainWindow extends JFrame {
 
     private void layoutDrawingPanelSettings(){
 
-        drawingPanel = new DrawingPanel(graphStates.get(0), txtfNode);
+        drawingPanel = new DrawingPanel(graph, txtfNode);
         drawingPanel.setPreferredSize(new Dimension(1000, 1000));
         drawingPanel.setBackground(new Color(230, 230, 230));
     }

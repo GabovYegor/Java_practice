@@ -61,6 +61,12 @@ public class Node {
         return adjacencyList;
     }
 
+    public Edge getEdgeByIndex(int index) {
+        if (index < 0 || index >= edgeCount())
+            throw new IndexOutOfBoundsException("Index is out of bounds.");
+        return adjacencyList.get(index);
+    }
+
     public Color getColor() {
         return color;
     }
@@ -69,7 +75,46 @@ public class Node {
         this.color = color;
     }
 
-    public int getDistance(){
+    public int getDistance() {
         return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public void setPath(ArrayList<Character> path) {
+        this.path = (ArrayList<Character>) path.clone();
+    }
+
+    public void addInPath(char name) {
+        path.add(name);
+    }
+
+    public void clearPath() {
+        path.clear();
+    }
+
+    public ArrayList<Character> getPath() {
+        return path;
+    }
+
+    public String pathToString() {
+        StringBuilder strBuilder = new StringBuilder("");
+        for (int i = 0; i < path.size(); i++)
+            strBuilder.append(path.get(i));
+        return strBuilder.toString();
+    }
+
+    public Node clone() {
+        Node cloneNode = new Node(name);
+        for (int i = 0; i < edgeCount(); i++) {
+            cloneNode.adjacencyList.add(adjacencyList.get(i).clone());
+        }
+        cloneNode.distance = distance;
+        // ДОБАВИТЬ ПАТЧ, КОГДА БУДЕТ ГОТОВО!!!!!!!
+        cloneNode.location = location.getLocation();
+        cloneNode.color = color;
+        return cloneNode;
     }
 }
