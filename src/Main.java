@@ -5,8 +5,6 @@ public class Main {
 
     public static void main(String[] args) {
         Graph graph = new Graph();
-        graph.addNode('d');
-        graph.addEdge('e', 'g',12);
         MainWindow mainWindow = new MainWindow("Dijkstra", graph);
         mainWindow.setVisible(true);
     }

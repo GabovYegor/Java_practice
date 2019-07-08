@@ -1,5 +1,6 @@
 package Visualiazation;
 
+import DataClasses.AlgorithmStepData;
 import DataClasses.Graph;
 
 import javax.swing.*;
@@ -49,15 +50,13 @@ public class MainWindow extends JFrame {
     private DrawingPanel drawingPanel;
 
     private Graph graph;
-    private ArrayList<Graph> graphStates;
-    private int algorithmStep;
+    private ArrayList<AlgorithmStepData> graphStates;
+    private int algorithmStepNum;
 
     public MainWindow(String title, Graph graph){
         super(title);
         this.graph = graph;
-        //this.graphStates = graph.retGraphs();
-//        graphStates.add(0, graph);
-        algorithmStep = 0;
+        algorithmStepNum = 0;
         initVariables();
         windowSettings();
         layoutSettins();
@@ -200,7 +199,8 @@ public class MainWindow extends JFrame {
                     JOptionPane.showMessageDialog(null, "Input start node name");
                 else {
                     // + здесь считать массив состояний
-                    drawingPanel.setIsAlgorithmValue();
+                    graphStates = graph.Dijkstra(txtfStartNode.getText().charAt(0));
+                    drawingPanel.setTrueIsAlgorithmValue();
                 }
             }
         });
@@ -231,8 +231,8 @@ public class MainWindow extends JFrame {
         btnNextStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(algorithmStep != graphStates.size() - 1) {
-                    graph = graphStates.get(++algorithmStep);
+                if(algorithmStepNum != graphStates.size() - 1) {
+                    graph = graphStates.get(++algorithmStepNum).getGraph();
                     drawingPanel.updateGraph(graph);
                 }
                 else
@@ -244,8 +244,8 @@ public class MainWindow extends JFrame {
         btnPreviousStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(algorithmStep != 0){
-                    graph = graphStates.get(--algorithmStep);
+                if(algorithmStepNum != 0){
+                    graph = graphStates.get(--algorithmStepNum).getGraph();
                     drawingPanel.updateGraph(graph);
                 }
                 else
@@ -261,6 +261,12 @@ public class MainWindow extends JFrame {
                 panel.setBackground(Color.BLUE);
                 panel.setPreferredSize(new Dimension(150, 0));
                 getContentPane().add(boxVInputPanel, BorderLayout.WEST);
+
+                // что еще?
+                graph = new Graph();
+                drawingPanel.setFalseIsAlgorithmValue();
+                drawingPanel.updateGraph(graph);
+
                 validate();
                 repaint();
             }
