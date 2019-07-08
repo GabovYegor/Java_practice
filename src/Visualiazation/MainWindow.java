@@ -494,7 +494,6 @@ public class MainWindow extends JFrame {
         graph.addNode(name.charAt(0));
 
         JSONArray location = (JSONArray) node.get("location");
-        System.out.println(location.get(0) + " " + location.get(1) + '\n');
         Long xl = (Long)(location.get(0));
         int x = xl.intValue();
         Long yl = (Long)(location.get(1));
@@ -509,7 +508,6 @@ public class MainWindow extends JFrame {
             Long  wl = (Long) currentEdge.get(1);
             int weight = wl.intValue();
             adjacencyListForSetUp.add(new Edge(String.valueOf(currentEdge.get(0)).charAt(0), weight));
-            System.out.println(currentEdge.get(0) + " " + currentEdge.get(1) + '\n');
         }
         graph.getNodeByIndex(graph.nodeCount()-1).setAdjacencyList(adjacencyListForSetUp);
     }
@@ -539,8 +537,6 @@ public class MainWindow extends JFrame {
 
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(nodes.toJSONString());
-            System.out.println("Successfully Copied JSON Object to File...");
-            System.out.println("\nJSON Object: " + nodes);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "ERROR FILE OPEN");
         }
