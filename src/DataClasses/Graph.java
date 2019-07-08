@@ -67,6 +67,19 @@ public class Graph {
         nodeList = new ArrayList<>();
     }
 
+    // default function - will be deleted - now for working
+    public ArrayList<Graph> retGraphs(){
+        ArrayList<Graph> masGraph = new ArrayList<>();
+        Graph a = new Graph();
+        a.addNode('q');
+        a.addEdge('c', 'o',12);
+        Graph b = new Graph();
+        b.addEdge('z', 'y', 9);
+        b.addNode('p');
+        masGraph.add(a);
+        masGraph.add(b);
+        return masGraph;
+    }
 }
 
 

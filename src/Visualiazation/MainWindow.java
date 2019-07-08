@@ -6,8 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 public class MainWindow extends JFrame {
     private static final int MAINWINDOW_WIDTH = 900;
@@ -49,10 +49,15 @@ public class MainWindow extends JFrame {
     private DrawingPanel drawingPanel;
 
     private Graph graph;
+    private ArrayList<Graph> graphStates;
+    private int algorithmStep;
 
     public MainWindow(String title, Graph graph){
         super(title);
         this.graph = graph;
+        this.graphStates = graph.retGraphs();
+        graphStates.add(0, graph);
+        algorithmStep = 0;
         initVariables();
         windowSettings();
         layoutSettins();
@@ -99,7 +104,7 @@ public class MainWindow extends JFrame {
     private void windowSettings(){
         setSize(MAINWINDOW_WIDTH, MAINWINDOW_HEIGHT);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocation(new Point(400, 400));
+        setLocation(new Point(450, 200));
         setResizable(true);
     }
 
@@ -142,7 +147,7 @@ public class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 boolean flag = false;
                 if(!txtfEdgeTo.getText().isEmpty() && !txtfEdgeFrom.getText().isEmpty() && !txtfEdgeWeight.getText().isEmpty()) {
-                    graph.addEdge(txtfEdgeFrom.getText().charAt(0), txtfEdgeTo.getText().charAt(0), (int)txtfEdgeWeight.getText().charAt(0));
+                    graph.addEdge(txtfEdgeFrom.getText().charAt(0), txtfEdgeTo.getText().charAt(0), parseInt());
                     txtfEdgeFrom.setText("");
                     txtfEdgeTo.setText("");
                     txtfEdgeWeight.setText("");
@@ -155,7 +160,7 @@ public class MainWindow extends JFrame {
                         for (int j = 0; j < graph.nodeCount(); ++j) {
                             if (graph.getNodeByIndex(j).getColor() == Color.YELLOW) {
                                 if(!txtfEdgeWeight.getText().isEmpty()) {
-                                    graph.addEdge(graph.getNodeByIndex(i).getName(), graph.getNodeByIndex(j).getName(), (int)txtfEdgeWeight.getText().charAt(0));
+                                    graph.addEdge(graph.getNodeByIndex(i).getName(), graph.getNodeByIndex(j).getName(), parseInt());
                                     flag = true;
                                 }
                             }
@@ -185,6 +190,66 @@ public class MainWindow extends JFrame {
                 getContentPane().add(boxVOutputPanel, BorderLayout.WEST);
                 validate();
                 repaint();
+            }
+        });
+
+        btnStartAlgorithm.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(txtfStartNode.getText().isEmpty())
+                    JOptionPane.showMessageDialog(null, "Input start node name");
+                else {
+                    // + здесь считать массив состояний
+                    drawingPanel.setIsAlgorithmValue();
+                }
+            }
+        });
+
+        // + вывести/пометить_ребра путь до вершины
+        btnCalculateLength.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(txtfAimNode.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Input aim node name!");
+                    return;
+                }
+                for(int i = 0; i < graph.nodeCount(); ++i){
+                    if(graph.getNodeByIndex(i).getName() == txtfAimNode.getText().charAt(0)){
+                        if(graph.getNodeByIndex(i).getDistance() != Integer.MAX_VALUE)
+                            txtfLengthToAimNode.setText(String.valueOf(graph.getNodeByIndex(i).getDistance()));
+                        else
+                            txtfLengthToAimNode.setText(String.valueOf('\u221E'));
+                        return;
+                    }
+                }
+                txtfLengthToAimNode.setText("");
+                JOptionPane.showMessageDialog(null, "There are no node with this name!");
+            }
+        });
+
+        // Вывести на экран информацию о текущем шаге алгоритма?
+        btnNextStep.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(algorithmStep != graphStates.size() - 1) {
+                    graph = graphStates.get(++algorithmStep);
+                    drawingPanel.updateGraph(graph);
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "Algorithm`s work end!");
+            }
+        });
+
+        // Вывести на экран информацию о текущем шаге алгоритма?
+        btnPreviousStep.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(algorithmStep != 0){
+                    graph = graphStates.get(--algorithmStep);
+                    drawingPanel.updateGraph(graph);
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "It`s already first step!");
             }
         });
 
@@ -266,7 +331,7 @@ public class MainWindow extends JFrame {
 
     private void layoutDrawingPanelSettings(){
 
-        drawingPanel = new DrawingPanel(graph, txtfNode);
+        drawingPanel = new DrawingPanel(graphStates.get(0), txtfNode);
         drawingPanel.setPreferredSize(new Dimension(1000, 1000));
         drawingPanel.setBackground(new Color(230, 230, 230));
     }
@@ -346,5 +411,14 @@ public class MainWindow extends JFrame {
         }catch (IOException exception){
             JOptionPane.showMessageDialog(null, "FILE ERROR");
         }
+    }
+
+    private int parseInt(){
+        String str = txtfEdgeWeight.getText();
+        int totalNum = 0;
+        for(int i = 0; i < str.length(); ++i){
+            totalNum = totalNum * 10 + (int)(str.charAt(i)) - 48;
+        }
+        return totalNum;
     }
 }

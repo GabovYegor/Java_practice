@@ -68,4 +68,8 @@ public class Node {
     public void setColor(Color color) {
         this.color = color;
     }
+
+    public int getDistance(){
+        return distance;
+    }
 }
