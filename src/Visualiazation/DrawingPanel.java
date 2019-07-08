@@ -66,7 +66,7 @@ public class DrawingPanel extends JPanel {
 
     private void drawMainLine(Graphics2D g2, Point from, Point to, Color color){
         g2.setColor(color);
-        g2.setStroke(new BasicStroke(2.0f));
+        g2.setStroke(new BasicStroke(3.0f));
         g2.drawLine(from.x, from.y, to.x, to.y);
     }
 
@@ -77,7 +77,7 @@ public class DrawingPanel extends JPanel {
     }
 
     private void drawLine(Graphics2D g2, Point from, Point to, Color color){
-        drawWhiteLine(g2, from, to);
+        //drawWhiteLine(g2, from, to);
         drawMainLine(g2, from, to, color);
     }
 
