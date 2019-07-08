@@ -414,7 +414,6 @@ public class MainWindow extends JFrame {
         boxVOutputPanel.add(Box.createVerticalStrut((int)Double.POSITIVE_INFINITY));
     }
 
-    // MUST BE CHECKER FOR FILE
     private void parseGraph(File file){
         try{
             FileInputStream fstream = new FileInputStream(file);

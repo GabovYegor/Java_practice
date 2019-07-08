@@ -141,7 +141,6 @@ public class DrawingPanel extends JPanel {
     public void updateGraph(Graph newGraph){
         this.graph = newGraph;
     }
-
     public void setTrueIsAlgorithmValue(){
         isAlgorithm = true;
     }
