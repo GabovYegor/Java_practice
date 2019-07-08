@@ -13,7 +13,7 @@ public class DrawingPanel extends JPanel {
     private boolean isAlgorithm = false;
     public static final int BIGRADIUS = 30;
     private static final int LITTLERADIUS = 24;
-    private static final int ARROWANGLE = 100;
+    private static final int ARROWANGLE = 101;
     private static final int ARROWLENGTH = 30;
     private static final int OFFSETFORNAME = 7;
 

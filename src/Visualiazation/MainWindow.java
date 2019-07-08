@@ -30,7 +30,7 @@ public class MainWindow extends JFrame {
     private JButton btnEdgeAdd;
     private JButton btnNodeAdd;
     private JButton btnRepaint;
-    private JButton btnFinish;
+    private JButton btnGoToAlgorithm;
 
     private Box boxVOutputPanel;
     private JLabel lblStartNode;
@@ -79,7 +79,7 @@ public class MainWindow extends JFrame {
         btnNodeAdd   = new JButton("add Node");
         btnEdgeAdd   = new JButton("add Edge");
         btnRepaint   = new JButton("Repaint Graph");
-        btnFinish    = new JButton("Finish");
+        btnGoToAlgorithm = new JButton("go to algorithm");
 
         txtaLog = new JTextArea(10, 0);
         txtaLog.setText("Algorithm steps\n");
@@ -182,7 +182,7 @@ public class MainWindow extends JFrame {
             }
         });
 
-        btnFinish.addActionListener(new ActionListener() {
+        btnGoToAlgorithm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 getContentPane().remove(boxVInputPanel);
@@ -276,10 +276,10 @@ public class MainWindow extends JFrame {
                 panel.setPreferredSize(new Dimension(150, 0));
                 getContentPane().add(boxVInputPanel, BorderLayout.WEST);
 
-                // что еще?
                 graph = new Graph();
                 drawingPanel.setFalseIsAlgorithmValue();
                 drawingPanel.updateGraph(graph);
+                txtaLog.setText("");
 
                 validate();
                 repaint();
@@ -343,7 +343,7 @@ public class MainWindow extends JFrame {
 
         boxVInputPanel.add(Box.createVerticalStrut(10));
         Box boxHSetUpFinishBtn = Box.createHorizontalBox();
-        boxHSetUpFinishBtn.add(btnFinish);
+        boxHSetUpFinishBtn.add(btnGoToAlgorithm);
         boxVInputPanel.add(boxHSetUpFinishBtn);
 
         boxVInputPanel.add(Box.createVerticalStrut((int)Double.POSITIVE_INFINITY));

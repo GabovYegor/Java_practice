@@ -4,7 +4,9 @@ import Visualiazation.*;
 public class Main {
 
     public static void main(String[] args) {
-        MainWindow mainWindow = new MainWindow("Dijkstra", new Graph());
+        Graph g = new Graph();
+        g.addEdge('f', 'v', 5);
+        MainWindow mainWindow = new MainWindow("Dijkstra", g);
         mainWindow.setVisible(true);
     }
 }
