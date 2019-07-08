@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class DrawingPanel extends JPanel {
     private Graph graph;
+    private boolean isAlgorithm = false;
     public static final int BIGRADIUS = 30;
     private static final int LITTLERADIUS = 24;
     private static final int ARROWANGLE = 100;
@@ -18,33 +19,7 @@ public class DrawingPanel extends JPanel {
 
     DrawingPanel(Graph graph, JTextField txtfNode){
         this.graph = graph;
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                if(e.getButton() == MouseEvent.BUTTON1) {
-                    if (!txtfNode.getText().isEmpty())
-                        graph.getNodeByIndex(graph.addNode(txtfNode.getText().charAt(0))).setLocation(e.getPoint());
-                    else
-                        JOptionPane.showMessageDialog(null, "Node`s name empty");
-                    txtfNode.setText("");
-                }
-                if(e.getButton() == MouseEvent.BUTTON3){
-                    for(int i = 0; i < graph.nodeCount(); ++i){
-                        if(graph.getNodeByIndex(i).getLocation().x <= e.getPoint().x + BIGRADIUS / 2 &&
-                                graph.getNodeByIndex(i).getLocation().x >= e.getPoint().x - BIGRADIUS / 2 &&
-                                graph.getNodeByIndex(i).getLocation().y <= e.getPoint().y + BIGRADIUS / 2 &&
-                                graph.getNodeByIndex(i).getLocation().y >= e.getPoint().y - BIGRADIUS / 2)
-                            if(graph.getNodeByIndex(i).getColor() == Color.black)
-                                graph.getNodeByIndex(i).setColor(Color.BLUE);
-                            else if (graph.getNodeByIndex(i).getColor() == Color.BLUE)
-                                graph.getNodeByIndex(i).setColor(Color.YELLOW);
-                            else
-                                graph.getNodeByIndex(i).setColor(Color.black);
-                    }
-                }
-            }
-        });
+        listenerSettings(txtfNode);
     }
 
     @Override
@@ -58,7 +33,8 @@ public class DrawingPanel extends JPanel {
 
     private void drawNodes(Graphics2D g2){
         for(int i = 0; i < graph.nodeCount(); ++i){
-            drawOneNode(g2, String.valueOf(graph.getNodeByIndex(i).getName()),  graph.getNodeByIndex(i).getLocation(), graph.getNodeByIndex(i).getColor());
+            drawOneNode(g2, String.valueOf(graph.getNodeByIndex(i).getName()), graph.getNodeByIndex(i).getDistance(),
+                    graph.getNodeByIndex(i).getLocation(), graph.getNodeByIndex(i).getColor());
         }
     }
 
@@ -70,7 +46,7 @@ public class DrawingPanel extends JPanel {
                 (int)(nodeToLocation.x + ARROWLENGTH * Math.cos(edgeAngle + ARROWANGLE)),
                 (int)(nodeToLocation.y + ARROWLENGTH * Math.sin(edgeAngle + ARROWANGLE)));
 
-        g2.drawLine((int)(nodeToLocation.x + 15 * Math.cos(edgeAngle)), (int)(nodeToLocation.y + 15 * Math.sin(edgeAngle)),
+        g2.drawLine((int)(nodeToLocation.x + BIGRADIUS / 2 * Math.cos(edgeAngle)), (int)(nodeToLocation.y + BIGRADIUS / 2 * Math.sin(edgeAngle)),
                 (int)(nodeToLocation.x + ARROWLENGTH * Math.cos(edgeAngle - ARROWANGLE)),
                 (int)(nodeToLocation.y + ARROWLENGTH * Math.sin(edgeAngle - ARROWANGLE)));
     }
@@ -112,19 +88,62 @@ public class DrawingPanel extends JPanel {
     }
 
     private void printEdgeWeightInPoint(Graphics2D g2, String weight, Point nodeFromLocation, Point nodeToLocation){
-        g2.setColor(Color.black);
-        g2.setStroke(new BasicStroke(2.0f));
         double edgeAngle = Math.atan2(nodeFromLocation.y - nodeToLocation.y, nodeFromLocation.x - nodeToLocation.x);
-
-        int length  = 50; //(int)Math.sqrt(Math.pow(nodeFromLocation.x - nodeToLocation.x, 2) + Math.pow(nodeFromLocation.y - nodeToLocation.y, 2));
+        int length  = (int)Math.sqrt(Math.pow(nodeFromLocation.x - nodeToLocation.x, 2) + Math.pow(nodeFromLocation.y - nodeToLocation.y, 2)) / 2;
         printStringInPoint(g2, weight, new Point((int)(nodeToLocation.x + length * Math.cos(edgeAngle)), (int)(nodeToLocation.y + length * Math.sin(edgeAngle))));
     }
 
-    private void drawOneNode(Graphics2D g2, String string, Point point, Color color){
+    private void drawOneNode(Graphics2D g2, String string, int distance, Point point, Color color){
+        if(isAlgorithm) {
+            if(distance == Integer.MAX_VALUE)
+                printStringInPoint(g2, String.valueOf('\u221E'), new Point(point.x, point.y - BIGRADIUS));
+            else
+                printStringInPoint(g2, String.valueOf(distance), new Point(point.x, point.y - BIGRADIUS));
+        }
+
         g2.setColor(color);
         g2.fillOval(point.x - BIGRADIUS / 2, point.y - BIGRADIUS /2, BIGRADIUS, BIGRADIUS);
         g2.setColor(Color.WHITE);
         g2.fillOval(point.x - LITTLERADIUS / 2, point.y - LITTLERADIUS /2, LITTLERADIUS, LITTLERADIUS);
         printStringInPoint(g2, string, point);
     }
+
+    private void listenerSettings(JTextField txtfNode) {
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    if (!txtfNode.getText().isEmpty())
+                        graph.getNodeByIndex(graph.addNode(txtfNode.getText().charAt(0))).setLocation(e.getPoint());
+                    else
+                        JOptionPane.showMessageDialog(null, "Node`s name empty");
+                    txtfNode.setText("");
+                }
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    for (int i = 0; i < graph.nodeCount(); ++i) {
+                        if (graph.getNodeByIndex(i).getLocation().x <= e.getPoint().x + BIGRADIUS / 2 &&
+                                graph.getNodeByIndex(i).getLocation().x >= e.getPoint().x - BIGRADIUS / 2 &&
+                                graph.getNodeByIndex(i).getLocation().y <= e.getPoint().y + BIGRADIUS / 2 &&
+                                graph.getNodeByIndex(i).getLocation().y >= e.getPoint().y - BIGRADIUS / 2)
+                            if (graph.getNodeByIndex(i).getColor() == Color.black)
+                                graph.getNodeByIndex(i).setColor(Color.BLUE);
+                            else if (graph.getNodeByIndex(i).getColor() == Color.BLUE)
+                                graph.getNodeByIndex(i).setColor(Color.YELLOW);
+                            else
+                                graph.getNodeByIndex(i).setColor(Color.black);
+                    }
+                }
+            }
+        });
+    }
+
+    public void updateGraph(Graph newGraph){
+        this.graph = newGraph;
+    }
+
+    public void setTrueIsAlgorithmValue(){
+        isAlgorithm = true;
+    }
+    public void setFalseIsAlgorithmValue() { isAlgorithm = false; }
 }

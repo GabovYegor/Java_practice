@@ -117,5 +117,4 @@ public class Node {
         cloneNode.color = color;
         return cloneNode;
     }
-
 }
