@@ -87,11 +87,11 @@ public class Graph {
         // Шаг 0: Инициализация.
         for (int i = 0; i < nodeCount(); i++) {
             getNodeByIndex(i).setDistance(Integer.MAX_VALUE);
-            getNodeByIndex(i).setColor(Color.black);
+            getNodeByIndex(i).setColor(Color.gray);
             getNodeByIndex(i).clearPath();
         }
         getNodeByName(startNodeName).setDistance(0);
-        getNodeByName(startNodeName).setColor(Color.gray);
+        getNodeByName(startNodeName).setColor(Color.orange);
         getNodeByName(startNodeName).addInPath(startNodeName);
         queue.add(getIndexByName(startNodeName));
         strBuilder = new StringBuilder("Шаг 0:\nИнициализация.");
@@ -113,6 +113,9 @@ public class Graph {
 
             getNodeByIndex(currentNodeIndex).setColor(Color.red);
             strBuilder = new StringBuilder("Шаг " + m + ":\nРаскрытие вершины '" + getNodeByIndex(currentNodeIndex).getName() + "'.");
+            if (getNodeByIndex(currentNodeIndex).edgeCount() == 0) {
+                strBuilder.append("\nУ вершины нет исходящих рёбер.");
+            }
             result.add(new AlgorithmStepData(this.clone(), strBuilder.toString()));
 
             for (int i = 0; i < getNodeByIndex(currentNodeIndex).edgeCount(); i++) {
@@ -123,20 +126,20 @@ public class Graph {
                     getNodeByIndex(currentEndOfEdgeIndex).setPath(getNodeByIndex(currentNodeIndex).getPath());
                     getNodeByIndex(currentEndOfEdgeIndex).addInPath(getNodeByIndex(currentEndOfEdgeIndex).getName());
                     strBuilder = new StringBuilder("Вершина '" + getNodeByIndex(currentEndOfEdgeIndex).getName() + "' ещё не посещалась.\n");
-                    strBuilder.append("Назначен новый путь: " + getNodeByIndex(currentEndOfEdgeIndex).pathToString() + " (расстояние - " + getNodeByIndex(currentEndOfEdgeIndex).getDistance() + ").");
+                    strBuilder.append("Назначен новый путь: " + getNodeByIndex(currentEndOfEdgeIndex).pathToString() + " (расстояние — " + getNodeByIndex(currentEndOfEdgeIndex).getDistance() + ").");
                     result.add(new AlgorithmStepData(this.clone(), strBuilder.toString()));
                     queue.add(currentEndOfEdgeIndex);
                     getNodeByIndex(currentEndOfEdgeIndex).setColor(Color.orange);
                 } else {
                     strBuilder = new StringBuilder("Вершина '" + getNodeByIndex(currentEndOfEdgeIndex).getName() + "' уже посещалась.\n");
-                    strBuilder.append("Текущий путь до вершины: " + getNodeByIndex(currentEndOfEdgeIndex).pathToString() + " (расстояние - " + getNodeByIndex(currentEndOfEdgeIndex).getDistance() + ").\n");
+                    strBuilder.append("Текущий путь до вершины: " + getNodeByIndex(currentEndOfEdgeIndex).pathToString() + " (расстояние — " + getNodeByIndex(currentEndOfEdgeIndex).getDistance() + ").\n");
                     if ( getNodeByIndex(currentEndOfEdgeIndex).getDistance() >= getNodeByIndex(currentNodeIndex).getDistance() + getNodeByIndex(currentNodeIndex).getEdgeByIndex(i).getWeight() ) {
                         getNodeByIndex(currentEndOfEdgeIndex).setDistance(getNodeByIndex(currentNodeIndex).getDistance() + getNodeByIndex(currentNodeIndex).getEdgeByIndex(i).getWeight());
                         getNodeByIndex(currentEndOfEdgeIndex).setPath(getNodeByIndex(currentNodeIndex).getPath());
                         getNodeByIndex(currentEndOfEdgeIndex).addInPath(getNodeByIndex(currentEndOfEdgeIndex).getName());
-                        strBuilder.append("Найден более короткий путь: " + getNodeByIndex(currentEndOfEdgeIndex).pathToString() + " (расстояние - " + getNodeByIndex(currentEndOfEdgeIndex).getDistance() + ").");
+                        strBuilder.append("Найден более короткий путь: " + getNodeByIndex(currentEndOfEdgeIndex).pathToString() + " (расстояние — " + getNodeByIndex(currentEndOfEdgeIndex).getDistance() + ").");
                     } else {
-                        strBuilder.append("Путь из вершины '" + getNodeByIndex(currentNodeIndex).getName() + "'(расстояние - " + (getNodeByIndex(currentNodeIndex).getDistance() + getNodeByIndex(currentNodeIndex).getEdgeByIndex(i).getWeight()) + ") не является более коротким.");
+                        strBuilder.append("Путь из вершины '" + getNodeByIndex(currentNodeIndex).getName() + "' (расстояние — " + (getNodeByIndex(currentNodeIndex).getDistance() + getNodeByIndex(currentNodeIndex).getEdgeByIndex(i).getWeight()) + ") не является более коротким.");
                     }
                     result.add(new AlgorithmStepData(this.clone(), strBuilder.toString()));
                     getNodeByIndex(currentEndOfEdgeIndex).setColor(Color.black);
@@ -156,7 +159,7 @@ public class Graph {
             if (getNodeByIndex(i).getDistance() == Integer.MAX_VALUE) {
                 strBuilder.append("вершина недостежима.\n");
             } else {
-                strBuilder.append(getNodeByIndex(i).pathToString() + " (расстояние - " + getNodeByIndex(i).getDistance() + ").\n");
+                strBuilder.append(getNodeByIndex(i).pathToString() + " (расстояние — " + getNodeByIndex(i).getDistance() + ").\n");
             }
         }
         result.add(new AlgorithmStepData(this.clone(), strBuilder.toString()));

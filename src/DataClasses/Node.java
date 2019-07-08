@@ -110,7 +110,7 @@ public class Node {
             cloneNode.adjacencyList.add(adjacencyList.get(i).clone());
         }
         cloneNode.distance = distance;
-        // ДОБАВИТЬ ПАТЧ, КОГДА БУДЕТ ГОТОВО!!!!!!!
+        cloneNode.path = (ArrayList<Character>) path.clone();
         cloneNode.location = location.getLocation();
         cloneNode.color = color;
         return cloneNode;
