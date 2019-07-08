@@ -1,5 +1,4 @@
 package DataClasses;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -41,6 +40,10 @@ public class Node {
     // Количество рёбер, исходящих из данной вершины.
     public int edgeCount() {
         return adjacencyList.size();
+    }
+
+    public void setAdjacencyList(ArrayList<Edge> adjacencyList){
+        this.adjacencyList = adjacencyList;
     }
 
     public void setLocation(Point location){
@@ -99,8 +102,9 @@ public class Node {
 
     public String pathToString() {
         StringBuilder strBuilder = new StringBuilder("");
-        for (int i = 0; i < path.size(); i++)
-            strBuilder.append(path.get(i));
+        for (int i = 0; i < path.size() - 1; i++)
+            strBuilder.append(path.get(i) + "->");
+        strBuilder.append(path.get(path.size() - 1));
         return strBuilder.toString();
     }
 
