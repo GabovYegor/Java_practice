@@ -198,9 +198,15 @@ public class MainWindow extends JFrame {
                 if(txtfStartNode.getText().isEmpty())
                     JOptionPane.showMessageDialog(null, "Input start node name");
                 else {
-                    // + здесь считать массив состояний
                     graphStates = graph.Dijkstra(txtfStartNode.getText().charAt(0));
+                    algorithmStepNum = 0;
+                    graph = graphStates.get(++algorithmStepNum).getGraph();
+                    drawingPanel.updateGraph(graph);
                     drawingPanel.setTrueIsAlgorithmValue();
+                    txtaLog.setText("");
+                    for(int i = 0; i < algorithmStepNum; ++i){
+                        txtaLog.append(graphStates.get(i).getStr());
+                    }
                 }
             }
         });
@@ -234,6 +240,10 @@ public class MainWindow extends JFrame {
                 if(algorithmStepNum != graphStates.size() - 1) {
                     graph = graphStates.get(++algorithmStepNum).getGraph();
                     drawingPanel.updateGraph(graph);
+                    txtaLog.setText("");
+                    for(int i = 0; i <= algorithmStepNum; ++i){
+                        txtaLog.append(graphStates.get(i).getStr() + '\n');
+                    }
                 }
                 else
                     JOptionPane.showMessageDialog(null, "Algorithm`s work end!");
@@ -247,6 +257,10 @@ public class MainWindow extends JFrame {
                 if(algorithmStepNum != 0){
                     graph = graphStates.get(--algorithmStepNum).getGraph();
                     drawingPanel.updateGraph(graph);
+                    txtaLog.setText("");
+                    for(int i = 0; i <= algorithmStepNum; ++i){
+                        txtaLog.append(graphStates.get(i).getStr() + '\n');
+                    }
                 }
                 else
                     JOptionPane.showMessageDialog(null, "It`s already first step!");
