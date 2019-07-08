@@ -2,6 +2,7 @@ package Visualiazation;
 
 import DataClasses.AlgorithmStepData;
 import DataClasses.Graph;
+import DataClasses.Node;
 
 import javax.swing.*;
 import java.awt.*;
@@ -112,7 +113,8 @@ public class MainWindow extends JFrame {
         layoutOutputSettings();
         layoutDrawingPanelSettings();
         getContentPane().add(boxVInputPanel, BorderLayout.WEST);
-        getContentPane().add(new JScrollPane(drawingPanel));
+        //getContentPane().add(new JScrollPane(drawingPanel));
+        getContentPane().add(drawingPanel);
         getContentPane().add(new JScrollPane(txtaLog), BorderLayout.SOUTH);
     }
 
@@ -133,6 +135,11 @@ public class MainWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(!txtfNode.getText().isEmpty()) {
+                    for(int i = 0; i < graph.nodeCount(); ++i){
+                        if(graph.getNodeByIndex(i).getName() == txtfNode.getText().charAt(0)) {
+                            JOptionPane.showMessageDialog(null, "This node is already in graph");
+                        }
+                    }
                     graph.addNode(txtfNode.getText().charAt(0));
                     txtfNode.setText("");
                 }
@@ -146,7 +153,14 @@ public class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 boolean flag = false;
                 if(!txtfEdgeTo.getText().isEmpty() && !txtfEdgeFrom.getText().isEmpty() && !txtfEdgeWeight.getText().isEmpty()) {
-                    graph.addEdge(txtfEdgeFrom.getText().charAt(0), txtfEdgeTo.getText().charAt(0), parseInt());
+                    int currentWeight = parseInt();
+                    if(currentWeight == 0) {
+                        txtfEdgeFrom.setText("");
+                        txtfEdgeTo.setText("");
+                        txtfEdgeWeight.setText("");
+                        return;
+                    }
+                    graph.addEdge(txtfEdgeFrom.getText().charAt(0), txtfEdgeTo.getText().charAt(0), currentWeight);
                     txtfEdgeFrom.setText("");
                     txtfEdgeTo.setText("");
                     txtfEdgeWeight.setText("");
@@ -159,7 +173,10 @@ public class MainWindow extends JFrame {
                         for (int j = 0; j < graph.nodeCount(); ++j) {
                             if (graph.getNodeByIndex(j).getColor() == Color.YELLOW) {
                                 if(!txtfEdgeWeight.getText().isEmpty()) {
-                                    graph.addEdge(graph.getNodeByIndex(i).getName(), graph.getNodeByIndex(j).getName(), parseInt());
+                                    int currentWeight = parseInt();
+                                    if(currentWeight == 0)
+                                        return;
+                                    graph.addEdge(graph.getNodeByIndex(i).getName(), graph.getNodeByIndex(j).getName(), currentWeight);
                                     flag = true;
                                 }
                             }
@@ -219,8 +236,16 @@ public class MainWindow extends JFrame {
                     JOptionPane.showMessageDialog(null, "Input aim node name!");
                     return;
                 }
+
                 for(int i = 0; i < graph.nodeCount(); ++i){
                     if(graph.getNodeByIndex(i).getName() == txtfAimNode.getText().charAt(0)){
+                        if(graph.getNodeByIndex(i).pathToString().length() != 0)
+                            JOptionPane.showMessageDialog(null, "Lenght = " + String.valueOf(graph.getNodeByIndex(i).getDistance()) +
+                                    '\n' + " PATH FROM " + txtfStartNode.getText().charAt(0) +
+                                    " TO " + txtfAimNode.getText().charAt(0) + " : " + graph.getNodeByIndex(i).pathToString());
+                        else
+                            JOptionPane.showMessageDialog(null, "there is no way!");
+
                         if(graph.getNodeByIndex(i).getDistance() != Integer.MAX_VALUE)
                             txtfLengthToAimNode.setText(String.valueOf(graph.getNodeByIndex(i).getDistance()));
                         else
@@ -228,6 +253,7 @@ public class MainWindow extends JFrame {
                         return;
                     }
                 }
+
                 txtfLengthToAimNode.setText("");
                 JOptionPane.showMessageDialog(null, "There are no node with this name!");
             }
@@ -435,7 +461,16 @@ public class MainWindow extends JFrame {
     private int parseInt(){
         String str = txtfEdgeWeight.getText();
         int totalNum = 0;
+        if(str.charAt(0) == '0' || str.charAt(0) == '-'){
+            JOptionPane.showMessageDialog(null, "number must be >= 0!");
+            return 0;
+        }
+
         for(int i = 0; i < str.length(); ++i){
+            if((int)str.charAt(i) < 48 || (int)str.charAt(i) > 57) {
+                JOptionPane.showMessageDialog(null, "Edge weight must be only integer!");
+                return 0;
+            }
             totalNum = totalNum * 10 + (int)(str.charAt(i)) - 48;
         }
         return totalNum;
