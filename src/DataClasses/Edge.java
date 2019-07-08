@@ -35,4 +35,11 @@ public class Edge {
     public void setColor(Color color) {
         this.color = color;
     }
+
+    public Edge clone() {
+        Edge cloneEdge = new Edge(endNodeName, weight);
+        cloneEdge.color = color;
+        return cloneEdge;
+    }
+
 }
