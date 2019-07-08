@@ -1,15 +1,20 @@
 package Visualiazation;
 
 import DataClasses.AlgorithmStepData;
+import DataClasses.Edge;
 import DataClasses.Graph;
-import DataClasses.Node;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
+
+import org.json.simple.*;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class MainWindow extends JFrame {
     private static final int MAINWINDOW_WIDTH = 900;
@@ -28,6 +33,7 @@ public class MainWindow extends JFrame {
     private JTextField txtfEdgeTo;
     private JTextField txtfEdgeWeight;
     private JButton btnFromFile;
+    private JButton btnSaveFile;
     private JButton btnEdgeAdd;
     private JButton btnNodeAdd;
     private JButton btnRepaint;
@@ -77,6 +83,7 @@ public class MainWindow extends JFrame {
         txtfEdgeWeight = new JTextField(2);
 
         btnFromFile  = new JButton("From File");
+        btnSaveFile = new JButton("Save this Graph");
         btnNodeAdd   = new JButton("add Node");
         btnEdgeAdd   = new JButton("add Edge");
         btnRepaint   = new JButton("Repaint Graph");
@@ -127,6 +134,18 @@ public class MainWindow extends JFrame {
                 if (fileopen.showDialog(null, "Открыть файл") == JFileChooser.APPROVE_OPTION) {
                     file = fileopen.getSelectedFile();
                     parseGraph(file);
+                }
+            }
+        });
+
+        btnSaveFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileopen = new JFileChooser();
+                File file = null;
+                if (fileopen.showDialog(null, "Открыть файл") == JFileChooser.APPROVE_OPTION) {
+                    file = fileopen.getSelectedFile();
+                    saveIntoFile(file);
                 }
             }
         });
@@ -321,6 +340,11 @@ public class MainWindow extends JFrame {
         boxHSetUpFromFileBtn.add(btnFromFile);
         boxVInputPanel.add(boxHSetUpFromFileBtn);
 
+        boxVInputPanel.add(Box.createVerticalStrut(10));
+        Box boxHSetUpSaveFileBtn = Box.createHorizontalBox();
+        boxHSetUpSaveFileBtn.add(btnSaveFile);
+        boxVInputPanel.add(boxHSetUpSaveFileBtn);
+
         boxVInputPanel.add(Box.createVerticalStrut(50));
         Box boxHSetUpNodeLbl = Box.createHorizontalBox();
         boxHSetUpNodeLbl.add(Box.createHorizontalStrut(25));
@@ -440,21 +464,85 @@ public class MainWindow extends JFrame {
         boxVOutputPanel.add(Box.createVerticalStrut((int)Double.POSITIVE_INFINITY));
     }
 
-    private void parseGraph(File file){
-        try{
-            FileInputStream fstream = new FileInputStream(file);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-            String strLine;
-            while ((strLine = br.readLine()) != null){
-                if(strLine.isEmpty())
-                    continue;
-                if(strLine.length() == 1)
-                    graph.addNode(strLine.charAt(0));
-                if(strLine.length() == 5)
-                    graph.addEdge(strLine.charAt(0), strLine.charAt(2), (int)strLine.charAt(4));
+    private void parseGraph(File file) {
+
+        //JSON parser object to parse read file
+        JSONParser jsonParser = new JSONParser();
+
+        try (FileReader reader = new FileReader(file))
+        {
+            //Read JSON file
+            JSONArray nodesList = (JSONArray) jsonParser.parse(reader);
+            System.out.println(nodesList);
+
+            //Iterate over employee array
+            nodesList.forEach( emp -> parseNodeObject( (JSONObject) emp ) );
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void parseNodeObject(JSONObject node)
+    {
+        String name = (String) node.get("name");
+        System.out.println(name);
+        graph.addNode(name.charAt(0));
+
+        JSONArray location = (JSONArray) node.get("location");
+        System.out.println(location.get(0) + " " + location.get(1) + '\n');
+        Long xl = (Long)(location.get(0));
+        int x = xl.intValue();
+        Long yl = (Long)(location.get(1));
+        int y = yl.intValue();
+        graph.getNodeByIndex(graph.nodeCount()-1).setLocation(new Point(x, y));
+
+        JSONArray adjacencyList = (JSONArray) node.get("adjacencyList");
+        ArrayList<Edge> adjacencyListForSetUp = new ArrayList<Edge>();
+        Iterator adjListItr = adjacencyList.iterator();
+        while ((adjListItr.hasNext())){
+            JSONArray currentEdge = (JSONArray) adjListItr.next();
+            Long  wl = (Long) currentEdge.get(1);
+            int weight = wl.intValue();
+            adjacencyListForSetUp.add(new Edge(String.valueOf(currentEdge.get(0)).charAt(0), weight));
+            System.out.println(currentEdge.get(0) + " " + currentEdge.get(1) + '\n');
+        }
+        graph.getNodeByIndex(graph.nodeCount()-1).setAdjacencyList(adjacencyListForSetUp);
+    }
+
+    private void saveIntoFile(File file){
+        JSONArray nodes = new JSONArray();
+        for(int i = 0; i < graph.nodeCount(); ++i) {
+            JSONObject oneNode = new JSONObject();
+            oneNode.put("name", String.valueOf(graph.getNodeByIndex(i).getName()));
+
+            JSONArray location = new JSONArray();
+            location.add(0, graph.getNodeByIndex(i).getLocation().x);
+            location.add(1, graph.getNodeByIndex(i).getLocation().y);
+            oneNode.put("location", location);
+
+            JSONArray adjacencyList = new JSONArray();
+
+            for(int j = 0; j < graph.getNodeByIndex(i).edgeCount(); ++j){
+                JSONArray edgeInfo = new JSONArray();
+                edgeInfo.add(0, String.valueOf(graph.getNodeByIndex(i).getEdgeByIndex(j).getEndNodeName()));
+                edgeInfo.add(1, graph.getNodeByIndex(i).getEdgeByIndex(j).getWeight());
+                adjacencyList.add(edgeInfo);
             }
-        }catch (IOException exception){
-            JOptionPane.showMessageDialog(null, "FILE ERROR");
+            oneNode.put("adjacencyList", adjacencyList);
+            nodes.add(oneNode);
+        }
+
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write(nodes.toJSONString());
+            System.out.println("Successfully Copied JSON Object to File...");
+            System.out.println("\nJSON Object: " + nodes);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "ERROR FILE OPEN");
         }
     }
 
