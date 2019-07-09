@@ -1,55 +1,48 @@
 MANUAL
 
-1) How to input data
+1) How to input graph
     1.1) From File
-        For with way you must push button "from File" -> and find file in your file system
+        For with way you must push button "from File" -> and find file .json in your file system
     1.2) By Button
-        You must fill all text fields to add smth:
-            * Node - button "Add" nearly "Node name" text label
-            * Edge - button "Add" nearly "Weight" test label
+        You must fill all text fields to add or delete:
+            * Node - button "Add" nearly "Node name" text label to add node
+                   - button "Remove" nearly "Node name" text label to remove node
+            * Edge - button "Add" nearly "Weight" test label to add edge
     1.3) By Mouse
-        Firstly you must fill text fields to add smth:
+        Firstly you must fill text fields to add or delete:
             * Field "Name" - for add node
             * Field "Weight" - for add Edge, if you want to add Edge by mouse you must insert
                 nodes that you want to connect ("blue" - from, "yellow" - here).
                 You can change node`s color by right mouse button
         Features for mouse input:
             * You can change node`s location if you write node`s name in "Name" text field
+                and click mouse in free drawing field.
+            * You can delete nodes if you click on here
+     1.4) Change nodes location
+        Nodes have random location by default but you can change this value. If you want repaint
+            graph - you have to click on button "Repaint" and all nodes will changes his location
+     1.5) If you hate you graph or simple want to delete him you can click by button "reset"
 
-Справка
+2) How to save graph
+    2.1) If you want to save you graph you can click on button "Save this graph" and graph will
+        save into file with all node`s locations and node`s edges
 
-Граф можно ввести с клавиатуры, при помощи мыши, считать из файла.
+3) How go to algorithm
+    3.1) If you want go to algorithm you have to clicked to button "Go to algotithm". Pane will be
+        changed. You can`t edited, add or remove nodes now. Here you can run Dijkstra algorithm.
 
-Чтобы считать граф из файла нужно нажать кнопку "From File" -> выбрать файл, который содержит граф -> нажать на кнопку "Открыть файл".
+4) Algorithm work
+    4.1) For start algorithm you must input start node and click on "Start algorithm button"
+        After that algorithm start. You will see vizualization of algorithm. Algorithm change
+        vizualization image every second.
+    4.2) After algorithm end his work you can walk by algorithm steps using buttons: "Next step" and
+        "Previous step"
+    4.3) You can know lenght from start to any another nodes, that contains in graph. For this you
+        have to input needed nodes to "Aim Node" and clicked on "Get length button". After that you
+        will see new window with information about Path and Length from start to aim node.
 
-Ввести граф с клавиатуры или при помощи мыши вам помогут следующие команды:
+5) Reset all
+    5.1) If you want to reset all click on button "Reset"
 
-Добавить вершину:
 
-1) Ввести в поле "Name" имя вершины -> нажать кнопку "add Node".
 
-2) Ввести в поле "Name" имя вершины -> нажать ЛКМ на рабочее поле.
-
-Добавить ребро:
-
-1)Ввести в поля "From" и "To" названия вершин -> ввести в поле "Edge Weight" вес ребра -> нажать кнопку "add Edge" (можно вводить вершины, которые еще не созданы, они появятся автоматически).
-
-2)Выбрать вершину, из которой ребро будет выходить -> нажать на нее ПКМ (вершина должна покрасится в синий цвет) -> выбрать вершину, в которую ребро будет входить -> нажать на нее ПКМ 2 раза (вершина должна покрасится в желтый цвет) -> ввести в поле "Edge Weight" вес ребра -> нажать клавишу "add Edge".
-
-Вы можете изобразить граф в различных координатах, для этого нужно нажать клавишу "Repaint Graph".
-
-Можете сохранить свой граф в файл нажав кнопку "Save this Graph".
-
-Вы можете самостоятельно выбирать координаты для вершин, для этого вам нужно ввести в поле "Name" имя вершины, которую вы хотите переместить -> нажать ЛКМ на рабочем поле на место, куда вы хотите поставить вершину.
-
-Когда граф считан или построен, переходим к просмотру алгоритма, следует нажать на кнопку "go to algorithm".
-
-Для того, чтобы запустить алгоритм нужно назначить стартовую вершину, для этого следует ввести в поле "input start Node" имя вершины -> нажать клавишу "start algorithm".
-
-После запуска алгоритма вы можете узнать расстояние от стартовой вершины к заданной. Для этого нужно ввести в поле "A im Node" имя заданной вершины -> нажать клавишу "Get lenght". Ответ появится в сообщении.
-
-Просмотреть работу алгоритма можно нажав кнопку "start/end" и пошагово, нажимая клавиши "next step" и "previous step".
-
-Чтобы начать работу с новым графом нужно нажать кнопку "Reset".
-
-Чтобы прекратить работу нужно нажать на крестик в правом верхнем углу приложения.

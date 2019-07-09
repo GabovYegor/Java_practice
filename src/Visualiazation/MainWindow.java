@@ -135,11 +135,11 @@ public class MainWindow extends JFrame {
         btnManual = new JButton("Manual");
         btnFromFile  = new JButton("From File");
         btnSaveFile = new JButton("Save this Graph");
-        btnNodeAdd   = new JButton("add");
-        btnNodeRemove = new JButton("remove");
-        btnEdgeAdd   = new JButton("add");
+        btnNodeAdd   = new JButton("Add");
+        btnNodeRemove = new JButton("Remove");
+        btnEdgeAdd   = new JButton("Add");
         btnRepaint   = new JButton("Repaint Graph");
-        btnGoToAlgorithm = new JButton("go to algorithm");
+        btnGoToAlgorithm = new JButton("Go to algorithm");
         btnResetInput = new JButton("Reset");
 
         txtaLog = new JTextArea(10, 0);
@@ -147,7 +147,7 @@ public class MainWindow extends JFrame {
         txtaLog.setLineWrap(true);
         txtaLog.setWrapStyleWord(true);
 
-        lblStartNode = new JLabel("input start Node");
+        lblStartNode = new JLabel("Input start Node");
         lblAimNode = new JLabel("Aim Node");
 
         txtfStartNode  = new JTextField(2);
@@ -167,10 +167,10 @@ public class MainWindow extends JFrame {
         });
 
         boxVOutputPanel = Box.createVerticalBox();
-        btnStartAlgorithm = new JButton("start algorithm");
+        btnStartAlgorithm = new JButton("Start algorithm");
         btnCalculateLength = new JButton("Get length");
-        btnNextStep = new JButton("next step");
-        btnPreviousStep = new JButton("previous step");
+        btnNextStep = new JButton("Next step");
+        btnPreviousStep = new JButton("Previous step");
         btnResetOutput = new JButton("Reset");
 
         algorithmStepNum = 0;
@@ -200,19 +200,18 @@ public class MainWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 File file = new File("Docs/manual.txt");
-                StringBuilder allString = new StringBuilder();
+                StringBuilder allStrings = new StringBuilder();
                 try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                     String line;
                     while ((line = br.readLine()) != null) {
-                        System.out.println(line);
-                        allString.append(line + '\n');
+                        allStrings.append(line + '\n');
                     }
                 } catch (FileNotFoundException ex) {
                     ex.printStackTrace();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                JOptionPane.showMessageDialog(null, allString.toString());
+                JOptionPane.showMessageDialog(null, allStrings.toString());
             }
         });
 
@@ -460,6 +459,10 @@ public class MainWindow extends JFrame {
                 drawingPanel.setFalseIsAlgorithmValue();
                 drawingPanel.updateGraph(graph);
                 txtaLog.setText("Algorithm steps");
+
+                time = new Timer();
+                isAlgorithmAlreadyWorked = false;
+                algorithmStepNum = 0;
 
                 validate();
                 repaint();
