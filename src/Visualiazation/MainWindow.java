@@ -260,15 +260,20 @@ public class MainWindow extends JFrame {
         btnNodeRemove.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean isDelelete = false;
-                for(int i = 0; i < graph.nodeCount(); ++i) {
-                    if(graph.getNodeByIndex(i).getName() == txtfNode.getText().charAt(0)) {
-                        graph.removeNode(txtfNode.getText().charAt(0));
-                        isDelelete = true;
+                if(!txtfNode.getText().isEmpty()) {
+                    boolean isDelelete = false;
+                    for (int i = 0; i < graph.nodeCount(); ++i) {
+                        if (graph.getNodeByIndex(i).getName() == txtfNode.getText().charAt(0)) {
+                            graph.removeNode(txtfNode.getText().charAt(0));
+                            isDelelete = true;
+                        }
                     }
+                    if (!isDelelete)
+                        JOptionPane.showMessageDialog(null, "Graph don`t contain this node");
                 }
-                if(!isDelelete)
-                    JOptionPane.showMessageDialog(null, "Graph don`t contain this node");
+                else
+                    JOptionPane.showMessageDialog(null, "Node`s name empty");
+                txtfNode.setText("");
             }
         });
 
@@ -284,10 +289,22 @@ public class MainWindow extends JFrame {
                         txtfEdgeWeight.setText("");
                         return;
                     }
+
+                    boolean isContain = false;
+                    for(int i = 0; i < graph.nodeCount(); ++i)
+                        if(graph.getNodeByIndex(i).getName() == txtfEdgeFrom.getText().charAt(0))
+                            isContain = true;
+
+                    if(isContain) {
+                        for (int i = 0; i < graph.getNodeByName(txtfEdgeFrom.getText().charAt(0)).edgeCount(); ++i) {
+                            if (graph.getNodeByName(txtfEdgeFrom.getText().charAt(0)).getEdgeByIndex(i).getEndNodeName() == txtfEdgeTo.getText().charAt(0)) {
+                                JOptionPane.showMessageDialog(null, "Graph is already contain edge \n" +
+                                                                                            "weight will be update");
+                            }
+                        }
+                    }
+
                     graph.addEdge(txtfEdgeFrom.getText().charAt(0), txtfEdgeTo.getText().charAt(0), currentWeight);
-                    txtfEdgeFrom.setText("");
-                    txtfEdgeTo.setText("");
-                    txtfEdgeWeight.setText("");
                     repaint();
                     flag = true;
                 }
@@ -314,7 +331,10 @@ public class MainWindow extends JFrame {
                     for(int i = 0; i < graph.nodeCount(); ++i)
                         graph.getNodeByIndex(i).setColor(Color.BLACK);
 
-
+                txtfEdgeFrom.setText("");
+                txtfEdgeTo.setText("");
+                txtfEdgeWeight.setText("");
+                
                 if(!flag)
                     JOptionPane.showMessageDialog(null, "Edge fields Empty");
             }
@@ -490,7 +510,6 @@ public class MainWindow extends JFrame {
 
         boxVInputPanel.add(Box.createVerticalStrut(50));
         Box boxHSetUpNodeLbl = Box.createHorizontalBox();
-        //boxHSetUpNodeLbl.add(Box.createHorizontalStrut(25));
         boxHSetUpNodeLbl.add(Box.createHorizontalStrut(5));
         boxHSetUpNodeLbl.add(lblNode);
         boxHSetUpNodeLbl.add(Box.createHorizontalStrut(5));
