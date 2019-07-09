@@ -38,6 +38,7 @@ public class MainWindow extends JFrame {
     private JButton btnNodeAdd;
     private JButton btnRepaint;
     private JButton btnGoToAlgorithm;
+    private JButton btnResetInput;
 
     private Box boxVOutputPanel;
     private JLabel lblStartNode;
@@ -50,7 +51,7 @@ public class MainWindow extends JFrame {
     private JButton btnCalculateLength;
     private JButton btnNextStep;
     private JButton btnPreviousStep;
-    private JButton btnReset;
+    private JButton btnResetOutput;
 
     private JTextArea txtaLog;
 
@@ -88,6 +89,7 @@ public class MainWindow extends JFrame {
         btnEdgeAdd   = new JButton("add Edge");
         btnRepaint   = new JButton("Repaint Graph");
         btnGoToAlgorithm = new JButton("go to algorithm");
+        btnResetInput = new JButton("Reset");
 
         txtaLog = new JTextArea(10, 0);
         txtaLog.setText("Algorithm steps\n");
@@ -105,7 +107,7 @@ public class MainWindow extends JFrame {
         btnCalculateLength = new JButton("Get length");
         btnNextStep = new JButton("next step");
         btnPreviousStep = new JButton("previous step");
-        btnReset = new JButton("Reset");
+        btnResetOutput = new JButton("Reset");
     }
 
     private void windowSettings(){
@@ -132,6 +134,8 @@ public class MainWindow extends JFrame {
                 JFileChooser fileopen = new JFileChooser();
                 File file = null;
                 if (fileopen.showDialog(null, "Открыть файл") == JFileChooser.APPROVE_OPTION) {
+                    graph = new Graph();
+                    drawingPanel.updateGraph(graph);
                     file = fileopen.getSelectedFile();
                     parseGraph(file);
                 }
@@ -187,14 +191,17 @@ public class MainWindow extends JFrame {
                     flag = true;
                 }
 
+                boolean isSetBlack = false;
                 for(int i = 0; i < graph.nodeCount(); ++i){
                     if(graph.getNodeByIndex(i).getColor() == Color.BLUE) {
                         for (int j = 0; j < graph.nodeCount(); ++j) {
                             if (graph.getNodeByIndex(j).getColor() == Color.YELLOW) {
+                                isSetBlack = true;
                                 if(!txtfEdgeWeight.getText().isEmpty()) {
                                     int currentWeight = parseInt();
                                     if(currentWeight == 0)
                                         return;
+                                    graph.getNodeByIndex(j).setColor(Color.BLACK);
                                     graph.addEdge(graph.getNodeByIndex(i).getName(), graph.getNodeByIndex(j).getName(), currentWeight);
                                     flag = true;
                                 }
@@ -202,6 +209,11 @@ public class MainWindow extends JFrame {
                         }
                     }
                 }
+
+                if(isSetBlack)
+                    for(int i = 0; i < graph.nodeCount(); ++i)
+                        graph.getNodeByIndex(i).setColor(Color.BLACK);
+
 
                 if(!flag)
                     JOptionPane.showMessageDialog(null, "Edge fields Empty");
@@ -225,6 +237,14 @@ public class MainWindow extends JFrame {
                 getContentPane().add(boxVOutputPanel, BorderLayout.WEST);
                 validate();
                 repaint();
+            }
+        });
+
+        btnResetInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                graph = new Graph();
+                drawingPanel.updateGraph(graph);
             }
         });
 
@@ -287,7 +307,7 @@ public class MainWindow extends JFrame {
                     drawingPanel.updateGraph(graph);
                     txtaLog.setText("");
                     for(int i = 0; i <= algorithmStepNum; ++i){
-                        txtaLog.append(graphStates.get(i).getStr() + '\n');
+                        txtaLog.append(graphStates.get(i).getStr() + '\n' + '\n');
                     }
                 }
                 else
@@ -304,7 +324,7 @@ public class MainWindow extends JFrame {
                     drawingPanel.updateGraph(graph);
                     txtaLog.setText("");
                     for(int i = 0; i <= algorithmStepNum; ++i){
-                        txtaLog.append(graphStates.get(i).getStr() + '\n');
+                        txtaLog.append(graphStates.get(i).getStr() + '\n' + '\n');
                     }
                 }
                 else
@@ -312,7 +332,7 @@ public class MainWindow extends JFrame {
             }
         });
 
-        btnReset.addActionListener(new ActionListener() {
+        btnResetOutput.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 getContentPane().remove(boxVOutputPanel);
@@ -324,7 +344,7 @@ public class MainWindow extends JFrame {
                 graph = new Graph();
                 drawingPanel.setFalseIsAlgorithmValue();
                 drawingPanel.updateGraph(graph);
-                txtaLog.setText("");
+                txtaLog.setText("Algorithm steps");
 
                 validate();
                 repaint();
@@ -396,6 +416,11 @@ public class MainWindow extends JFrame {
         boxHSetUpFinishBtn.add(btnGoToAlgorithm);
         boxVInputPanel.add(boxHSetUpFinishBtn);
 
+        boxVInputPanel.add(Box.createVerticalStrut(70));
+        Box boxHSetUpResetBtn = Box.createHorizontalBox();
+        boxHSetUpResetBtn.add(btnResetInput);
+        boxVInputPanel.add(boxHSetUpResetBtn);
+
         boxVInputPanel.add(Box.createVerticalStrut((int)Double.POSITIVE_INFINITY));
     }
 
@@ -456,9 +481,9 @@ public class MainWindow extends JFrame {
         boxHSetUpPreviousBtn.add(btnPreviousStep);
         boxVOutputPanel.add(boxHSetUpPreviousBtn);
 
-        boxVOutputPanel.add(Box.createVerticalStrut(10));
+        boxVOutputPanel.add(Box.createVerticalStrut(190));
         Box boxHSetUpResetBtn = Box.createHorizontalBox();
-        boxHSetUpResetBtn.add(btnReset);
+        boxHSetUpResetBtn.add(btnResetOutput);
         boxVOutputPanel.add(boxHSetUpResetBtn);
 
         boxVOutputPanel.add(Box.createVerticalStrut((int)Double.POSITIVE_INFINITY));
@@ -473,7 +498,6 @@ public class MainWindow extends JFrame {
         {
             //Read JSON file
             JSONArray nodesList = (JSONArray) jsonParser.parse(reader);
-            System.out.println(nodesList);
 
             //Iterate over employee array
             nodesList.forEach( emp -> parseNodeObject( (JSONObject) emp ) );
@@ -490,7 +514,6 @@ public class MainWindow extends JFrame {
     private void parseNodeObject(JSONObject node)
     {
         String name = (String) node.get("name");
-        System.out.println(name);
         graph.addNode(name.charAt(0));
 
         JSONArray location = (JSONArray) node.get("location");

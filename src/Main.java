@@ -1,11 +1,5 @@
 import DataClasses.Graph;
 import Visualiazation.*;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
-import javax.swing.*;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class Main {
 

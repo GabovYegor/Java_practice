@@ -102,6 +102,8 @@ public class Node {
 
     public String pathToString() {
         StringBuilder strBuilder = new StringBuilder("");
+        if(path.size() == 0)
+            return strBuilder.toString();
         for (int i = 0; i < path.size() - 1; i++)
             strBuilder.append(path.get(i) + "->");
         strBuilder.append(path.get(path.size() - 1));
