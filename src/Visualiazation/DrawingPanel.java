@@ -110,23 +110,26 @@ public class DrawingPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if (e.getButton() == MouseEvent.BUTTON1) {
-                    for (int i = 0; i < graph.nodeCount(); ++i) {
-                        if (graph.getNodeByIndex(i).getLocation().x <= e.getPoint().x + BIGRADIUS / 2 &&
-                                graph.getNodeByIndex(i).getLocation().x >= e.getPoint().x - BIGRADIUS / 2 &&
-                                graph.getNodeByIndex(i).getLocation().y <= e.getPoint().y + BIGRADIUS / 2 &&
-                                graph.getNodeByIndex(i).getLocation().y >= e.getPoint().y - BIGRADIUS / 2) {
-                            graph.removeNode(graph.getNodeByIndex(i).getName());
-                            return;
-                        }
-                    }
 
-                    if (!txtfNode.getText().isEmpty())
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    if (!txtfNode.getText().isEmpty()) {
                         graph.getNodeByIndex(graph.addNode(txtfNode.getText().charAt(0))).setLocation(e.getPoint());
+                        txtfNode.setText("");
+                        return;
+                    }
                     else
-                        JOptionPane.showMessageDialog(null, "Node`s name empty");
-                    txtfNode.setText("");
+                        for (int i = 0; i < graph.nodeCount(); ++i) {
+                            if (graph.getNodeByIndex(i).getLocation().x <= e.getPoint().x + BIGRADIUS / 2 &&
+                                    graph.getNodeByIndex(i).getLocation().x >= e.getPoint().x - BIGRADIUS / 2 &&
+                                    graph.getNodeByIndex(i).getLocation().y <= e.getPoint().y + BIGRADIUS / 2 &&
+                                    graph.getNodeByIndex(i).getLocation().y >= e.getPoint().y - BIGRADIUS / 2) {
+                                graph.removeNode(graph.getNodeByIndex(i).getName());
+                                return;
+                            }
+                        }
+                    JOptionPane.showMessageDialog(null, "Node`s name empty");
                 }
+
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     for (int i = 0; i < graph.nodeCount(); ++i) {
                         if (graph.getNodeByIndex(i).getLocation().x <= e.getPoint().x + BIGRADIUS / 2 &&

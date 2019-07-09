@@ -260,15 +260,20 @@ public class MainWindow extends JFrame {
         btnNodeRemove.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean isDelelete = false;
-                for(int i = 0; i < graph.nodeCount(); ++i) {
-                    if(graph.getNodeByIndex(i).getName() == txtfNode.getText().charAt(0)) {
-                        graph.removeNode(txtfNode.getText().charAt(0));
-                        isDelelete = true;
+                if(!txtfNode.getText().isEmpty()) {
+                    boolean isDelelete = false;
+                    for (int i = 0; i < graph.nodeCount(); ++i) {
+                        if (graph.getNodeByIndex(i).getName() == txtfNode.getText().charAt(0)) {
+                            graph.removeNode(txtfNode.getText().charAt(0));
+                            isDelelete = true;
+                        }
                     }
+                    if (!isDelelete)
+                        JOptionPane.showMessageDialog(null, "Graph don`t contain this node");
                 }
-                if(!isDelelete)
-                    JOptionPane.showMessageDialog(null, "Graph don`t contain this node");
+                else
+                    JOptionPane.showMessageDialog(null, "Node`s name empty");
+                txtfNode.setText("");
             }
         });
 
