@@ -59,6 +59,7 @@ public class MainWindow extends JFrame {
     private JTextField txtfEdgeFrom;
     private JTextField txtfEdgeTo;
     private JTextField txtfEdgeWeight;
+    private JButton btnManual;
     private JButton btnFromFile;
     private JButton btnSaveFile;
     private JButton btnEdgeAdd;
@@ -130,6 +131,7 @@ public class MainWindow extends JFrame {
 
         txtfEdgeWeight = new JTextField(2);
 
+        btnManual = new JButton("Manual");
         btnFromFile  = new JButton("From File");
         btnSaveFile = new JButton("Save this Graph");
         btnNodeAdd   = new JButton("add");
@@ -191,6 +193,26 @@ public class MainWindow extends JFrame {
     }
 
     private void buttonsSettings(){
+
+        btnManual.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                File file = new File("Docs/manual.txt");
+                StringBuilder allString = new StringBuilder();
+                try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        System.out.println(line);
+                        allString.append(line + '\n');
+                    }
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                JOptionPane.showMessageDialog(null, allString.toString());
+            }
+        });
 
         btnFromFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -432,6 +454,11 @@ public class MainWindow extends JFrame {
 
     private void layoutInputSettings(){
         boxVInputPanel.setPreferredSize(new Dimension(150, 0));
+
+        boxVInputPanel.add(Box.createVerticalStrut(10));
+        Box boxHSetUpManual = Box.createHorizontalBox();
+        boxHSetUpManual.add(btnManual);
+        boxVInputPanel.add(boxHSetUpManual);
 
         boxVInputPanel.add(Box.createVerticalStrut(10));
         Box boxHSetUpFromFileBtn = Box.createHorizontalBox();
