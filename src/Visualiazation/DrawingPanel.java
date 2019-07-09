@@ -13,9 +13,11 @@ public class DrawingPanel extends JPanel {
     public boolean isAlgorithm = false;
     public static final int BIGRADIUS = 30;
     private static final int LITTLERADIUS = 24;
-    private static final int ARROWANGLE = 101;
+    private static final int ARROWANGLE = 50;
     private static final int ARROWLENGTH = 30;
     private static final int OFFSETFORNAME = 7;
+    private static final int OFFSETFORWEIGHT = 15;
+
 
     DrawingPanel(Graph graph, JTextField txtfNode){
         this.graph = graph;
@@ -70,14 +72,7 @@ public class DrawingPanel extends JPanel {
         g2.drawLine(from.x, from.y, to.x, to.y);
     }
 
-    private void drawWhiteLine(Graphics2D g2, Point from, Point to){
-        g2.setColor(Color.white);
-        g2.setStroke(new BasicStroke(6.0f));
-        g2.drawLine(from.x, from.y, to.x, to.y);
-    }
-
     private void drawLine(Graphics2D g2, Point from, Point to, Color color){
-        //drawWhiteLine(g2, from, to);
         drawMainLine(g2, from, to, color);
     }
 
@@ -90,7 +85,9 @@ public class DrawingPanel extends JPanel {
     private void printEdgeWeightInPoint(Graphics2D g2, String weight, Point nodeFromLocation, Point nodeToLocation){
         double edgeAngle = Math.atan2(nodeFromLocation.y - nodeToLocation.y, nodeFromLocation.x - nodeToLocation.x);
         int length  = (int)Math.sqrt(Math.pow(nodeFromLocation.x - nodeToLocation.x, 2) + Math.pow(nodeFromLocation.y - nodeToLocation.y, 2)) / 2;
-        printStringInPoint(g2, weight, new Point((int)(nodeToLocation.x + length * Math.cos(edgeAngle)), (int)(nodeToLocation.y + length * Math.sin(edgeAngle))));
+        printStringInPoint(g2, weight, new Point((int)(nodeToLocation.x + length * Math.cos(edgeAngle) + OFFSETFORWEIGHT * Math.cos(edgeAngle + 90)),
+                                                 (int)(nodeToLocation.y + length * Math.sin(edgeAngle) + OFFSETFORWEIGHT * Math.sin(edgeAngle + 90))));
+
     }
 
     private void drawOneNode(Graphics2D g2, String string, int distance, Point point, Color color){
