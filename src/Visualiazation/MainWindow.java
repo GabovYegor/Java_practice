@@ -13,9 +13,6 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
@@ -35,8 +32,9 @@ class ScheduledTask extends TimerTask {
 
     @Override
     public void run() {
-        if(stepsCount == stepsNum ) {
+        if(stepsCount >= stepsNum ) {
             time.cancel();
+            time.purge();
             JOptionPane.showMessageDialog(null, "algorithm end work!");
             return;
         }
@@ -72,15 +70,12 @@ public class MainWindow extends JFrame {
     private Box boxVOutputPanel;
     private JLabel lblStartNode;
     private JLabel lblAimNode;
-    private JLabel lblLegthToAimNode;
     private JTextField txtfStartNode;
     private JTextField txtfAimNode;
-    private JTextField txtfLengthToAimNode;
     private JButton btnStartAlgorithm;
     private JButton btnCalculateLength;
     private JButton btnNextStep;
     private JButton btnPreviousStep;
-    private JButton btnStartStopAlgorithm;
     private JButton btnResetOutput;
 
     private JTextArea txtaLog;
@@ -90,11 +85,12 @@ public class MainWindow extends JFrame {
     private Graph graph;
     private ArrayList<AlgorithmStepData> graphStates;
     private int algorithmStepNum;
+    private java.util.Timer time = new Timer();
+    boolean isAlgorithmAlreadyWorked;
 
     public MainWindow(String title, Graph graph){
         super(title);
         this.graph = graph;
-        algorithmStepNum = 0;
         initVariables();
         windowSettings();
         layoutSettins();
@@ -109,8 +105,29 @@ public class MainWindow extends JFrame {
         lblWeight    = new JLabel("Edge Weight");
 
         txtfNode       = new JTextField(2);
+        txtfNode.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                if(txtfNode.getText().length() >= 1)
+                    e.consume();  // ignore event
+                }
+        });
+
         txtfEdgeFrom   = new JTextField(2);
+        txtfEdgeFrom.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                if(txtfEdgeFrom.getText().length() >= 1)
+                    e.consume();  // ignore event
+            }
+        });
+
         txtfEdgeTo     = new JTextField(2);
+        txtfEdgeTo.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                if(txtfEdgeTo.getText().length() >= 1)
+                    e.consume();  // ignore event
+            }
+        });
+
         txtfEdgeWeight = new JTextField(2);
 
         btnFromFile  = new JButton("From File");
@@ -128,17 +145,33 @@ public class MainWindow extends JFrame {
 
         lblStartNode = new JLabel("input start Node");
         lblAimNode = new JLabel("Aim Node");
-        lblLegthToAimNode = new JLabel("Length to Node");
+
         txtfStartNode  = new JTextField(2);
+        txtfStartNode.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                if(txtfStartNode.getText().length() >= 1)
+                    e.consume();  // ignore event
+            }
+        });
+
         txtfAimNode = new JTextField(2);
-        txtfLengthToAimNode = new JTextField(2);
+        txtfAimNode.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                if(txtfAimNode.getText().length() >= 1)
+                    e.consume();  // ignore event
+            }
+        });
+
         boxVOutputPanel = Box.createVerticalBox();
         btnStartAlgorithm = new JButton("start algorithm");
         btnCalculateLength = new JButton("Get length");
         btnNextStep = new JButton("next step");
         btnPreviousStep = new JButton("previous step");
-        btnStartStopAlgorithm = new JButton("start/stop");
         btnResetOutput = new JButton("Reset");
+
+        algorithmStepNum = 0;
+        time = new Timer();
+        isAlgorithmAlreadyWorked = false;
     }
 
     private void windowSettings(){
@@ -281,30 +314,35 @@ public class MainWindow extends JFrame {
         btnStartAlgorithm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(txtfStartNode.getText().isEmpty())
+                if(txtfStartNode.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Input start node name");
-                else {
-                    boolean isRightNode = false;
-                    for(int i = 0; i < graph.nodeCount(); ++i){
-                        if(graph.getNodeByIndex(i).getName() == txtfStartNode.getText().charAt(0))
-                            isRightNode = true;
-                    }
-                    
-                    if(!isRightNode){
-                        JOptionPane.showMessageDialog(null, "There are no node with this name");
-                        return;
-                    }
+                    return;
+                }
+                boolean isRightNode = false;
+                for(int i = 0; i < graph.nodeCount(); ++i){
+                    if(graph.getNodeByIndex(i).getName() == txtfStartNode.getText().charAt(0))
+                        isRightNode = true;
+                }
 
+                if(!isRightNode){
+                    JOptionPane.showMessageDialog(null, "There are no node with this name");
+                    return;
+                }
+
+                if(!isAlgorithmAlreadyWorked) {
+                    isAlgorithmAlreadyWorked = true;
                     graphStates = graph.Dijkstra(txtfStartNode.getText().charAt(0));
-                    algorithmStepNum = 0;
-                    graph = graphStates.get(++algorithmStepNum).getGraph();
+                    graph = graphStates.get(algorithmStepNum).getGraph();
                     drawingPanel.updateGraph(graph);
                     drawingPanel.setTrueIsAlgorithmValue();
                     txtaLog.setText("");
-                    for(int i = 0; i < algorithmStepNum; ++i){
-                        txtaLog.append(graphStates.get(i).getStr());
-                    }
+                    txtaLog.append(graphStates.get(0).getStr());
+
+                    ScheduledTask task = new ScheduledTask(btnNextStep, time, graphStates.size() - 1, algorithmStepNum);
+                    time.schedule(task, 0, 1000);
                 }
+                else
+                    JOptionPane.showMessageDialog(null, "Algorithm already worked");
             }
         });
 
@@ -325,16 +363,10 @@ public class MainWindow extends JFrame {
                                     " TO " + txtfAimNode.getText().charAt(0) + " : " + graph.getNodeByIndex(i).pathToString());
                         else
                             JOptionPane.showMessageDialog(null, "there is no way!");
-
-                        if(graph.getNodeByIndex(i).getDistance() != Integer.MAX_VALUE)
-                            txtfLengthToAimNode.setText(String.valueOf(graph.getNodeByIndex(i).getDistance()));
-                        else
-                            txtfLengthToAimNode.setText(String.valueOf('\u221E'));
                         return;
                     }
                 }
 
-                txtfLengthToAimNode.setText("");
                 JOptionPane.showMessageDialog(null, "There are no node with this name!");
             }
         });
@@ -374,15 +406,6 @@ public class MainWindow extends JFrame {
                 }
                 else
                     JOptionPane.showMessageDialog(null, "It`s already first step!");
-            }
-        });
-        
-        btnStartStopAlgorithm.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                java.util.Timer time = new Timer();
-                ScheduledTask task = new ScheduledTask(btnNextStep, time, graphStates.size() - 1, algorithmStepNum);
-                time.schedule(task, 0, 1000);
             }
         });
 
@@ -514,15 +537,6 @@ public class MainWindow extends JFrame {
         boxVOutputPanel.add(boxHSetUpAimNodeLbl);
 
         boxVOutputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetUpAimNodeLength = Box.createHorizontalBox();
-        boxHSetUpAimNodeLength.add(Box.createHorizontalStrut(5));
-        boxHSetUpAimNodeLength.add(lblLegthToAimNode);
-        boxHSetUpAimNodeLength.add(Box.createHorizontalStrut(5));
-        boxHSetUpAimNodeLength.add(txtfLengthToAimNode);
-        boxHSetUpAimNodeLength.add(Box.createHorizontalStrut(5));
-        boxVOutputPanel.add(boxHSetUpAimNodeLength);
-
-        boxVOutputPanel.add(Box.createVerticalStrut(10));
         Box boxHSetUpLengthBtn = Box.createHorizontalBox();
         boxHSetUpLengthBtn.add(btnCalculateLength);
         boxVOutputPanel.add(boxHSetUpLengthBtn);
@@ -537,12 +551,7 @@ public class MainWindow extends JFrame {
         boxHSetUpPreviousBtn.add(btnPreviousStep);
         boxVOutputPanel.add(boxHSetUpPreviousBtn);
 
-        boxVOutputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetUpStartStop = Box.createHorizontalBox();
-        boxHSetUpStartStop.add(btnStartStopAlgorithm);
-        boxVOutputPanel.add(boxHSetUpStartStop);
-
-        boxVOutputPanel.add(Box.createVerticalStrut(100));
+        boxVOutputPanel.add(Box.createVerticalStrut(220));
         Box boxHSetUpResetBtn = Box.createHorizontalBox();
         boxHSetUpResetBtn.add(btnResetOutput);
         boxVOutputPanel.add(boxHSetUpResetBtn);
