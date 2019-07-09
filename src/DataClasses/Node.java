@@ -14,7 +14,7 @@ public class Node {
     private Color color;
     public static final int BIGRADIUS = 30;
     public static final int BOUND_WIGHT = 500;
-    public static final int BOUND_HEIGHT = 500;
+    public static final int BOUND_HEIGHT = 400;
 
     // Конструктор.
     public Node(char name) {

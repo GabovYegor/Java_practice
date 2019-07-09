@@ -131,6 +131,14 @@ public class MainWindow extends JFrame {
         });
 
         txtfEdgeWeight = new JTextField(2);
+        txtfEdgeWeight.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                if(txtfEdgeWeight.getText().length() >= 5) {
+                    e.consume();  // ignore event
+                    JOptionPane.showMessageDialog(null, "very big weight");
+                }
+            }
+        });
 
         btnManual = new JButton("Manual");
         btnFromFile  = new JButton("From File");
