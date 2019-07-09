@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class DrawingPanel extends JPanel {
     private Graph graph;
-    private boolean isAlgorithm = false;
+    public boolean isAlgorithm = false;
     public static final int BIGRADIUS = 30;
     private static final int LITTLERADIUS = 24;
     private static final int ARROWANGLE = 101;
@@ -24,8 +24,8 @@ public class DrawingPanel extends JPanel {
 
     @Override
     protected void paintComponent ( Graphics g ) {
-        repaint();
         super.paintComponent ( g );
+        repaint();
         Graphics2D g2 = (Graphics2D) g;
         drawEdges(g2);
         drawNodes(g2);
@@ -141,6 +141,7 @@ public class DrawingPanel extends JPanel {
     public void updateGraph(Graph newGraph){
         this.graph = newGraph;
     }
+
     public void setTrueIsAlgorithmValue(){
         isAlgorithm = true;
     }
