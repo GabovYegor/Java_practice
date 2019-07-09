@@ -102,7 +102,7 @@ public class MainWindow extends JFrame {
         lblNode      = new JLabel("Name");
         lblEdgeFrom  = new JLabel("From");
         lblEdgeTo    = new JLabel("To");
-        lblWeight    = new JLabel("Edge Weight");
+        lblWeight    = new JLabel("Weight");
 
         txtfNode       = new JTextField(2);
         txtfNode.addKeyListener(new KeyAdapter() {
@@ -132,8 +132,8 @@ public class MainWindow extends JFrame {
 
         btnFromFile  = new JButton("From File");
         btnSaveFile = new JButton("Save this Graph");
-        btnNodeAdd   = new JButton("add Node");
-        btnEdgeAdd   = new JButton("add Edge");
+        btnNodeAdd   = new JButton("add");
+        btnEdgeAdd   = new JButton("add");
         btnRepaint   = new JButton("Repaint Graph");
         btnGoToAlgorithm = new JButton("go to algorithm");
         btnResetInput = new JButton("Reset");
@@ -264,7 +264,6 @@ public class MainWindow extends JFrame {
                                     int currentWeight = parseInt();
                                     if(currentWeight == 0)
                                         return;
-                                    graph.getNodeByIndex(j).setColor(Color.BLACK);
                                     graph.addEdge(graph.getNodeByIndex(i).getName(), graph.getNodeByIndex(j).getName(), currentWeight);
                                     flag = true;
                                 }
@@ -446,17 +445,15 @@ public class MainWindow extends JFrame {
 
         boxVInputPanel.add(Box.createVerticalStrut(50));
         Box boxHSetUpNodeLbl = Box.createHorizontalBox();
-        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(25));
+        //boxHSetUpNodeLbl.add(Box.createHorizontalStrut(25));
+        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(5));
         boxHSetUpNodeLbl.add(lblNode);
         boxHSetUpNodeLbl.add(Box.createHorizontalStrut(5));
         boxHSetUpNodeLbl.add(txtfNode);
-        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(60));
+        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(5));
+        boxHSetUpNodeLbl.add(btnNodeAdd);
+        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(10));
         boxVInputPanel.add(boxHSetUpNodeLbl);
-
-        boxVInputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetUpNodeBtn = Box.createHorizontalBox();
-        boxHSetUpNodeBtn.add(btnNodeAdd);
-        boxVInputPanel.add(boxHSetUpNodeBtn);
 
         boxVInputPanel.add(Box.createVerticalStrut(50));
         Box boxHSetUpEdgeLbl = Box.createHorizontalBox();
@@ -477,13 +474,10 @@ public class MainWindow extends JFrame {
         boxHSetUpEdgeWeight.add(lblWeight);
         boxHSetUpEdgeWeight.add(Box.createHorizontalStrut(5));
         boxHSetUpEdgeWeight.add(txtfEdgeWeight);
-        boxHSetUpEdgeWeight.add(Box.createHorizontalStrut(25));
+        boxHSetUpEdgeWeight.add(Box.createHorizontalStrut(3));
+        boxHSetUpEdgeWeight.add(btnEdgeAdd);
+        boxHSetUpEdgeWeight.add(Box.createHorizontalStrut(3));
         boxVInputPanel.add(boxHSetUpEdgeWeight);
-
-        boxVInputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetUpEdgeBtn = Box.createHorizontalBox();
-        boxHSetUpEdgeBtn.add(btnEdgeAdd);
-        boxVInputPanel.add(boxHSetUpEdgeBtn);
 
         boxVInputPanel.add(Box.createVerticalStrut(50));
         Box boxHSetUpRepaintBtn = Box.createHorizontalBox();
