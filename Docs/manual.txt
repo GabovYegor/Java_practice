@@ -1,3 +1,21 @@
+MANUAL
+
+1) How to input data
+    1.1) From File
+        For with way you must push button "from File" -> and find file in your file system
+    1.2) By Button
+        You must fill all text fields to add smth:
+            * Node - button "Add" nearly "Node name" text label
+            * Edge - button "Add" nearly "Weight" test label
+    1.3) By Mouse
+        Firstly you must fill text fields to add smth:
+            * Field "Name" - for add node
+            * Field "Weight" - for add Edge, if you want to add Edge by mouse you must insert
+                nodes that you want to connect ("blue" - from, "yellow" - here).
+                You can change node`s color by right mouse button
+        Features for mouse input:
+            * You can change node`s location if you write node`s name in "Name" text field
+
 Справка
 
 Граф можно ввести с клавиатуры, при помощи мыши, считать из файла.
