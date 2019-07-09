@@ -37,6 +37,16 @@ public class Node {
         adjacencyList.add(new Edge(endNodeName, weight));
     }
 
+    // Удалить ребро в вершину с именем endNodeName, если такое имеется.
+    public void removeEdge(char endNodeName) {
+        for (int i = 0; i < edgeCount(); i++) {
+            if (adjacencyList.get(i).getEndNodeName() == endNodeName) {
+                adjacencyList.remove(i);
+                break;
+            }
+        }
+    }
+
     // Количество рёбер, исходящих из данной вершины.
     public int edgeCount() {
         return adjacencyList.size();
