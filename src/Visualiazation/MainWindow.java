@@ -11,10 +11,39 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+class ScheduledTask extends TimerTask {
+    private Timer time;
+    private JButton btn;
+    private int stepsNum;
+    private int stepsCount;
+    ScheduledTask(JButton nextStep, Timer time, int stepsNum, int stepsCount){
+        btn = nextStep;
+        this.time = time;
+        this.stepsNum = stepsNum;
+        this.stepsCount = stepsCount;
+    }
+
+    @Override
+    public void run() {
+        if(stepsCount == stepsNum ) {
+            time.cancel();
+            JOptionPane.showMessageDialog(null, "algorithm end work!");
+            return;
+        }
+        stepsCount++;
+        btn.doClick();
+    }
+}
 
 public class MainWindow extends JFrame {
     private static final int MAINWINDOW_WIDTH = 900;
@@ -51,6 +80,7 @@ public class MainWindow extends JFrame {
     private JButton btnCalculateLength;
     private JButton btnNextStep;
     private JButton btnPreviousStep;
+    private JButton btnStartStopAlgorithm;
     private JButton btnResetOutput;
 
     private JTextArea txtaLog;
@@ -107,6 +137,7 @@ public class MainWindow extends JFrame {
         btnCalculateLength = new JButton("Get length");
         btnNextStep = new JButton("next step");
         btnPreviousStep = new JButton("previous step");
+        btnStartStopAlgorithm = new JButton("start/stop");
         btnResetOutput = new JButton("Reset");
     }
 
@@ -122,7 +153,6 @@ public class MainWindow extends JFrame {
         layoutOutputSettings();
         layoutDrawingPanelSettings();
         getContentPane().add(boxVInputPanel, BorderLayout.WEST);
-        //getContentPane().add(new JScrollPane(drawingPanel));
         getContentPane().add(drawingPanel);
         getContentPane().add(new JScrollPane(txtaLog), BorderLayout.SOUTH);
     }
@@ -254,6 +284,17 @@ public class MainWindow extends JFrame {
                 if(txtfStartNode.getText().isEmpty())
                     JOptionPane.showMessageDialog(null, "Input start node name");
                 else {
+                    boolean isRightNode = false;
+                    for(int i = 0; i < graph.nodeCount(); ++i){
+                        if(graph.getNodeByIndex(i).getName() == txtfStartNode.getText().charAt(0))
+                            isRightNode = true;
+                    }
+                    
+                    if(!isRightNode){
+                        JOptionPane.showMessageDialog(null, "There are no node with this name");
+                        return;
+                    }
+
                     graphStates = graph.Dijkstra(txtfStartNode.getText().charAt(0));
                     algorithmStepNum = 0;
                     graph = graphStates.get(++algorithmStepNum).getGraph();
@@ -302,16 +343,20 @@ public class MainWindow extends JFrame {
         btnNextStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(algorithmStepNum != graphStates.size() - 1) {
-                    graph = graphStates.get(++algorithmStepNum).getGraph();
-                    drawingPanel.updateGraph(graph);
-                    txtaLog.setText("");
-                    for(int i = 0; i <= algorithmStepNum; ++i){
-                        txtaLog.append(graphStates.get(i).getStr() + '\n' + '\n');
+                if (drawingPanel.isAlgorithm){
+                    if(algorithmStepNum != graphStates.size() - 1) {
+                        graph = graphStates.get(++algorithmStepNum).getGraph();
+                        drawingPanel.updateGraph(graph);
+                        txtaLog.setText("");
+                        for(int i = 0; i <= algorithmStepNum; ++i){
+                            txtaLog.append(graphStates.get(i).getStr() + '\n' + '\n');
+                        }
                     }
+                    else
+                        JOptionPane.showMessageDialog(null, "Algorithm`s work end!");
                 }
                 else
-                    JOptionPane.showMessageDialog(null, "Algorithm`s work end!");
+                    JOptionPane.showMessageDialog(null, "Algorithm don`t start!");
             }
         });
 
@@ -331,6 +376,15 @@ public class MainWindow extends JFrame {
                     JOptionPane.showMessageDialog(null, "It`s already first step!");
             }
         });
+        
+        btnStartStopAlgorithm.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                java.util.Timer time = new Timer();
+                ScheduledTask task = new ScheduledTask(btnNextStep, time, graphStates.size() - 1, algorithmStepNum);
+                time.schedule(task, 0, 1000);
+            }
+        });
 
         btnResetOutput.addActionListener(new ActionListener() {
             @Override
@@ -338,7 +392,7 @@ public class MainWindow extends JFrame {
                 getContentPane().remove(boxVOutputPanel);
                 JPanel panel = new JPanel();
                 panel.setBackground(Color.BLUE);
-                panel.setPreferredSize(new Dimension(150, 0));
+                panel.setPreferredSize(new Dimension(130, 0));
                 getContentPane().add(boxVInputPanel, BorderLayout.WEST);
 
                 graph = new Graph();
@@ -351,6 +405,8 @@ public class MainWindow extends JFrame {
             }
         });
     }
+
+
 
     private void layoutInputSettings(){
         boxVInputPanel.setPreferredSize(new Dimension(150, 0));
@@ -481,7 +537,12 @@ public class MainWindow extends JFrame {
         boxHSetUpPreviousBtn.add(btnPreviousStep);
         boxVOutputPanel.add(boxHSetUpPreviousBtn);
 
-        boxVOutputPanel.add(Box.createVerticalStrut(190));
+        boxVOutputPanel.add(Box.createVerticalStrut(10));
+        Box boxHSetUpStartStop = Box.createHorizontalBox();
+        boxHSetUpStartStop.add(btnStartStopAlgorithm);
+        boxVOutputPanel.add(boxHSetUpStartStop);
+
+        boxVOutputPanel.add(Box.createVerticalStrut(100));
         Box boxHSetUpResetBtn = Box.createHorizontalBox();
         boxHSetUpResetBtn.add(btnResetOutput);
         boxVOutputPanel.add(boxHSetUpResetBtn);
