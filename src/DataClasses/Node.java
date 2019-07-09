@@ -13,7 +13,8 @@ public class Node {
     private Point location;
     private Color color;
     public static final int BIGRADIUS = 30;
-    public static final int BOUND = 500;
+    public static final int BOUND_WIGHT = 500;
+    public static final int BOUND_HEIGHT = 500;
 
     // Конструктор.
     public Node(char name) {
@@ -22,7 +23,7 @@ public class Node {
         distance = Integer.MAX_VALUE; // Integer.MAX_VALUE считается бесконечностью.
         path = new ArrayList<>();
         Random random = new Random();
-        location = new Point(random.nextInt(BOUND) + BIGRADIUS, random.nextInt(BOUND) + BIGRADIUS);
+        location = new Point(random.nextInt(BOUND_WIGHT) + BIGRADIUS, random.nextInt(BOUND_HEIGHT) + BIGRADIUS);
         color = Color.black;
     }
 
