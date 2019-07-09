@@ -114,7 +114,7 @@ public class MainWindow extends JFrame {
         setSize(MAINWINDOW_WIDTH, MAINWINDOW_HEIGHT);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocation(new Point(450, 200));
-        setResizable(true);
+        setResizable(false);
     }
 
     private void layoutSettins(){
