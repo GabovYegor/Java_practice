@@ -59,10 +59,12 @@ public class MainWindow extends JFrame {
     private JTextField txtfEdgeFrom;
     private JTextField txtfEdgeTo;
     private JTextField txtfEdgeWeight;
+    private JButton btnManual;
     private JButton btnFromFile;
     private JButton btnSaveFile;
     private JButton btnEdgeAdd;
     private JButton btnNodeAdd;
+    private JButton btnNodeRemove;
     private JButton btnRepaint;
     private JButton btnGoToAlgorithm;
     private JButton btnResetInput;
@@ -102,7 +104,7 @@ public class MainWindow extends JFrame {
         lblNode      = new JLabel("Name");
         lblEdgeFrom  = new JLabel("From");
         lblEdgeTo    = new JLabel("To");
-        lblWeight    = new JLabel("Edge Weight");
+        lblWeight    = new JLabel("Weight");
 
         txtfNode       = new JTextField(2);
         txtfNode.addKeyListener(new KeyAdapter() {
@@ -130,10 +132,12 @@ public class MainWindow extends JFrame {
 
         txtfEdgeWeight = new JTextField(2);
 
+        btnManual = new JButton("Manual");
         btnFromFile  = new JButton("From File");
         btnSaveFile = new JButton("Save this Graph");
-        btnNodeAdd   = new JButton("add Node");
-        btnEdgeAdd   = new JButton("add Edge");
+        btnNodeAdd   = new JButton("add");
+        btnNodeRemove = new JButton("remove");
+        btnEdgeAdd   = new JButton("add");
         btnRepaint   = new JButton("Repaint Graph");
         btnGoToAlgorithm = new JButton("go to algorithm");
         btnResetInput = new JButton("Reset");
@@ -192,6 +196,26 @@ public class MainWindow extends JFrame {
 
     private void buttonsSettings(){
 
+        btnManual.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                File file = new File("Docs/manual.txt");
+                StringBuilder allString = new StringBuilder();
+                try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        System.out.println(line);
+                        allString.append(line + '\n');
+                    }
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                JOptionPane.showMessageDialog(null, allString.toString());
+            }
+        });
+
         btnFromFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileopen = new JFileChooser();
@@ -234,6 +258,21 @@ public class MainWindow extends JFrame {
             }
         });
 
+        btnNodeRemove.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean isDelelete = false;
+                for(int i = 0; i < graph.nodeCount(); ++i) {
+                    if(graph.getNodeByIndex(i).getName() == txtfNode.getText().charAt(0)) {
+                        graph.removeNode(txtfNode.getText().charAt(0));
+                        isDelelete = true;
+                    }
+                }
+                if(!isDelelete)
+                    JOptionPane.showMessageDialog(null, "Graph don`t contain this node");
+            }
+        });
+
         btnEdgeAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -264,7 +303,6 @@ public class MainWindow extends JFrame {
                                     int currentWeight = parseInt();
                                     if(currentWeight == 0)
                                         return;
-                                    graph.getNodeByIndex(j).setColor(Color.BLACK);
                                     graph.addEdge(graph.getNodeByIndex(i).getName(), graph.getNodeByIndex(j).getName(), currentWeight);
                                     flag = true;
                                 }
@@ -429,10 +467,13 @@ public class MainWindow extends JFrame {
         });
     }
 
-
-
     private void layoutInputSettings(){
         boxVInputPanel.setPreferredSize(new Dimension(150, 0));
+
+        boxVInputPanel.add(Box.createVerticalStrut(10));
+        Box boxHSetUpManual = Box.createHorizontalBox();
+        boxHSetUpManual.add(btnManual);
+        boxVInputPanel.add(boxHSetUpManual);
 
         boxVInputPanel.add(Box.createVerticalStrut(10));
         Box boxHSetUpFromFileBtn = Box.createHorizontalBox();
@@ -446,17 +487,21 @@ public class MainWindow extends JFrame {
 
         boxVInputPanel.add(Box.createVerticalStrut(50));
         Box boxHSetUpNodeLbl = Box.createHorizontalBox();
-        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(25));
+        //boxHSetUpNodeLbl.add(Box.createHorizontalStrut(25));
+        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(5));
         boxHSetUpNodeLbl.add(lblNode);
         boxHSetUpNodeLbl.add(Box.createHorizontalStrut(5));
         boxHSetUpNodeLbl.add(txtfNode);
-        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(60));
+        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(5));
+        boxHSetUpNodeLbl.add(btnNodeAdd);
+        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(10));
         boxVInputPanel.add(boxHSetUpNodeLbl);
 
-        boxVInputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetUpNodeBtn = Box.createHorizontalBox();
-        boxHSetUpNodeBtn.add(btnNodeAdd);
-        boxVInputPanel.add(boxHSetUpNodeBtn);
+        boxVInputPanel.add(Box.createVerticalStrut(5));
+        Box boxHSetUpNodeRemove = Box.createHorizontalBox();
+        boxHSetUpNodeRemove.add(Box.createHorizontalStrut(46));
+        boxHSetUpNodeRemove.add(btnNodeRemove);
+        boxVInputPanel.add(boxHSetUpNodeRemove);
 
         boxVInputPanel.add(Box.createVerticalStrut(50));
         Box boxHSetUpEdgeLbl = Box.createHorizontalBox();
@@ -477,13 +522,10 @@ public class MainWindow extends JFrame {
         boxHSetUpEdgeWeight.add(lblWeight);
         boxHSetUpEdgeWeight.add(Box.createHorizontalStrut(5));
         boxHSetUpEdgeWeight.add(txtfEdgeWeight);
-        boxHSetUpEdgeWeight.add(Box.createHorizontalStrut(25));
+        boxHSetUpEdgeWeight.add(Box.createHorizontalStrut(3));
+        boxHSetUpEdgeWeight.add(btnEdgeAdd);
+        boxHSetUpEdgeWeight.add(Box.createHorizontalStrut(3));
         boxVInputPanel.add(boxHSetUpEdgeWeight);
-
-        boxVInputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetUpEdgeBtn = Box.createHorizontalBox();
-        boxHSetUpEdgeBtn.add(btnEdgeAdd);
-        boxVInputPanel.add(boxHSetUpEdgeBtn);
 
         boxVInputPanel.add(Box.createVerticalStrut(50));
         Box boxHSetUpRepaintBtn = Box.createHorizontalBox();
@@ -495,7 +537,7 @@ public class MainWindow extends JFrame {
         boxHSetUpFinishBtn.add(btnGoToAlgorithm);
         boxVInputPanel.add(boxHSetUpFinishBtn);
 
-        boxVInputPanel.add(Box.createVerticalStrut(70));
+        boxVInputPanel.add(Box.createVerticalStrut(64));
         Box boxHSetUpResetBtn = Box.createHorizontalBox();
         boxHSetUpResetBtn.add(btnResetInput);
         boxVInputPanel.add(boxHSetUpResetBtn);
