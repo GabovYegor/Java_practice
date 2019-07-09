@@ -111,6 +111,16 @@ public class DrawingPanel extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if (e.getButton() == MouseEvent.BUTTON1) {
+                    for (int i = 0; i < graph.nodeCount(); ++i) {
+                        if (graph.getNodeByIndex(i).getLocation().x <= e.getPoint().x + BIGRADIUS / 2 &&
+                                graph.getNodeByIndex(i).getLocation().x >= e.getPoint().x - BIGRADIUS / 2 &&
+                                graph.getNodeByIndex(i).getLocation().y <= e.getPoint().y + BIGRADIUS / 2 &&
+                                graph.getNodeByIndex(i).getLocation().y >= e.getPoint().y - BIGRADIUS / 2) {
+                            graph.removeNode(graph.getNodeByIndex(i).getName());
+                            return;
+                        }
+                    }
+
                     if (!txtfNode.getText().isEmpty())
                         graph.getNodeByIndex(graph.addNode(txtfNode.getText().charAt(0))).setLocation(e.getPoint());
                     else
