@@ -665,7 +665,7 @@ public class MainWindow extends JFrame {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "ERROR");
         } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "PARSE ERROR. MUST BE .json file format");
+            JOptionPane.showMessageDialog(null, "PARSE ERROR. MUST BE .JSON FILE FORMAT");
         }
     }
 
