@@ -8,3 +8,7 @@ public class Main {
         mainWindow.setVisible(true);
     }
 }
+
+// внимательно с ScheduledTask
+//button settings в отдельный класс
+// в MainWindow оставить только layouts

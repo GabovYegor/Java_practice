@@ -10,6 +10,8 @@ public class Edge {
 
     public Edge(char endNodeName, int weight) {
         this.endNodeName = endNodeName;
+        if(weight <= 0)
+            throw new IndexOutOfBoundsException();
         this.weight = weight;
         color = Color.black;
     }

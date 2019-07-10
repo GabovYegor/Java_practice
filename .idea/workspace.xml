@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f9a7ee9f-5cf4-45b0-92eb-8c0cabb07682" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonExample/graph1.json" beforeDir="false" afterPath="$PROJECT_DIR$/jsonExample/graph1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonExample/graph2.json" beforeDir="false" afterPath="$PROJECT_DIR$/jsonExample/graph2.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataClasses/Edge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataClasses/Edge.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Visualiazation/DrawingPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Visualiazation/DrawingPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Visualiazation/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Visualiazation/MainWindow.java" afterDir="false" />
@@ -23,40 +23,40 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="36" lean-forward="true" selection-start-line="7" selection-start-column="36" selection-end-line="7" selection-end-column="36" />
+            <state relative-caret-position="195">
+              <caret line="13" column="39" selection-start-line="13" selection-start-column="39" selection-end-line="13" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Visualiazation/MainWindow.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="631" column="8" lean-forward="true" selection-start-line="631" selection-start-column="8" selection-end-line="631" selection-end-column="8" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#862#863#0" expanded="true" />
-                <element signature="e#910#911#0" expanded="true" />
-                <element signature="e#28620#28621#0" expanded="true" />
-                <element signature="e#28688#28689#0" expanded="true" />
-                <element signature="e#28720#28721#0" expanded="true" />
-                <element signature="e#28755#28756#0" expanded="true" />
-                <element signature="e#28792#28793#0" expanded="true" />
-                <element signature="e#28832#28833#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Visualiazation/MainWindow.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="218">
+              <caret line="642" column="73" selection-start-line="642" selection-start-column="73" selection-end-line="642" selection-end-column="73" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#862#863#0" expanded="true" />
+                <element signature="e#910#911#0" expanded="true" />
+                <element signature="e#28800#28801#0" expanded="true" />
+                <element signature="e#28868#28869#0" expanded="true" />
+                <element signature="e#28900#28901#0" expanded="true" />
+                <element signature="e#28935#28936#0" expanded="true" />
+                <element signature="e#28972#28973#0" expanded="true" />
+                <element signature="e#29012#29013#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Visualiazation/DrawingPanel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
-              <caret line="65" column="37" selection-start-line="65" selection-start-column="37" selection-end-line="65" selection-end-column="37" />
+            <state relative-caret-position="188">
+              <caret line="31" column="8" selection-start-line="31" selection-start-column="8" selection-end-line="31" selection-end-column="8" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3485#3486#0" expanded="true" />
@@ -65,6 +65,8 @@
                 <element signature="e#7736#7737#0" expanded="true" />
                 <element signature="e#7780#7781#0" expanded="true" />
                 <element signature="e#7814#7815#0" expanded="true" />
+                <element signature="e#7663#7664#0" expanded="true" />
+                <element signature="e#7700#7701#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -73,8 +75,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DataClasses/Graph.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="57" column="47" selection-start-line="57" selection-start-column="22" selection-end-line="57" selection-end-column="47" />
+            <state relative-caret-position="188">
+              <caret line="63" column="18" selection-start-line="63" selection-start-column="18" selection-end-line="63" selection-end-column="18" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -94,8 +96,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DataClasses/Edge.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="30" column="5" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
+            <state relative-caret-position="195">
+              <caret line="13" column="22" selection-start-line="13" selection-start-column="22" selection-end-line="13" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -103,8 +105,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DataClasses/Node.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="645">
-              <caret line="45" selection-start-line="45" selection-end-line="45" />
+            <state relative-caret-position="210">
+              <caret line="14" selection-start-line="14" selection-end-line="15" selection-end-column="47" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -132,11 +134,11 @@
         <option value="$PROJECT_DIR$/Docs/manual.txt" />
         <option value="$PROJECT_DIR$/src/DataClasses/Node.java" />
         <option value="$PROJECT_DIR$/src/DataClasses/AlgorithmStepData.java" />
-        <option value="$PROJECT_DIR$/src/DataClasses/Edge.java" />
         <option value="$PROJECT_DIR$/src/DataClasses/Graph.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
-        <option value="$PROJECT_DIR$/src/Visualiazation/MainWindow.java" />
         <option value="$PROJECT_DIR$/src/Visualiazation/DrawingPanel.java" />
+        <option value="$PROJECT_DIR$/src/DataClasses/Edge.java" />
+        <option value="$PROJECT_DIR$/src/Visualiazation/MainWindow.java" />
       </list>
     </option>
   </component>
@@ -375,65 +377,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DataClasses/Edge.java">
+    <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="30" column="5" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
+        <state relative-caret-position="195">
+          <caret line="13" column="39" selection-start-line="13" selection-start-column="39" selection-end-line="13" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DataClasses/Node.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="645">
-          <caret line="45" selection-start-line="45" selection-end-line="45" />
+        <state relative-caret-position="210">
+          <caret line="14" selection-start-line="14" selection-end-line="15" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/DataClasses/Edge.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="36" lean-forward="true" selection-start-line="7" selection-start-column="36" selection-end-line="7" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DataClasses/Graph.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="57" column="47" selection-start-line="57" selection-start-column="22" selection-end-line="57" selection-end-column="47" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Visualiazation/MainWindow.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="631" column="8" lean-forward="true" selection-start-line="631" selection-start-column="8" selection-end-line="631" selection-end-column="8" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#862#863#0" expanded="true" />
-            <element signature="e#910#911#0" expanded="true" />
-            <element signature="e#28620#28621#0" expanded="true" />
-            <element signature="e#28688#28689#0" expanded="true" />
-            <element signature="e#28720#28721#0" expanded="true" />
-            <element signature="e#28755#28756#0" expanded="true" />
-            <element signature="e#28792#28793#0" expanded="true" />
-            <element signature="e#28832#28833#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="195">
+          <caret line="13" column="22" selection-start-line="13" selection-start-column="22" selection-end-line="13" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Visualiazation/DrawingPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="65" column="37" selection-start-line="65" selection-start-column="37" selection-end-line="65" selection-end-column="37" />
+        <state relative-caret-position="188">
+          <caret line="31" column="8" selection-start-line="31" selection-start-column="8" selection-end-line="31" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3485#3486#0" expanded="true" />
@@ -442,6 +416,36 @@
             <element signature="e#7736#7737#0" expanded="true" />
             <element signature="e#7780#7781#0" expanded="true" />
             <element signature="e#7814#7815#0" expanded="true" />
+            <element signature="e#7663#7664#0" expanded="true" />
+            <element signature="e#7700#7701#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DataClasses/Graph.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="63" column="18" selection-start-line="63" selection-start-column="18" selection-end-line="63" selection-end-column="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Visualiazation/MainWindow.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="642" column="73" selection-start-line="642" selection-start-column="73" selection-end-line="642" selection-end-column="73" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#862#863#0" expanded="true" />
+            <element signature="e#910#911#0" expanded="true" />
+            <element signature="e#28800#28801#0" expanded="true" />
+            <element signature="e#28868#28869#0" expanded="true" />
+            <element signature="e#28900#28901#0" expanded="true" />
+            <element signature="e#28935#28936#0" expanded="true" />
+            <element signature="e#28972#28973#0" expanded="true" />
+            <element signature="e#29012#29013#0" expanded="true" />
           </folding>
         </state>
       </provider>

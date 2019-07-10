@@ -29,12 +29,7 @@ public class DrawingPanel extends JPanel {
         super.paintComponent ( g );
         repaint();
         Graphics2D g2 = (Graphics2D) g;
-//        try {
-            drawEdges(g2);
-//        }
-//        catch (IllegalArgumentException exc){
-//            System.out.println(exc.getMessage());
-//        }
+        drawEdges(g2);
         drawNodes(g2);
     }
 
@@ -160,5 +155,7 @@ public class DrawingPanel extends JPanel {
     public void setTrueIsAlgorithmValue(){
         isAlgorithm = true;
     }
-    public void setFalseIsAlgorithmValue() { isAlgorithm = false; }
+    public void setFalseIsAlgorithmValue() {
+        isAlgorithm = false;
+    }
 }
