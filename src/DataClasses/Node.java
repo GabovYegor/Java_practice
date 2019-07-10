@@ -3,31 +3,28 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-// Вершина графа.
 public class Node {
 
     private char name;
-    private ArrayList<Edge> adjacencyList; // Список смежности.
-    private int distance; // Расстояние от стартовой вершины.
-    private ArrayList<Character> path; // Пусть от стартовой вершины.
+    private ArrayList<Edge> adjacencyList;
+    private int distance;
+    private ArrayList<Character> path;
     private Point location;
     private Color color;
     public static final int BIGRADIUS = 30;
     public static final int BOUND_WIGHT = 500;
     public static final int BOUND_HEIGHT = 400;
 
-    // Конструктор.
     public Node(char name) {
         this.name = name;
         adjacencyList = new ArrayList<>();
-        distance = Integer.MAX_VALUE; // Integer.MAX_VALUE считается бесконечностью.
+        distance = Integer.MAX_VALUE;
         path = new ArrayList<>();
         Random random = new Random();
         location = new Point(random.nextInt(BOUND_WIGHT) + BIGRADIUS, random.nextInt(BOUND_HEIGHT) + BIGRADIUS);
         color = Color.black;
     }
 
-    // Добавить ребро в список смежности (если такое ребро уже есть, вес ребра будет заменён на новый).
     public void addEdge(char endNodeName, int weight) {
         for (int i = 0; i < edgeCount(); i++) {
             if (adjacencyList.get(i).getEndNodeName() == endNodeName) {
@@ -38,8 +35,7 @@ public class Node {
         adjacencyList.add(new Edge(endNodeName, weight));
     }
 
-    // Удалить ребро в вершину с именем endNodeName, если такое имеется.
-    public void removeEdge(char endNodeName) {
+     public void removeEdge(char endNodeName) {
         for (int i = 0; i < edgeCount(); i++) {
             if (adjacencyList.get(i).getEndNodeName() == endNodeName) {
                 adjacencyList.remove(i);
@@ -48,7 +44,6 @@ public class Node {
         }
     }
 
-    // Количество рёбер, исходящих из данной вершины.
     public int edgeCount() {
         return adjacencyList.size();
     }

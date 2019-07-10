@@ -20,14 +20,14 @@ import org.json.simple.parser.ParseException;
 
 class ScheduledTask extends TimerTask {
     private Timer time;
-    private JButton btn;
     private int stepsNum;
     private int stepsCount;
-    ScheduledTask(JButton nextStep, Timer time, int stepsNum, int stepsCount){
-        btn = nextStep;
+    private MainWindow windowEx;
+    ScheduledTask(JButton nextStep, Timer time, int stepsNum, int stepsCount, MainWindow windowEx){
         this.time = time;
         this.stepsNum = stepsNum;
         this.stepsCount = stepsCount;
+        this.windowEx = windowEx;
     }
 
     @Override
@@ -35,11 +35,12 @@ class ScheduledTask extends TimerTask {
         if(stepsCount >= stepsNum ) {
             time.cancel();
             time.purge();
+            windowEx.setUpCloseMainThreadAlgorithm();
             JOptionPane.showMessageDialog(null, "algorithm end work!");
             return;
         }
         stepsCount++;
-        btn.doClick();
+        windowEx.nextStep();
     }
 }
 
@@ -88,7 +89,10 @@ public class MainWindow extends JFrame {
     private ArrayList<AlgorithmStepData> graphStates;
     private int algorithmStepNum;
     private java.util.Timer time = new Timer();
-    boolean isAlgorithmAlreadyWorked;
+    private boolean isAlgorithmAlreadyWorked;
+    private boolean closeMainThreadAlgorithm;
+
+    private MainWindow thisWindow = this;
 
     public MainWindow(String title, Graph graph){
         super(title);
@@ -130,7 +134,7 @@ public class MainWindow extends JFrame {
             }
         });
 
-        txtfEdgeWeight = new JTextField(2);
+        txtfEdgeWeight = new JTextField(5);
         txtfEdgeWeight.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 if(txtfEdgeWeight.getText().length() >= 5) {
@@ -184,6 +188,7 @@ public class MainWindow extends JFrame {
         algorithmStepNum = 0;
         time = new Timer();
         isAlgorithmAlreadyWorked = false;
+        closeMainThreadAlgorithm = false;
     }
 
     private void windowSettings(){
@@ -288,6 +293,14 @@ public class MainWindow extends JFrame {
         btnEdgeAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(txtfEdgeTo.getText().charAt(0) == txtfEdgeFrom.getText().charAt(0)) {
+                    JOptionPane.showMessageDialog(null, "Graph don`t have loop!");
+                    txtfEdgeFrom.setText("");
+                    txtfEdgeTo.setText("");
+                    txtfEdgeWeight.setText("");
+                    return;
+                }
+
                 boolean flag = false;
                 if(!txtfEdgeTo.getText().isEmpty() && !txtfEdgeFrom.getText().isEmpty() && !txtfEdgeWeight.getText().isEmpty()) {
                     int currentWeight = parseInt();
@@ -342,7 +355,7 @@ public class MainWindow extends JFrame {
                 txtfEdgeFrom.setText("");
                 txtfEdgeTo.setText("");
                 txtfEdgeWeight.setText("");
-                
+
                 if(!flag)
                     JOptionPane.showMessageDialog(null, "Edge fields Empty");
             }
@@ -403,7 +416,8 @@ public class MainWindow extends JFrame {
                     txtaLog.setText("");
                     txtaLog.append(graphStates.get(0).getStr());
 
-                    ScheduledTask task = new ScheduledTask(btnNextStep, time, graphStates.size() - 1, algorithmStepNum);
+                    setUpCloseMainThreadAlgorithm();
+                    ScheduledTask task = new ScheduledTask(btnNextStep, time, graphStates.size() - 1, algorithmStepNum, thisWindow);
                     time.schedule(task, 0, 1000);
                 }
                 else
@@ -411,7 +425,6 @@ public class MainWindow extends JFrame {
             }
         });
 
-        // + вывести/пометить_ребра путь до вершины
         btnCalculateLength.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -436,10 +449,13 @@ public class MainWindow extends JFrame {
             }
         });
 
-        // Вывести на экран информацию о текущем шаге алгоритма?
         btnNextStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(closeMainThreadAlgorithm){
+                    JOptionPane.showMessageDialog(null, "Main thread closed");
+                    return;
+                }
                 if (drawingPanel.isAlgorithm){
                     if(algorithmStepNum != graphStates.size() - 1) {
                         graph = graphStates.get(++algorithmStepNum).getGraph();
@@ -457,10 +473,15 @@ public class MainWindow extends JFrame {
             }
         });
 
-        // Вывести на экран информацию о текущем шаге алгоритма?
         btnPreviousStep.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(closeMainThreadAlgorithm){
+                    JOptionPane.showMessageDialog(null, "Main thread closed");
+                    return;
+                }
+
                 if(algorithmStepNum != 0){
                     graph = graphStates.get(--algorithmStepNum).getGraph();
                     drawingPanel.updateGraph(graph);
@@ -632,24 +653,19 @@ public class MainWindow extends JFrame {
     }
 
     private void parseGraph(File file) {
-
-        //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
 
         try (FileReader reader = new FileReader(file))
         {
-            //Read JSON file
             JSONArray nodesList = (JSONArray) jsonParser.parse(reader);
-
-            //Iterate over employee array
             nodesList.forEach( emp -> parseNodeObject( (JSONObject) emp ) );
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "FILE NOT FOUND!");
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "ERROR");
         } catch (ParseException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "PARSE ERROR. MUST BE .json file format");
         }
     }
 
@@ -724,4 +740,26 @@ public class MainWindow extends JFrame {
         }
         return totalNum;
     }
+
+    public void nextStep(){
+        if (drawingPanel.isAlgorithm){
+            if(algorithmStepNum != graphStates.size() - 1) {
+                graph = graphStates.get(++algorithmStepNum).getGraph();
+                drawingPanel.updateGraph(graph);
+                txtaLog.setText("");
+                for(int i = 0; i <= algorithmStepNum; ++i){
+                    txtaLog.append(graphStates.get(i).getStr() + '\n' + '\n');
+                }
+            }
+            else
+                JOptionPane.showMessageDialog(null, "Algorithm`s work end!");
+        }
+        else
+            JOptionPane.showMessageDialog(null, "Algorithm don`t start!");
+    }
+
+    public void setUpCloseMainThreadAlgorithm(){
+        closeMainThreadAlgorithm = !closeMainThreadAlgorithm;
+    }
 }
+

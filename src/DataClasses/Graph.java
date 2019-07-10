@@ -6,14 +6,12 @@ import java.util.ArrayList;
 
 public class Graph {
 
-    private ArrayList<Node> nodeList; // Список вершин графа.
+    private ArrayList<Node> nodeList;
 
-    // Конструктор.
     public Graph() {
         nodeList = new ArrayList<>();
     }
 
-    // Добавить вершину в граф (если такой вершины ещё нет) и вернуть её индекс в nodeList.
     public int addNode(char name) {
         int index = getIndexByName(name);
         if (index == -1) {
@@ -23,7 +21,6 @@ public class Graph {
         return index;
     }
 
-    // Удалить вершину с именем name, если такая имеется (будут удалены все рёбра, связанные с этой вершиной).
     public void removeNode(char name) {
         int index = getIndexByName(name);
         if (index >= 0) {
@@ -34,7 +31,6 @@ public class Graph {
         }
     }
 
-    // Возвращает индекс вершины с именем name в nodeList или -1, если такой вершины не существует.
     private int getIndexByName(char name) {
         for (int i = 0; i < nodeCount(); i++)
             if (nodeList.get(i).getName() == name)
@@ -42,7 +38,6 @@ public class Graph {
         return -1;
     }
 
-    // Добавить ребро в граф (предварительно создав вершины start и end, если их ещё нет).
     public void addEdge(char start, char end, int weight) {
         if (start == end)
             throw new IllegalArgumentException("Граф не может содержать петель.");
@@ -54,36 +49,20 @@ public class Graph {
         addNode(end);
     }
 
-    // Удалить ребро из графа, если такое имеется.
-    public void removeEdge(char start, char end) {
-        int index = getIndexByName(start);
-        if (index >= 0) {
-            getNodeByIndex(index).removeEdge(end);
-        }
-    }
-
-    // Количество вершин графа.
     public int nodeCount() {
         return nodeList.size();
     }
 
-    // Вернуть вершину по индексу.
     public Node getNodeByIndex(int index) {
         if (index < 0 || index >= nodeCount())
             throw new IndexOutOfBoundsException("Index is out of bounds.");
         return nodeList.get(index);
     }
 
-    // Вернуть вершину по имени.
     public Node getNodeByName(char name) {
         if (getIndexByName(name) == -1)
             throw new IllegalArgumentException("В графе нет вершины с именем " + name + ".");
         return getNodeByIndex(getIndexByName(name));
-    }
-    
-    // Очистить граф.
-    public void clear() {
-        nodeList = new ArrayList<>();
     }
 
     public Graph clone() {
@@ -102,8 +81,6 @@ public class Graph {
         ArrayList<Integer> queue = new ArrayList<>();
         StringBuilder strBuilder;
 
-
-        // Шаг 0: Инициализация.
         for (int i = 0; i < nodeCount(); i++) {
             getNodeByIndex(i).setDistance(Integer.MAX_VALUE);
             getNodeByIndex(i).setColor(Color.gray);
@@ -116,8 +93,6 @@ public class Graph {
         strBuilder = new StringBuilder("Шаг 0:\nИнициализация.");
         result.add(new AlgorithmStepData(this.clone(), strBuilder.toString()));
 
-
-        // Шаг m: раскрытие вершин.
         int m = 1;
         while (queue.size() > 0) {
             int currentNodeIndex = queue.get(0);
@@ -182,8 +157,6 @@ public class Graph {
             m++;
         }
 
-
-        // Итоговый результат.
         strBuilder = new StringBuilder("Результат:\n");
         strBuilder.append("Путь от вершины '" + startNodeName + "' до вершины\n");
         for (int i = 0; i < nodeCount(); i++) {

@@ -1,6 +1,5 @@
 package DataClasses;
 
-
 public class AlgorithmStepData {
     private Graph graph;
     private String str;
