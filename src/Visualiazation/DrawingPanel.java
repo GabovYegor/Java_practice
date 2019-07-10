@@ -29,7 +29,12 @@ public class DrawingPanel extends JPanel {
         super.paintComponent ( g );
         repaint();
         Graphics2D g2 = (Graphics2D) g;
-        drawEdges(g2);
+//        try {
+            drawEdges(g2);
+//        }
+//        catch (IllegalArgumentException exc){
+//            System.out.println(exc.getMessage());
+//        }
         drawNodes(g2);
     }
 

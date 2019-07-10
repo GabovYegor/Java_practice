@@ -8,6 +8,3 @@ public class Main {
         mainWindow.setVisible(true);
     }
 }
-
-// очищать вес
-// если нажимать кнопки next/prev будет плохо
