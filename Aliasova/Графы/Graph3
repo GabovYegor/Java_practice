@@ -1,0 +1,1 @@
+[{"name":"b","location":[165,168],"adjacencyList":[]},{"name":"d","location":[477,400],"adjacencyList":[["e",20],["b",40]]},{"name":"e","location":[250,402],"adjacencyList":[["c",10]]},{"name":"a","location":[335,72],"adjacencyList":[["b",10],["e",30],["d",50]]},{"name":"c","location":[497,104],"adjacencyList":[["a",10],["d",30],["e",10]]}]
