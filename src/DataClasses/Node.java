@@ -48,6 +48,10 @@ public class Node {
         return adjacencyList.size();
     }
 
+    public char getName() {
+        return name;
+    }
+
     public void setAdjacencyList(ArrayList<Edge> adjacencyList){
         this.adjacencyList = adjacencyList;
     }
@@ -58,10 +62,6 @@ public class Node {
 
     public Point getLocation(){
         return location;
-    }
-
-    public char getName() {
-        return name;
     }
 
     public ArrayList<Edge> getAdjacencyList(){
@@ -82,12 +82,12 @@ public class Node {
         this.color = color;
     }
 
-    public int getDistance() {
-        return distance;
-    }
-
     public void setDistance(int distance) {
         this.distance = distance;
+    }
+
+    public int getDistance() {
+        return distance;
     }
 
     public void setPath(ArrayList<Character> path) {
