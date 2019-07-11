@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class DrawingPanel extends JPanel {
-    private Graph graph;
+    private Graph graph = new Graph()       ;
     public boolean isAlgorithm = false;
     public static final int BIGRADIUS = 30;
     private static final int LITTLERADIUS = 24;
@@ -17,6 +17,8 @@ public class DrawingPanel extends JPanel {
     private static final int ARROWLENGTH = 30;
     private static final int OFFSETFORNAME = 7;
     private static final int OFFSETFORWEIGHT = 15;
+
+    DrawingPanel(){}
 
     DrawingPanel(Graph graph, JTextField txtfNode){
         this.graph = graph;
@@ -26,10 +28,22 @@ public class DrawingPanel extends JPanel {
     @Override
     protected void paintComponent ( Graphics g ) {
         super.paintComponent ( g );
-        //repaint();
         Graphics2D g2 = (Graphics2D) g;
         drawEdges(g2);
         drawNodes(g2);
+    }
+
+    private void drawEdges(Graphics2D g2){
+        for(int i = 0; i < graph.nodeCount(); ++i){
+            Point nodeFromLocation = new Point(graph.getNodeByIndex(i).getLocation());
+            ArrayList <Edge> currentAdjacencyList = graph.getNodeByIndex(i).getAdjacencyList();
+            for(int j = 0; j < currentAdjacencyList.size(); ++j){
+                Point nodeToLocation = new Point(graph.getNodeByName(currentAdjacencyList.get(j).getEndNodeName()).getLocation());
+                drawLine(g2, nodeFromLocation, nodeToLocation, currentAdjacencyList.get(j).getColor());
+                drawArrows(g2, nodeFromLocation, nodeToLocation);
+                printEdgeWeightInPoint(g2, String.valueOf(currentAdjacencyList.get(j).getWeight()), nodeFromLocation, nodeToLocation);
+            }
+        }
     }
 
     private void drawNodes(Graphics2D g2){
@@ -50,20 +64,6 @@ public class DrawingPanel extends JPanel {
         g2.drawLine((int)(nodeToLocation.x + BIGRADIUS / 2 * Math.cos(edgeAngle)), (int)(nodeToLocation.y + BIGRADIUS / 2 * Math.sin(edgeAngle)),
                 (int)(nodeToLocation.x + ARROWLENGTH * Math.cos(edgeAngle - ARROWANGLE)),
                 (int)(nodeToLocation.y + ARROWLENGTH * Math.sin(edgeAngle - ARROWANGLE)));
-    }
-
-    private void drawEdges(Graphics2D g2){
-        for(int i = 0; i < graph.nodeCount(); ++i){
-            Point nodeFromLocation = new Point(graph.getNodeByIndex(i).getLocation());
-            ArrayList <Edge> currentAdjacencyList = graph.getNodeByIndex(i).getAdjacencyList();
-            for(int j = 0; j < currentAdjacencyList.size(); ++j){
-                Point nodeToLocation = new Point();
-                nodeToLocation = new Point(graph.getNodeByName(currentAdjacencyList.get(j).getEndNodeName()).getLocation());
-                drawLine(g2, nodeFromLocation, nodeToLocation, currentAdjacencyList.get(j).getColor());
-                drawArrows(g2, nodeFromLocation, nodeToLocation);
-                printEdgeWeightInPoint(g2, String.valueOf(currentAdjacencyList.get(j).getWeight()), nodeFromLocation, nodeToLocation);
-            }
-        }
     }
 
     private void drawMainLine(Graphics2D g2, Point from, Point to, Color color){
@@ -159,6 +159,7 @@ public class DrawingPanel extends JPanel {
     public void setTrueIsAlgorithmValue(){
         isAlgorithm = true;
     }
+
     public void setFalseIsAlgorithmValue() {
         isAlgorithm = false;
     }

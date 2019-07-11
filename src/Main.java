@@ -4,7 +4,7 @@ import Visualiazation.*;
 public class Main {
 
     public static void main(String[] args) {
-        MainWindow mainWindow = new MainWindow("Dijkstra", new Graph());
+        MainWindow mainWindow = new MainWindow("Dijkstra");
         mainWindow.setVisible(true);
     }
 }
