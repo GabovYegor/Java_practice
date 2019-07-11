@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+// Пользовательский класс для расширения функционала класса JFrame
 public class MainWindow extends JFrame {
     private static final int MAINWINDOW_WIDTH = 900;
     private static final int MAINWINDOW_HEIGHT = 700;
@@ -48,6 +49,8 @@ public class MainWindow extends JFrame {
         layoutSettins();
     }
 
+    // Вынесение инициализации за пределы конструктора,
+    // в отдельныю функцию чтобы не засорять конструктор
     private void initVariables() {
         boxVInputPanel = Box.createVerticalBox();
         lblNode = new JLabel("Name");
@@ -100,6 +103,8 @@ public class MainWindow extends JFrame {
         btnResetOutput = new JButton("Reset");
     }
 
+    // Базовые настройки главного всплывающего окна -
+    // размер, положение, изменяемость размера
     private void windowSettings() {
         setSize(MAINWINDOW_WIDTH, MAINWINDOW_HEIGHT);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -107,6 +112,8 @@ public class MainWindow extends JFrame {
         setResizable(false);
     }
 
+    // Настройка расположения пользовательских компонент
+    // кнопок, лэйблов, текстовых полей
     private void layoutSettins() {
         layoutInputSettings();
         layoutOutputSettings();
@@ -114,7 +121,8 @@ public class MainWindow extends JFrame {
         getContentPane().add(new JScrollPane(txtaLog), BorderLayout.SOUTH);
     }
 
-
+    // Настроить внешний вид для пользовательской кнопки
+    // избавления от дублирования кода
     private void setUpSimpleButton(Box mainBox, JButton btn) {
         mainBox.add(Box.createVerticalStrut(10));
         Box boxH = Box.createHorizontalBox();
@@ -123,6 +131,8 @@ public class MainWindow extends JFrame {
         mainBox.add(boxH);
     }
 
+    // Настроить внешний вид для пользовательского лэйбла + тестового поля
+    // избавления от дублирования кода
     private void setUpLblTxtf(Box mainBox, JLabel lbl, JTextField txtf, int offset) {
         mainBox.add(Box.createVerticalStrut(10));
         Box boxH = Box.createHorizontalBox();
@@ -134,6 +144,8 @@ public class MainWindow extends JFrame {
         mainBox.add(boxH);
     }
 
+    // Настроить внешний вид для пары пользовательских лэйблов + тестовых полей
+    // избавления от дублирования кода
     private void setUpTwoLblTxtf(Box mainBox, JLabel lbl_1, JTextField txtf_1, JLabel lbl_2, JTextField txtf_2, int offset) {
         mainBox.add(Box.createVerticalStrut(10));
         Box boxH = Box.createHorizontalBox();
@@ -150,6 +162,8 @@ public class MainWindow extends JFrame {
         mainBox.add(boxH);
     }
 
+    // Настройка расположения пользовательских компонент
+    // для настройки панели ввода графа
     private void layoutInputSettings() {
         boxVInputPanel.setPreferredSize(new Dimension(150, 0));
 
@@ -172,6 +186,8 @@ public class MainWindow extends JFrame {
         boxVInputPanel.add(Box.createVerticalStrut((int) Double.POSITIVE_INFINITY));
     }
 
+    // Настройка расположения пользовательских компонент
+    // для настройки панели работы алгоритма
     private void layoutOutputSettings() {
         boxVOutputPanel.setPreferredSize(new Dimension(150, 0));
 
@@ -189,6 +205,8 @@ public class MainWindow extends JFrame {
         boxVOutputPanel.add(Box.createVerticalStrut((int) Double.POSITIVE_INFINITY));
     }
 
+    // Добавление слушателя к клавиатуре
+    // избавления от дублирования кода
     class EdgeKeyListener extends KeyAdapter {
         private JTextField txtfToSetUp;
         private int maxSimbolsNum;

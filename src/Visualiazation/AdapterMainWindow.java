@@ -15,7 +15,7 @@ import java.io.*;
 import java.util.*;
 import java.util.Timer;
 
-import static DataClasses.Dijkstra.dijkstra;
+import static Algorithm.Dijkstra.dijkstra;
 
 public class AdapterMainWindow extends MainWindow{
     private static final int BIGRADIUS = 30;
@@ -40,16 +40,19 @@ public class AdapterMainWindow extends MainWindow{
         buttonsSettings();
     }
 
+    // Вынесение инициализации за пределы конструктора,
+    // в отдельныю функцию чтобы не засорять конструктор
     private void initVariables(){
         algorithmStepNum = 0;
-        timer = new Timer();                 // ?
+        timer = new Timer();
         isAlgorithhBlock = false;
-        closeMainThreadAlgorithm = false;    // ?
+        closeMainThreadAlgorithm = false;
         graphStates = new ArrayList<>();
         drawingPanel = new DrawingPanel(graph, txtfNode);
         thisAdapter = this;
     }
 
+    // Инициализация положения поля для вывода графа
     private void layoutDrawingPanelSettings() {
         drawingPanel = new DrawingPanel(graph, txtfNode);
         drawingPanel.setPreferredSize(new Dimension(1000, 1000));
@@ -57,8 +60,10 @@ public class AdapterMainWindow extends MainWindow{
         getContentPane().add(drawingPanel);
     }
 
+    // Настройка слушателей для пользовательских кнопок
     private void buttonsSettings(){
 
+        // Вывести справочную информацию
         btnManual.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -78,6 +83,7 @@ public class AdapterMainWindow extends MainWindow{
             }
         });
 
+        // ввести граф из файла
         btnFromFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileopen = new JFileChooser();
@@ -92,6 +98,7 @@ public class AdapterMainWindow extends MainWindow{
             }
         });
 
+        // Сохранить граф в файл
         btnSaveFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -104,6 +111,7 @@ public class AdapterMainWindow extends MainWindow{
             }
         });
 
+        // Добавление вершины в граф
         btnNodeAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -122,6 +130,7 @@ public class AdapterMainWindow extends MainWindow{
             }
         });
 
+        // удаление вершины из графа
         btnNodeRemove.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -143,6 +152,7 @@ public class AdapterMainWindow extends MainWindow{
             }
         });
 
+        // добавление ребра в граф
         btnEdgeAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -216,6 +226,7 @@ public class AdapterMainWindow extends MainWindow{
             }
         });
 
+        // отрисовка графа в новых координатах
         btnRepaint.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -227,6 +238,8 @@ public class AdapterMainWindow extends MainWindow{
             }
         });
 
+        // переход к алгоритму
+        // при этом сменится панель с панели ввода графа на панель работы алгоритма
         btnGoToAlgorithm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -237,6 +250,7 @@ public class AdapterMainWindow extends MainWindow{
             }
         });
 
+        // Очистить поле ввода алгоритма и начать ввод наново
         btnResetInput.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -245,6 +259,8 @@ public class AdapterMainWindow extends MainWindow{
             }
         });
 
+        // Кнопка запускает алгоритм
+        // создает новый поток, который будет вызываться каждую секунду и выполнять шаг алгоритма
         btnStartAlgorithm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -263,7 +279,7 @@ public class AdapterMainWindow extends MainWindow{
                     return;
                 }
 
-                if(!isAlgorithhBlock) { // steps
+                if(!isAlgorithhBlock) {
                     setIsAlgorithmBlock(true);
                     setUpCloseMainThreadAlgorithm();
                     if(graphStates.size() != 0) {
@@ -288,17 +304,24 @@ public class AdapterMainWindow extends MainWindow{
             }
         });
 
+        // Переход к последнему шагу алгоритма
         btnFinishAlgorithm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                algorithmStepNum = graphStates.size() - 1;
-                task.setStepCount(graphStates.size() - 1);
-                drawingPanel.updateGraph(graphStates.get(graphStates.size() - 1).getGraph());
-                setIsAlgorithmBlock(false);
-                updateTimer();
+                if(isAlgorithhBlock) {
+                    algorithmStepNum = graphStates.size() - 1;
+                    task.setStepCount(graphStates.size() - 1);
+                    drawingPanel.updateGraph(graphStates.get(graphStates.size() - 1).getGraph());
+                    setIsAlgorithmBlock(false);
+                    updateTimer();
+                }
+                else {
+                    JOptionPane.showMessageDialog(null,"You must start algotitnm!");
+                }
             }
         });
 
+        // подсчитать длину до вершины от стартовой + вывести путь
         btnCalculateLength.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -323,6 +346,7 @@ public class AdapterMainWindow extends MainWindow{
             }
         });
 
+        // перейти к следующему шагу алгоритма
         btnNextStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -347,6 +371,7 @@ public class AdapterMainWindow extends MainWindow{
             }
         });
 
+        // перейти к предыдущему шагу алгоритма
         btnPreviousStep.addActionListener(new ActionListener() {
 
             @Override
@@ -369,6 +394,7 @@ public class AdapterMainWindow extends MainWindow{
             }
         });
 
+        // начать выполнение программы заново - с ввода графа
         btnResetOutput.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -393,6 +419,7 @@ public class AdapterMainWindow extends MainWindow{
         });
     }
 
+    // парсер для файла формата .json
     private void parseGraph(File file) {
         JSONParser jsonParser = new JSONParser();
 
@@ -414,8 +441,8 @@ public class AdapterMainWindow extends MainWindow{
         }
     }
 
-    private void parseNodeObject(JSONObject node)
-    {
+    // парсить один элемент массива вершин
+    private void parseNodeObject(JSONObject node) {
         String name = (String) node.get("name");
         graph.addNode(name.charAt(0));
 
@@ -441,6 +468,7 @@ public class AdapterMainWindow extends MainWindow{
         }
     }
 
+    // сохранить в файл
     private void saveIntoFile(File file){
         JSONArray nodes = new JSONArray();
         for(int i = 0; i < graph.nodeCount(); ++i) {
@@ -471,6 +499,7 @@ public class AdapterMainWindow extends MainWindow{
         }
     }
 
+    // парсить int из текстового поля
     private int parseInt(){
         String str = txtfEdgeWeight.getText();
         int totalNum = 0;
@@ -489,6 +518,7 @@ public class AdapterMainWindow extends MainWindow{
         return totalNum;
     }
 
+    // следующий шаг
     public void nextStep(){
         if (drawingPanel.isAlgorithm){
             if(algorithmStepNum != graphStates.size() - 1) {
@@ -506,14 +536,17 @@ public class AdapterMainWindow extends MainWindow{
             JOptionPane.showMessageDialog(null, "Algorithm don`t start!");
     }
 
+    // закрыть/открыть главный поток
     public void setUpCloseMainThreadAlgorithm(){
         closeMainThreadAlgorithm = !closeMainThreadAlgorithm;
     }
 
+    // обновить таймер
     public void updateTimer(){
         timer = new Timer();
     }
 
+    // установить блок на смену шага по клавише
     public void setIsAlgorithmBlock(boolean value){
         isAlgorithhBlock = value;
     }

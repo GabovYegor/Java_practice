@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+// класс для рисования графа
 public class DrawingPanel extends JPanel {
     private Graph graph = new Graph()       ;
     public boolean isAlgorithm = false;
@@ -18,13 +19,12 @@ public class DrawingPanel extends JPanel {
     private static final int OFFSETFORNAME = 7;
     private static final int OFFSETFORWEIGHT = 15;
 
-    DrawingPanel(){}
-
     DrawingPanel(Graph graph, JTextField txtfNode){
         this.graph = graph;
         listenerSettings(txtfNode);
     }
 
+    // переопределение метода рисования из базового класса
     @Override
     protected void paintComponent ( Graphics g ) {
         super.paintComponent ( g );
@@ -33,19 +33,21 @@ public class DrawingPanel extends JPanel {
         drawNodes(g2);
     }
 
+    // рисовать ребра графа
     private void drawEdges(Graphics2D g2){
         for(int i = 0; i < graph.nodeCount(); ++i){
             Point nodeFromLocation = new Point(graph.getNodeByIndex(i).getLocation());
             ArrayList <Edge> currentAdjacencyList = graph.getNodeByIndex(i).getAdjacencyList();
             for(int j = 0; j < currentAdjacencyList.size(); ++j){
                 Point nodeToLocation = new Point(graph.getNodeByName(currentAdjacencyList.get(j).getEndNodeName()).getLocation());
-                drawLine(g2, nodeFromLocation, nodeToLocation, currentAdjacencyList.get(j).getColor());
+                drawMainLine(g2, nodeFromLocation, nodeToLocation, currentAdjacencyList.get(j).getColor());
                 drawArrows(g2, nodeFromLocation, nodeToLocation);
                 printEdgeWeightInPoint(g2, String.valueOf(currentAdjacencyList.get(j).getWeight()), nodeFromLocation, nodeToLocation);
             }
         }
     }
 
+    // рисовать вершины графа
     private void drawNodes(Graphics2D g2){
         for(int i = 0; i < graph.nodeCount(); ++i){
             drawOneNode(g2, String.valueOf(graph.getNodeByIndex(i).getName()), graph.getNodeByIndex(i).getDistance(),
@@ -53,6 +55,7 @@ public class DrawingPanel extends JPanel {
         }
     }
 
+    // добавить стрелки
     private void drawArrows(Graphics2D g2, Point nodeFromLocation, Point nodeToLocation){
         g2.setColor(Color.black);
         g2.setStroke(new BasicStroke(2.0f));
@@ -66,22 +69,22 @@ public class DrawingPanel extends JPanel {
                 (int)(nodeToLocation.y + ARROWLENGTH * Math.sin(edgeAngle - ARROWANGLE)));
     }
 
+    // нарисовать линию
     private void drawMainLine(Graphics2D g2, Point from, Point to, Color color){
         g2.setColor(color);
         g2.setStroke(new BasicStroke(3.0f));
         g2.drawLine(from.x, from.y, to.x, to.y);
     }
 
-    private void drawLine(Graphics2D g2, Point from, Point to, Color color){
-        drawMainLine(g2, from, to, color);
-    }
-
+    // написать строку в точке
+    // в отличие от стандартной функции настраивает цвет, шрифт
     private void printStringInPoint(Graphics2D g2, String string, Point point){
         g2.setColor(Color.black);
         g2.setFont(new Font("TimesRoman", Font.PLAIN, 20));
         g2.drawString(string, point.x - OFFSETFORNAME, point.y + OFFSETFORNAME);
     }
 
+    // писать вес ребра в точке
     private void printEdgeWeightInPoint(Graphics2D g2, String weight, Point nodeFromLocation, Point nodeToLocation){
         double edgeAngle = Math.atan2(nodeFromLocation.y - nodeToLocation.y, nodeFromLocation.x - nodeToLocation.x);
         int length  = (int)Math.sqrt(Math.pow(nodeFromLocation.x - nodeToLocation.x, 2) + Math.pow(nodeFromLocation.y - nodeToLocation.y, 2)) / 2;
@@ -90,6 +93,7 @@ public class DrawingPanel extends JPanel {
 
     }
 
+    // нарисовать одну вершину
     private void drawOneNode(Graphics2D g2, String string, int distance, Point point, Color color){
         if(isAlgorithm) {
             if(distance == Integer.MAX_VALUE)
@@ -105,6 +109,7 @@ public class DrawingPanel extends JPanel {
         printStringInPoint(g2, string, point);
     }
 
+    // настройки слушателя для мыши
     private void listenerSettings(JTextField txtfNode) {
         addMouseListener(new MouseAdapter() {
             @Override
@@ -151,15 +156,18 @@ public class DrawingPanel extends JPanel {
         });
     }
 
+    // обновить граф для отрисовки
     public void updateGraph(Graph newGraph){
         this.graph = newGraph;
         repaint();
     }
 
+    // алгоритм начал работу
     public void setTrueIsAlgorithmValue(){
         isAlgorithm = true;
     }
 
+    // алгоритм закончил работу
     public void setFalseIsAlgorithmValue() {
         isAlgorithm = false;
     }

@@ -2,6 +2,7 @@ package DataClasses;
 
 import java.util.ArrayList;
 
+// структура данных для хранения графа
 public class Graph {
 
     private ArrayList<Node> nodeList;
@@ -61,6 +62,7 @@ public class Graph {
         return getNodeByIndex(getIndexByName(name));
     }
 
+    // склонировать данные из файла графа
     public Graph clone() {
         Graph cloneGraph = new Graph();
         for (int i = 0; i < nodeCount(); i++)

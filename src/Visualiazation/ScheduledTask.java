@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
+// класс задания для потока
 class ScheduledTask extends TimerTask {
     private Timer time;
     private int stepsNum;
@@ -16,6 +17,7 @@ class ScheduledTask extends TimerTask {
         this.thisAdapter = thisAdapter;
     }
 
+    // выполняемое задание - выполнять каждую секунду до завершения алгоритма
     @Override
     public void run() {
         if(stepsCount >= stepsNum ) {
@@ -31,6 +33,7 @@ class ScheduledTask extends TimerTask {
         thisAdapter.nextStep();
     }
 
+    // установить количество шагов
     public void setStepCount(int stepsCount){
         this.stepsCount = stepsCount;
     }
