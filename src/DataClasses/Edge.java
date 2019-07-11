@@ -19,7 +19,7 @@ public class Edge {
         return endNodeName;
     }
 
-    public void setWeight(int weight) throws IllegalArgumentException {
+    public void setWeight(int weight) {
         if (weight <= 0)
             throw new IllegalArgumentException("Ребро должно иметь положительный вес.");
         this.weight = weight;
