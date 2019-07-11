@@ -10,5 +10,5 @@ public class Main {
 }
 
 // внимательно с ScheduledTask
-//button settings в отдельный класс
+// button settings в отдельный класс
 // в MainWindow оставить только layouts

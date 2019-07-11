@@ -39,9 +39,9 @@ class ScheduledTask extends TimerTask {
             time.cancel();
             time.purge();
             windowEx.setUpCloseMainThreadAlgorithm();
-            JOptionPane.showMessageDialog(null, "algorithm end work!");
             windowEx.updateTimer();
             windowEx.unblockAlgorithm();
+            JOptionPane.showMessageDialog(null, "algorithm end work!");
             return;
         }
         stepsCount++;
@@ -405,13 +405,13 @@ public class MainWindow extends JFrame {
 
                 if(!isAlgorithhBlock) {
                     isAlgorithhBlock = true;
+                    algorithmStepNum = 0;
                     graphStates = graph.Dijkstra(txtfStartNode.getText().charAt(0));
                     graph = graphStates.get(algorithmStepNum).getGraph();
                     drawingPanel.updateGraph(graph);
                     drawingPanel.setTrueIsAlgorithmValue();
                     txtaLog.setText("");
                     txtaLog.append(graphStates.get(0).getStr());
-                    algorithmStepNum = 0;
                     task = new ScheduledTask(timer, graphStates.size() - 1, 0, thisWindow);
                     setUpCloseMainThreadAlgorithm();
                     timer.schedule(task, 0, 1000);
@@ -638,27 +638,21 @@ public class MainWindow extends JFrame {
         int x = xl.intValue();
         Long yl = (Long)(location.get(1));
         int y = yl.intValue();
-        if(x >  BOUND_WIDTH || y > BOUND_HEIGHT || x < 0 || y < 0)
+        if(x > BOUND_WIDTH || y > BOUND_HEIGHT || x < 0 || y < 0)
             throw new IndexOutOfBoundsException("location don`t in bounds");
         graph.getNodeByIndex(graph.nodeCount()-1).setLocation(new Point(x, y));
 
         JSONArray adjacencyList = (JSONArray) node.get("adjacencyList");
-        ArrayList<Edge> adjacencyListForSetUp = new ArrayList<Edge>();
         Iterator adjListItr = adjacencyList.iterator();
-        boolean isThrowEx = false;
         while ((adjListItr.hasNext())){
             JSONArray currentEdge = (JSONArray) adjListItr.next();
             Long  wl = (Long) currentEdge.get(1);
             int weight = wl.intValue();
-            if(weight <= 0) {
-                adjacencyListForSetUp.add(new Edge(String.valueOf(currentEdge.get(0)).charAt(0), weight));
+            if(weight > 0) {
+                graph.addEdge(name.charAt(0), String.valueOf(currentEdge.get(0)).charAt(0), weight);
             } else
-                isThrowEx = true;
+                throw new IndexOutOfBoundsException("Weight <= 0");
         }
-        if(isThrowEx)
-            throw new IndexOutOfBoundsException("Weight <= 0");
-        graph.getNodeByIndex(graph.nodeCount() - 1).setAdjacencyList(adjacencyListForSetUp);
-
     }
 
     private void saveIntoFile(File file){

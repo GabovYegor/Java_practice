@@ -58,7 +58,8 @@ public class DrawingPanel extends JPanel {
             Point nodeFromLocation = new Point(graph.getNodeByIndex(i).getLocation());
             ArrayList <Edge> currentAdjacencyList = graph.getNodeByIndex(i).getAdjacencyList();
             for(int j = 0; j < currentAdjacencyList.size(); ++j){
-                Point nodeToLocation = new Point(graph.getNodeByName(currentAdjacencyList.get(j).getEndNodeName()).getLocation());
+                Point nodeToLocation = new Point();
+                nodeToLocation = new Point(graph.getNodeByName(currentAdjacencyList.get(j).getEndNodeName()).getLocation());
                 drawLine(g2, nodeFromLocation, nodeToLocation, currentAdjacencyList.get(j).getColor());
                 drawArrows(g2, nodeFromLocation, nodeToLocation);
                 printEdgeWeightInPoint(g2, String.valueOf(currentAdjacencyList.get(j).getWeight()), nodeFromLocation, nodeToLocation);

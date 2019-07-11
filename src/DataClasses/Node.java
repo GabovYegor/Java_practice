@@ -48,10 +48,6 @@ public class Node {
         return adjacencyList.size();
     }
 
-    public void setAdjacencyList(ArrayList<Edge> adjacencyList){
-        this.adjacencyList = adjacencyList;
-    }
-
     public void setLocation(Point location){
         this.location = location;
     }
