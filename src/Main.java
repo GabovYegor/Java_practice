@@ -4,11 +4,7 @@ import Visualiazation.*;
 public class Main {
 
     public static void main(String[] args) {
-        MainWindow mainWindow = new MainWindow("Dijkstra");
-        mainWindow.setVisible(true);
+        AdapterMainWindow adapterMainWindow = new AdapterMainWindow("Graph", new Graph());
+        adapterMainWindow.setVisible(true);
     }
 }
-
-// внимательно с ScheduledTask
-// button settings в отдельный класс
-// в MainWindow оставить только layouts

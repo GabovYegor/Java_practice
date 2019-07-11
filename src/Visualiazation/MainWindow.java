@@ -4,25 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-class EdgeKeyListener extends KeyAdapter {
-    private JTextField txtfToSetUp;
-    private int maxSimbolsNum;
-
-    EdgeKeyListener(JTextField txtfToSetUp, int maxSimbolsNum) {
-        this.txtfToSetUp = txtfToSetUp;
-        this.maxSimbolsNum = maxSimbolsNum;
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        super.keyTyped(e);
-        if (txtfToSetUp.getText().length() >= maxSimbolsNum) {
-            e.consume();
-            JOptionPane.showMessageDialog(null, "Max count of symbols");
-        }
-    }
-}
-
 public class MainWindow extends JFrame {
     private static final int MAINWINDOW_WIDTH = 900;
     private static final int MAINWINDOW_HEIGHT = 700;
@@ -58,8 +39,6 @@ public class MainWindow extends JFrame {
     JButton btnCalculateLength;
     JButton btnResetOutput;
     JTextArea txtaLog;
-
-    DrawingPanel drawingPanel;
     MainWindow thisWindow = this;
 
     public MainWindow(String title) {
@@ -131,9 +110,7 @@ public class MainWindow extends JFrame {
     private void layoutSettins() {
         layoutInputSettings();
         layoutOutputSettings();
-        layoutDrawingPanelSettings();
         getContentPane().add(boxVInputPanel, BorderLayout.WEST);
-        getContentPane().add(drawingPanel);
         getContentPane().add(new JScrollPane(txtaLog), BorderLayout.SOUTH);
     }
 
@@ -212,10 +189,23 @@ public class MainWindow extends JFrame {
         boxVOutputPanel.add(Box.createVerticalStrut((int) Double.POSITIVE_INFINITY));
     }
 
-    private void layoutDrawingPanelSettings() {
-        drawingPanel = new DrawingPanel();
-        drawingPanel.setPreferredSize(new Dimension(1000, 1000));
-        drawingPanel.setBackground(new Color(230, 230, 230));
+    class EdgeKeyListener extends KeyAdapter {
+        private JTextField txtfToSetUp;
+        private int maxSimbolsNum;
+
+        EdgeKeyListener(JTextField txtfToSetUp, int maxSimbolsNum) {
+            this.txtfToSetUp = txtfToSetUp;
+            this.maxSimbolsNum = maxSimbolsNum;
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+            super.keyTyped(e);
+            if (txtfToSetUp.getText().length() >= maxSimbolsNum) {
+                e.consume();
+                JOptionPane.showMessageDialog(null, "Max count of symbols");
+            }
+        }
     }
 }
 

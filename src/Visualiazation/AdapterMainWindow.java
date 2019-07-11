@@ -62,10 +62,19 @@ public class AdapterMainWindow extends MainWindow{
     private boolean isAlgorithhBlock;
     protected boolean closeMainThreadAlgorithm;
     private ScheduledTask task;
+    private DrawingPanel drawingPanel;
 
     public AdapterMainWindow(String title, Graph graph) {
         super(title);
         this.graph = graph;
+        initVariables();
+        layoutDrawingPanelSettings();
+        buttonsSettings();
+        layoutDrawingPanelSettings();
+        getContentPane().add(drawingPanel);
+    }
+
+    private void initVariables(){
         algorithmStepNum = 0;
         timer = new Timer();
         isAlgorithhBlock = false;
@@ -532,5 +541,11 @@ public class AdapterMainWindow extends MainWindow{
 
     public void unblockAlgorithm(){
         isAlgorithhBlock = false;
+    }
+
+    private void layoutDrawingPanelSettings() {
+        drawingPanel = new DrawingPanel(graph, txtfNode);
+        drawingPanel.setPreferredSize(new Dimension(1000, 1000));
+        drawingPanel.setBackground(new Color(230, 230, 230));
     }
 }
