@@ -17,52 +17,20 @@ import java.util.Timer;
 
 import static DataClasses.Dijkstra.dijkstra;
 
-class ScheduledTask extends TimerTask {
-    private Timer time;
-    private int stepsNum;
-    private int stepsCount;
-    //private MainWindow windowEx;
-    private ScheduledTask task;
-    ScheduledTask(){};
-    ScheduledTask(Timer time, int stepsNum, int stepsCount, MainWindow windowEx){
-        this.time = time;
-        this.stepsNum = stepsNum;
-        this.stepsCount = stepsCount;
-        //this.windowEx = windowEx;
-    }
-    public void setStepCount(int stepsCount){
-        this.stepsCount = stepsCount;
-    }
-
-    @Override
-    public void run() {
-        if(stepsCount >= stepsNum ) {
-            time.cancel();
-            time.purge();
-           // windowEx.setUpCloseMainThreadAlgorithm();
-           // windowEx.updateTimer();
-           // windowEx.unblockAlgorithm();
-            JOptionPane.showMessageDialog(null, "algorithm end work!");
-            return;
-        }
-        stepsCount++;
-       // windowEx.nextStep();
-    }
-}
-
 public class AdapterMainWindow extends MainWindow{
     private static final int BIGRADIUS = 30;
     private static final int BOUND_WIDTH = 500;
     private static final int BOUND_HEIGHT = 400;
+    private DrawingPanel drawingPanel;
 
     private Graph graph;
     private ArrayList<AlgorithmStepData> graphStates;
-    protected Integer algorithmStepNum;
+    private Integer algorithmStepNum;
     private java.util.Timer timer = new Timer();
     private boolean isAlgorithhBlock;
-    protected boolean closeMainThreadAlgorithm;
+    private boolean closeMainThreadAlgorithm;
     private ScheduledTask task;
-    private DrawingPanel drawingPanel;
+    private AdapterMainWindow thisAdapter;
 
     public AdapterMainWindow(String title, Graph graph) {
         super(title);
@@ -70,17 +38,23 @@ public class AdapterMainWindow extends MainWindow{
         initVariables();
         layoutDrawingPanelSettings();
         buttonsSettings();
-        layoutDrawingPanelSettings();
-        getContentPane().add(drawingPanel);
     }
 
     private void initVariables(){
         algorithmStepNum = 0;
-        timer = new Timer();
+        timer = new Timer();                 // ?
         isAlgorithhBlock = false;
-        closeMainThreadAlgorithm = false;
+        closeMainThreadAlgorithm = false;    // ?
         graphStates = new ArrayList<>();
         drawingPanel = new DrawingPanel(graph, txtfNode);
+        thisAdapter = this;
+    }
+
+    private void layoutDrawingPanelSettings() {
+        drawingPanel = new DrawingPanel(graph, txtfNode);
+        drawingPanel.setPreferredSize(new Dimension(1000, 1000));
+        drawingPanel.setBackground(new Color(230, 230, 230));
+        getContentPane().add(drawingPanel);
     }
 
     private void buttonsSettings(){
@@ -289,23 +263,24 @@ public class AdapterMainWindow extends MainWindow{
                     return;
                 }
 
-                if(!isAlgorithhBlock) {
+                if(!isAlgorithhBlock) { // steps
+                    setIsAlgorithmBlock(true);
+                    setUpCloseMainThreadAlgorithm();
                     if(graphStates.size() != 0) {
-                        graph = graphStates.get(graphStates.size() - 2).getGraph();
+                        graph = graphStates.get(graphStates.size() - 2).getGraph(); // if restart
                         drawingPanel.updateGraph(graph);
-                        System.out.println("update");
                     }
 
-                    isAlgorithhBlock = true;
                     algorithmStepNum = 0;
                     graphStates = dijkstra(graph, txtfStartNode.getText().charAt(0));
-                    graph = graphStates.get(algorithmStepNum).getGraph();
+                    graph = graphStates.get(0).getGraph(); // инициализируемся графом на 0-вом шаге
                     drawingPanel.updateGraph(graph);
-                    drawingPanel.setTrueIsAlgorithmValue();
+                    drawingPanel.setTrueIsAlgorithmValue(); // for upper text
                     txtaLog.setText("");
                     txtaLog.append(graphStates.get(0).getStr());
-                    task = new ScheduledTask(timer, graphStates.size() - 1, 0, thisWindow);
-                    setUpCloseMainThreadAlgorithm();
+
+                    // задаем задание, которое будет периодически выполнятся
+                    task = new ScheduledTask(timer, graphStates.size() - 1, 0, thisAdapter);
                     timer.schedule(task, 0, 1000);
                 }
                 else
@@ -319,7 +294,7 @@ public class AdapterMainWindow extends MainWindow{
                 algorithmStepNum = graphStates.size() - 1;
                 task.setStepCount(graphStates.size() - 1);
                 drawingPanel.updateGraph(graphStates.get(graphStates.size() - 1).getGraph());
-                isAlgorithhBlock = false;
+                setIsAlgorithmBlock(false);
                 updateTimer();
             }
         });
@@ -539,13 +514,7 @@ public class AdapterMainWindow extends MainWindow{
         timer = new Timer();
     }
 
-    public void unblockAlgorithm(){
-        isAlgorithhBlock = false;
-    }
-
-    private void layoutDrawingPanelSettings() {
-        drawingPanel = new DrawingPanel(graph, txtfNode);
-        drawingPanel.setPreferredSize(new Dimension(1000, 1000));
-        drawingPanel.setBackground(new Color(230, 230, 230));
+    public void setIsAlgorithmBlock(boolean value){
+        isAlgorithhBlock = value;
     }
 }

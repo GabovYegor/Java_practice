@@ -1,8 +1,6 @@
 package DataClasses;
 
-import java.awt.*;
 import java.util.ArrayList;
-
 
 public class Graph {
 
@@ -36,8 +34,6 @@ public class Graph {
             throw new IllegalArgumentException("Граф не может содержать петель.");
         if (weight <= 0)
             throw new IllegalArgumentException("Граф может содержать только рёбра с положительным весом.");
-        if (weight > Edge.MAX_WEIGHT)
-            throw new IllegalArgumentException("Вес ребра не может превышать " + Edge.MAX_WEIGHT + ".");
         nodeList.get(addNode(start)).addEdge(end, weight);
         addNode(end);
     }

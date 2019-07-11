@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f9a7ee9f-5cf4-45b0-92eb-8c0cabb07682" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/jsonExample/graph2.json" beforeDir="false" afterPath="$PROJECT_DIR$/jsonExample/graph2.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Visualiazation/AdapterMainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Visualiazation/AdapterMainWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Visualiazation/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Visualiazation/MainWindow.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,7 +28,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Visualiazation/MainWindow.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="975">
@@ -54,19 +51,43 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Visualiazation/AdapterMainWindow.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4005">
-              <caret line="306" column="83" selection-start-line="306" selection-start-column="83" selection-end-line="306" selection-end-column="83" />
+            <state relative-caret-position="585">
+              <caret line="39" column="49" selection-start-line="39" selection-start-column="49" selection-end-line="39" selection-end-column="49" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#902#903#0" expanded="true" />
-                <element signature="e#946#947#0" expanded="true" />
+                <element signature="e#1392#1393#0" expanded="true" />
+                <element signature="e#1436#1437#0" expanded="true" />
+                <element signature="method#layoutDrawingPanelSettings#0;class#AdapterMainWindow#0" />
+                <element signature="class#2445:3218" />
+                <element signature="method#actionPerformed#0;class#2445:3218" />
+                <element signature="class#3264:3785" />
+                <element signature="class#3831:4255" />
+                <element signature="method#actionPerformed#0;class#4300:5030" />
+                <element signature="class#5078:5946" />
+                <element signature="method#actionPerformed#0;class#5991:9426" />
+                <element signature="class#9471:9894" />
+                <element signature="class#9945:10252" />
+                <element signature="class#10300:10507" />
+                <element signature="method#parseGraph#0;class#AdapterMainWindow#0" />
+                <element signature="method#parseNodeObject#0;class#AdapterMainWindow#0" />
+                <element signature="method#saveIntoFile#0;class#AdapterMainWindow#0" />
+                <element signature="method#parseInt#0;class#AdapterMainWindow#0" />
                 <element signature="e#19397#19398#0" expanded="true" />
                 <element signature="e#19465#19466#0" expanded="true" />
                 <element signature="e#19497#19498#0" expanded="true" />
                 <element signature="e#19532#19533#0" expanded="true" />
-                <element signature="e#19569#19570#0" expanded="true" />
-                <element signature="e#19609#19610#0" expanded="true" />
+                <element signature="e#22000#22001#0" expanded="true" />
+                <element signature="e#22040#22041#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Visualiazation/ScheduledTask.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="26" selection-start-line="2" selection-start-column="26" selection-end-line="2" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -74,8 +95,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Visualiazation/DrawingPanel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+            <state relative-caret-position="1395">
+              <caret line="93" column="11" selection-start-line="93" selection-start-column="11" selection-end-line="93" selection-end-column="11" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3718#3719#0" expanded="true" />
@@ -113,8 +134,8 @@
         <option value="$PROJECT_DIR$/src/DataClasses/Dijkstra.java" />
         <option value="$PROJECT_DIR$/src/Visualiazation/DrawingPanel.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
-        <option value="$PROJECT_DIR$/src/Visualiazation/AdapterMainWindow.java" />
         <option value="$PROJECT_DIR$/src/Visualiazation/MainWindow.java" />
+        <option value="$PROJECT_DIR$/src/Visualiazation/AdapterMainWindow.java" />
       </list>
     </option>
   </component>
@@ -159,7 +180,20 @@
               <item name="Java_practice" type="b2602c69:ProjectViewProjectNode" />
               <item name="Java_practice" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="DataClasses" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Java_practice" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Java_practice" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="Visualiazation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Java_practice" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Java_practice" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="Visualiazation" type="462c0819:PsiDirectoryNode" />
+              <item name="AdapterMainWindow.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
             </path>
             <path>
               <item name="Java_practice" type="b2602c69:ProjectViewProjectNode" />
@@ -235,7 +269,7 @@
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3713337" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3713337" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -244,7 +278,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32937366" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32937366" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32937366" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39956802" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -433,8 +467,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Visualiazation/DrawingPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+        <state relative-caret-position="1395">
+          <caret line="93" column="11" selection-start-line="93" selection-start-column="11" selection-end-line="93" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3718#3719#0" expanded="true" />
@@ -442,24 +476,6 @@
             <element signature="e#8013#8014#0" expanded="true" />
             <element signature="e#8047#8048#0" expanded="true" />
             <element signature="e#7850#7851#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Visualiazation/AdapterMainWindow.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4005">
-          <caret line="306" column="83" selection-start-line="306" selection-start-column="83" selection-end-line="306" selection-end-column="83" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#902#903#0" expanded="true" />
-            <element signature="e#946#947#0" expanded="true" />
-            <element signature="e#19397#19398#0" expanded="true" />
-            <element signature="e#19465#19466#0" expanded="true" />
-            <element signature="e#19497#19498#0" expanded="true" />
-            <element signature="e#19532#19533#0" expanded="true" />
-            <element signature="e#19569#19570#0" expanded="true" />
-            <element signature="e#19609#19610#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -479,6 +495,46 @@
             <element signature="e#23509#24386#0" />
             <element signature="class#EdgeKeyListener#0;class#MainWindow#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Visualiazation/AdapterMainWindow.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="39" column="49" selection-start-line="39" selection-start-column="49" selection-end-line="39" selection-end-column="49" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1392#1393#0" expanded="true" />
+            <element signature="e#1436#1437#0" expanded="true" />
+            <element signature="method#layoutDrawingPanelSettings#0;class#AdapterMainWindow#0" />
+            <element signature="class#2445:3218" />
+            <element signature="method#actionPerformed#0;class#2445:3218" />
+            <element signature="class#3264:3785" />
+            <element signature="class#3831:4255" />
+            <element signature="method#actionPerformed#0;class#4300:5030" />
+            <element signature="class#5078:5946" />
+            <element signature="method#actionPerformed#0;class#5991:9426" />
+            <element signature="class#9471:9894" />
+            <element signature="class#9945:10252" />
+            <element signature="class#10300:10507" />
+            <element signature="method#parseGraph#0;class#AdapterMainWindow#0" />
+            <element signature="method#parseNodeObject#0;class#AdapterMainWindow#0" />
+            <element signature="method#saveIntoFile#0;class#AdapterMainWindow#0" />
+            <element signature="method#parseInt#0;class#AdapterMainWindow#0" />
+            <element signature="e#19397#19398#0" expanded="true" />
+            <element signature="e#19465#19466#0" expanded="true" />
+            <element signature="e#19497#19498#0" expanded="true" />
+            <element signature="e#19532#19533#0" expanded="true" />
+            <element signature="e#22000#22001#0" expanded="true" />
+            <element signature="e#22040#22041#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Visualiazation/ScheduledTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="26" selection-start-line="2" selection-start-column="26" selection-end-line="2" selection-end-column="26" />
         </state>
       </provider>
     </entry>

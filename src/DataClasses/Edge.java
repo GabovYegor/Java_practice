@@ -5,7 +5,6 @@ import java.awt.*;
 public class Edge {
     private char endNodeName;
     private int weight;
-    public static final int MAX_WEIGHT = 1000000;
     private Color color;
 
     public Edge(char endNodeName, int weight) {
