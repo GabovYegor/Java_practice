@@ -18,7 +18,6 @@ public class DrawingPanel extends JPanel {
     private static final int OFFSETFORNAME = 7;
     private static final int OFFSETFORWEIGHT = 15;
 
-
     DrawingPanel(Graph graph, JTextField txtfNode){
         this.graph = graph;
         listenerSettings(txtfNode);
@@ -27,7 +26,7 @@ public class DrawingPanel extends JPanel {
     @Override
     protected void paintComponent ( Graphics g ) {
         super.paintComponent ( g );
-        repaint();
+        //repaint();
         Graphics2D g2 = (Graphics2D) g;
         drawEdges(g2);
         drawNodes(g2);
@@ -116,6 +115,7 @@ public class DrawingPanel extends JPanel {
                     if (!txtfNode.getText().isEmpty()) {
                         graph.getNodeByIndex(graph.addNode(txtfNode.getText().charAt(0))).setLocation(e.getPoint());
                         txtfNode.setText("");
+                        repaint();
                         return;
                     }
                     else
@@ -125,6 +125,7 @@ public class DrawingPanel extends JPanel {
                                     graph.getNodeByIndex(i).getLocation().y <= e.getPoint().y + BIGRADIUS / 2 &&
                                     graph.getNodeByIndex(i).getLocation().y >= e.getPoint().y - BIGRADIUS / 2) {
                                 graph.removeNode(graph.getNodeByIndex(i).getName());
+                                repaint();
                                 return;
                             }
                         }
@@ -144,6 +145,7 @@ public class DrawingPanel extends JPanel {
                             else
                                 graph.getNodeByIndex(i).setColor(Color.black);
                     }
+                    repaint();
                 }
             }
         });
@@ -151,6 +153,7 @@ public class DrawingPanel extends JPanel {
 
     public void updateGraph(Graph newGraph){
         this.graph = newGraph;
+        repaint();
     }
 
     public void setTrueIsAlgorithmValue(){

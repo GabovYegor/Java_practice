@@ -1,8 +1,7 @@
 package Visualiazation;
 
-import DataClasses.AlgorithmStepData;
-import DataClasses.Edge;
-import DataClasses.Graph;
+import DataClasses.*;
+import DataClasses.Dijkstra;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,11 +17,14 @@ import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import static DataClasses.Dijkstra.dijkstra;
+
 class ScheduledTask extends TimerTask {
     private Timer time;
     private int stepsNum;
     private int stepsCount;
     private MainWindow windowEx;
+    ScheduledTask(){};
     ScheduledTask(Timer time, int stepsNum, int stepsCount, MainWindow windowEx){
         this.time = time;
         this.stepsNum = stepsNum;
@@ -184,6 +186,8 @@ public class MainWindow extends JFrame {
         timer = new Timer();
         isAlgorithhBlock = false;
         closeMainThreadAlgorithm = false;
+        graphStates = new ArrayList<>();
+        task = new ScheduledTask();
     }
 
     private void windowSettings(){
@@ -233,6 +237,7 @@ public class MainWindow extends JFrame {
                     file = fileopen.getSelectedFile();
                     parseGraph(file);
                 }
+                repaint();
             }
         });
 
@@ -262,6 +267,7 @@ public class MainWindow extends JFrame {
                 }
                 else
                     JOptionPane.showMessageDialog(null, "Node`s name empty");
+                repaint();
             }
         });
 
@@ -282,6 +288,7 @@ public class MainWindow extends JFrame {
                 else
                     JOptionPane.showMessageDialog(null, "Node`s name empty");
                 txtfNode.setText("");
+                repaint();
             }
         });
 
@@ -354,6 +361,7 @@ public class MainWindow extends JFrame {
 
                 if(!flag)
                     JOptionPane.showMessageDialog(null, "Edge fields Empty");
+                repaint();
             }
         });
 
@@ -364,6 +372,7 @@ public class MainWindow extends JFrame {
                 for(int i = 0; i < graph.nodeCount(); ++i){
                     graph.getNodeByIndex(i).setLocation(new Point(random.nextInt(BOUND_WIDTH) + BIGRADIUS, random.nextInt(BOUND_HEIGHT) + BIGRADIUS));
                 }
+                repaint();
             }
         });
 
@@ -404,9 +413,15 @@ public class MainWindow extends JFrame {
                 }
 
                 if(!isAlgorithhBlock) {
+                    if(graphStates.size() != 0) {
+                        graph = graphStates.get(graphStates.size() - 2).getGraph();
+                        drawingPanel.updateGraph(graph);
+                        System.out.println("update");
+                    }
+
                     isAlgorithhBlock = true;
                     algorithmStepNum = 0;
-                    graphStates = graph.Dijkstra(txtfStartNode.getText().charAt(0));
+                    graphStates = dijkstra(graph, txtfStartNode.getText().charAt(0));
                     graph = graphStates.get(algorithmStepNum).getGraph();
                     drawingPanel.updateGraph(graph);
                     drawingPanel.setTrueIsAlgorithmValue();
@@ -426,7 +441,7 @@ public class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 algorithmStepNum = graphStates.size() - 1;
                 task.setStepCount(graphStates.size() - 1);
-                drawingPanel.updateGraph(graphStates.get(graphStates.size()-1).getGraph());
+                drawingPanel.updateGraph(graphStates.get(graphStates.size() - 1).getGraph());
                 isAlgorithhBlock = false;
                 updateTimer();
             }

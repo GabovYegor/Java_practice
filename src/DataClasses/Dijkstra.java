@@ -3,7 +3,6 @@ package DataClasses;
 import java.awt.*;
 import java.util.ArrayList;
 
-
 public class Dijkstra {
     public static ArrayList<AlgorithmStepData> dijkstra(Graph graph, char startNodeName) {
         Graph aGraph = graph.clone();
@@ -90,16 +89,19 @@ public class Dijkstra {
             aGraph.getNodeByIndex(currentNodeIndex).setColor(Color.black);
             m++;
         }
+        result.add(new AlgorithmStepData(aGraph.clone(), strBuilder.toString()));
 
         for (int i = 0; i < aGraph.nodeCount(); i++) {
             for (int j = 0; j < aGraph.getNodeByIndex(i).edgeCount(); j++) {
                 char c = aGraph.getNodeByIndex(i).getEdgeByIndex(j).getEndNodeName();
-                if (aGraph.getNodeByIndex(i).getName() != aGraph.getNodeByName(c).getPath().get(aGraph.getNodeByName(c).getPath().size() - 2)) {
+                if (aGraph.getNodeByName(c).getPath().size() < 2 ||
+                        aGraph.getNodeByIndex(i).getName() != aGraph.getNodeByName(c).getPath().get(aGraph.getNodeByName(c).getPath().size() - 2)){
                     aGraph.getNodeByIndex(i).removeEdge(c);
                     j--;
                 }
             }
         }
+
         strBuilder = new StringBuilder("Результат:\n");
         strBuilder.append("Путь от вершины '" + startNodeName + "' до вершины\n");
         for (int i = 0; i < aGraph.nodeCount(); i++) {
