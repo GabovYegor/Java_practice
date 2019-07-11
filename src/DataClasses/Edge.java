@@ -5,13 +5,12 @@ import java.awt.*;
 public class Edge {
     private char endNodeName;
     private int weight;
-    public static final int MAX_WEIGHT = 1000000;
     private Color color;
 
     public Edge(char endNodeName, int weight) {
         this.endNodeName = endNodeName;
-        if(weight <= 0)
-            throw new IndexOutOfBoundsException();
+        if (weight <= 0)
+            throw new IllegalArgumentException("Ребро должно иметь положительный вес.");
         this.weight = weight;
         color = Color.black;
     }
@@ -20,7 +19,9 @@ public class Edge {
         return endNodeName;
     }
 
-    public void setWeight(int weight){
+    public void setWeight(int weight) throws IllegalArgumentException {
+        if (weight <= 0)
+            throw new IllegalArgumentException("Ребро должно иметь положительный вес.");
         this.weight = weight;
     }
 
