@@ -316,7 +316,7 @@ public class AdapterMainWindow extends MainWindow{
                     updateTimer();
                 }
                 else {
-                    JOptionPane.showMessageDialog(null,"You must start algotitnm!");
+                    JOptionPane.showMessageDialog(null,"You must start algorithm!");
                 }
             }
         });
@@ -430,7 +430,10 @@ public class AdapterMainWindow extends MainWindow{
                 nodesList.forEach(emp -> parseNodeObject((JSONObject) emp));
             }
             catch (Throwable ex){
-                JOptionPane.showMessageDialog(null, ex.getMessage());
+                if(ex.getMessage().isEmpty())
+                    JOptionPane.showMessageDialog(null, "ERROR");
+                else
+                        JOptionPane.showMessageDialog(null, ex.getMessage());
                 btnResetInput.doClick();
                 return;
             }
