@@ -9,5 +9,6 @@ public class Main {
     }
 }
 
-// очищать вес
-// если нажимать кнопки next/prev будет плохо
+// внимательно с ScheduledTask
+// button settings в отдельный класс
+// в MainWindow оставить только layouts

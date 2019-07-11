@@ -48,12 +48,9 @@ public class Node {
         return adjacencyList.size();
     }
 
+
     public char getName() {
         return name;
-    }
-
-    public void setAdjacencyList(ArrayList<Edge> adjacencyList){
-        this.adjacencyList = adjacencyList;
     }
 
     public void setLocation(Point location){

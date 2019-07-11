@@ -23,11 +23,14 @@ class ScheduledTask extends TimerTask {
     private int stepsNum;
     private int stepsCount;
     private MainWindow windowEx;
-    ScheduledTask(JButton nextStep, Timer time, int stepsNum, int stepsCount, MainWindow windowEx){
+    ScheduledTask(Timer time, int stepsNum, int stepsCount, MainWindow windowEx){
         this.time = time;
         this.stepsNum = stepsNum;
         this.stepsCount = stepsCount;
         this.windowEx = windowEx;
+    }
+    public void setStepCount(int stepsCount){
+        this.stepsCount = stepsCount;
     }
 
     @Override
@@ -36,11 +39,33 @@ class ScheduledTask extends TimerTask {
             time.cancel();
             time.purge();
             windowEx.setUpCloseMainThreadAlgorithm();
+            windowEx.updateTimer();
+            windowEx.unblockAlgorithm();
             JOptionPane.showMessageDialog(null, "algorithm end work!");
             return;
         }
         stepsCount++;
         windowEx.nextStep();
+    }
+}
+
+
+class EdgeKeyListener extends KeyAdapter {
+    private JTextField txtfToSetUp;
+    private int maxSimbolsNum;
+
+    EdgeKeyListener(JTextField txtfToSetUp, int maxSimbolsNum){
+        this.txtfToSetUp = txtfToSetUp;
+        this.maxSimbolsNum = maxSimbolsNum;
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        super.keyTyped(e);
+        if(txtfToSetUp.getText().length() >= maxSimbolsNum) {
+            e.consume();
+            JOptionPane.showMessageDialog(null, "Max count of symbols");
+        }
     }
 }
 
@@ -76,20 +101,21 @@ public class MainWindow extends JFrame {
     private JTextField txtfStartNode;
     private JTextField txtfAimNode;
     private JButton btnStartAlgorithm;
-    private JButton btnCalculateLength;
+    private JButton btnFinishAlgorithm;
     private JButton btnNextStep;
     private JButton btnPreviousStep;
+    private JButton btnCalculateLength;
     private JButton btnResetOutput;
-
+    private ScheduledTask task;
     private JTextArea txtaLog;
 
     private DrawingPanel drawingPanel;
 
     private Graph graph;
     private ArrayList<AlgorithmStepData> graphStates;
-    private int algorithmStepNum;
-    private java.util.Timer time = new Timer();
-    private boolean isAlgorithmAlreadyWorked;
+    private Integer algorithmStepNum;
+    private java.util.Timer timer = new Timer();
+    private boolean isAlgorithhBlock;
     private boolean closeMainThreadAlgorithm;
 
     private MainWindow thisWindow = this;
@@ -111,45 +137,23 @@ public class MainWindow extends JFrame {
         lblWeight    = new JLabel("Weight");
 
         txtfNode       = new JTextField(2);
-        txtfNode.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                if(txtfNode.getText().length() >= 1)
-                    e.consume();  // ignore event
-                }
-        });
+        txtfNode.addKeyListener(new EdgeKeyListener(txtfNode, 1));
 
         txtfEdgeFrom   = new JTextField(2);
-        txtfEdgeFrom.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                if(txtfEdgeFrom.getText().length() >= 1)
-                    e.consume();  // ignore event
-            }
-        });
+        txtfEdgeFrom.addKeyListener(new EdgeKeyListener(txtfEdgeFrom, 1));
 
         txtfEdgeTo     = new JTextField(2);
-        txtfEdgeTo.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                if(txtfEdgeTo.getText().length() >= 1)
-                    e.consume();  // ignore event
-            }
-        });
+        txtfEdgeTo.addKeyListener(new EdgeKeyListener(txtfEdgeTo, 1));
 
         txtfEdgeWeight = new JTextField(5);
-        txtfEdgeWeight.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                if(txtfEdgeWeight.getText().length() >= 5) {
-                    e.consume();  // ignore event
-                    JOptionPane.showMessageDialog(null, "very big weight");
-                }
-            }
-        });
+        txtfEdgeWeight.addKeyListener(new EdgeKeyListener(txtfEdgeWeight, 3));
 
         btnManual = new JButton("Manual");
         btnFromFile  = new JButton("From File");
         btnSaveFile = new JButton("Save this Graph");
-        btnNodeAdd   = new JButton("Add");
-        btnNodeRemove = new JButton("Remove");
-        btnEdgeAdd   = new JButton("Add");
+        btnNodeAdd   = new JButton("Add Node");
+        btnNodeRemove = new JButton("Remove Node");
+        btnEdgeAdd   = new JButton("Add Edge");
         btnRepaint   = new JButton("Repaint Graph");
         btnGoToAlgorithm = new JButton("Go to algorithm");
         btnResetInput = new JButton("Reset");
@@ -163,31 +167,22 @@ public class MainWindow extends JFrame {
         lblAimNode = new JLabel("Aim Node");
 
         txtfStartNode  = new JTextField(2);
-        txtfStartNode.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                if(txtfStartNode.getText().length() >= 1)
-                    e.consume();  // ignore event
-            }
-        });
+        txtfStartNode.addKeyListener(new EdgeKeyListener(txtfStartNode, 1));
 
         txtfAimNode = new JTextField(2);
-        txtfAimNode.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                if(txtfAimNode.getText().length() >= 1)
-                    e.consume();  // ignore event
-            }
-        });
+        txtfAimNode.addKeyListener(new EdgeKeyListener(txtfAimNode, 1));
 
         boxVOutputPanel = Box.createVerticalBox();
         btnStartAlgorithm = new JButton("Start algorithm");
-        btnCalculateLength = new JButton("Get length");
+        btnFinishAlgorithm = new JButton("Finish algorithm");
         btnNextStep = new JButton("Next step");
         btnPreviousStep = new JButton("Previous step");
+        btnCalculateLength = new JButton("Get length");
         btnResetOutput = new JButton("Reset");
 
         algorithmStepNum = 0;
-        time = new Timer();
-        isAlgorithmAlreadyWorked = false;
+        timer = new Timer();
+        isAlgorithhBlock = false;
         closeMainThreadAlgorithm = false;
     }
 
@@ -293,7 +288,8 @@ public class MainWindow extends JFrame {
         btnEdgeAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(txtfEdgeTo.getText().charAt(0) == txtfEdgeFrom.getText().charAt(0)) {
+                if(!txtfEdgeTo.getText().isEmpty() && !txtfEdgeFrom.getText().isEmpty() &&
+                        txtfEdgeTo.getText().charAt(0) == txtfEdgeFrom.getText().charAt(0)) {
                     JOptionPane.showMessageDialog(null, "Graph don`t have loop!");
                     txtfEdgeFrom.setText("");
                     txtfEdgeTo.setText("");
@@ -407,21 +403,32 @@ public class MainWindow extends JFrame {
                     return;
                 }
 
-                if(!isAlgorithmAlreadyWorked) {
-                    isAlgorithmAlreadyWorked = true;
+                if(!isAlgorithhBlock) {
+                    isAlgorithhBlock = true;
+                    algorithmStepNum = 0;
                     graphStates = graph.Dijkstra(txtfStartNode.getText().charAt(0));
                     graph = graphStates.get(algorithmStepNum).getGraph();
                     drawingPanel.updateGraph(graph);
                     drawingPanel.setTrueIsAlgorithmValue();
                     txtaLog.setText("");
                     txtaLog.append(graphStates.get(0).getStr());
-
+                    task = new ScheduledTask(timer, graphStates.size() - 1, 0, thisWindow);
                     setUpCloseMainThreadAlgorithm();
-                    ScheduledTask task = new ScheduledTask(btnNextStep, time, graphStates.size() - 1, algorithmStepNum, thisWindow);
-                    time.schedule(task, 0, 1000);
+                    timer.schedule(task, 0, 1000);
                 }
                 else
-                    JOptionPane.showMessageDialog(null, "Algorithm already worked");
+                    JOptionPane.showMessageDialog(null, "Algorithm in process!!!");
+            }
+        });
+
+        btnFinishAlgorithm.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                algorithmStepNum = graphStates.size() - 1;
+                task.setStepCount(graphStates.size() - 1);
+                drawingPanel.updateGraph(graphStates.get(graphStates.size()-1).getGraph());
+                isAlgorithhBlock = false;
+                updateTimer();
             }
         });
 
@@ -509,8 +516,8 @@ public class MainWindow extends JFrame {
                 drawingPanel.updateGraph(graph);
                 txtaLog.setText("Algorithm steps");
 
-                time = new Timer();
-                isAlgorithmAlreadyWorked = false;
+                updateTimer();
+                isAlgorithhBlock = false;
                 algorithmStepNum = 0;
 
                 validate();
@@ -519,81 +526,78 @@ public class MainWindow extends JFrame {
         });
     }
 
+    private void setUpSimpleButton(Box mainBox, JButton btn){
+        mainBox.add(Box.createVerticalStrut(10));
+        Box boxH = Box.createHorizontalBox();
+        boxH.add(btn);
+        boxH.add(Box.createHorizontalGlue());
+        mainBox.add(boxH);
+    }
+
+    private void setUpLblTxtf(Box mainBox, JLabel lbl, JTextField txtf, int offset){
+        mainBox.add(Box.createVerticalStrut(10));
+        Box boxH = Box.createHorizontalBox();
+        boxH.add(Box.createHorizontalStrut(5));
+        boxH.add(lbl);
+        boxH.add(Box.createHorizontalStrut(5));
+        boxH.add(txtf);
+        boxH.add(Box.createHorizontalStrut(offset));
+        mainBox.add(boxH);
+    }
+
+    private void setUpTwoLblTxtf(Box mainBox, JLabel lbl_1, JTextField txtf_1, JLabel lbl_2, JTextField txtf_2, int offset){
+        mainBox.add(Box.createVerticalStrut(10));
+        Box boxH = Box.createHorizontalBox();
+        boxH.add(Box.createHorizontalStrut(5));
+        boxH.add(lbl_1);
+        boxH.add(Box.createHorizontalStrut(5));
+        boxH.add(txtf_1);
+        boxH.add(Box.createHorizontalStrut(10));
+        boxH.add(lbl_2);
+        boxH.add(Box.createHorizontalStrut(5));
+        boxH.add(txtf_2);
+        boxH.add(Box.createHorizontalStrut(15));
+        boxH.add(Box.createHorizontalStrut(offset));
+        mainBox.add(boxH);
+    }
+
     private void layoutInputSettings(){
         boxVInputPanel.setPreferredSize(new Dimension(150, 0));
 
-        boxVInputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetUpManual = Box.createHorizontalBox();
-        boxHSetUpManual.add(btnManual);
-        boxVInputPanel.add(boxHSetUpManual);
-
-        boxVInputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetUpFromFileBtn = Box.createHorizontalBox();
-        boxHSetUpFromFileBtn.add(btnFromFile);
-        boxVInputPanel.add(boxHSetUpFromFileBtn);
-
-        boxVInputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetUpSaveFileBtn = Box.createHorizontalBox();
-        boxHSetUpSaveFileBtn.add(btnSaveFile);
-        boxVInputPanel.add(boxHSetUpSaveFileBtn);
-
-        boxVInputPanel.add(Box.createVerticalStrut(50));
-        Box boxHSetUpNodeLbl = Box.createHorizontalBox();
-        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(5));
-        boxHSetUpNodeLbl.add(lblNode);
-        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(5));
-        boxHSetUpNodeLbl.add(txtfNode);
-        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(5));
-        boxHSetUpNodeLbl.add(btnNodeAdd);
-        boxHSetUpNodeLbl.add(Box.createHorizontalStrut(10));
-        boxVInputPanel.add(boxHSetUpNodeLbl);
-
-        boxVInputPanel.add(Box.createVerticalStrut(5));
-        Box boxHSetUpNodeRemove = Box.createHorizontalBox();
-        boxHSetUpNodeRemove.add(Box.createHorizontalStrut(46));
-        boxHSetUpNodeRemove.add(btnNodeRemove);
-        boxVInputPanel.add(boxHSetUpNodeRemove);
-
-        boxVInputPanel.add(Box.createVerticalStrut(50));
-        Box boxHSetUpEdgeLbl = Box.createHorizontalBox();
-        boxHSetUpEdgeLbl.add(Box.createHorizontalStrut(5));
-        boxHSetUpEdgeLbl.add(lblEdgeFrom);
-        boxHSetUpEdgeLbl.add(Box.createHorizontalStrut(5));
-        boxHSetUpEdgeLbl.add(txtfEdgeFrom);
-        boxHSetUpEdgeLbl.add(Box.createHorizontalStrut(10));
-        boxHSetUpEdgeLbl.add(lblEdgeTo);
-        boxHSetUpEdgeLbl.add(Box.createHorizontalStrut(5));
-        boxHSetUpEdgeLbl.add(txtfEdgeTo);
-        boxHSetUpEdgeLbl.add(Box.createHorizontalStrut(15));
-        boxVInputPanel.add(boxHSetUpEdgeLbl);
-
-        boxVInputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetUpEdgeWeight = Box.createHorizontalBox();
-        boxHSetUpEdgeWeight.add(Box.createHorizontalStrut(5));
-        boxHSetUpEdgeWeight.add(lblWeight);
-        boxHSetUpEdgeWeight.add(Box.createHorizontalStrut(5));
-        boxHSetUpEdgeWeight.add(txtfEdgeWeight);
-        boxHSetUpEdgeWeight.add(Box.createHorizontalStrut(3));
-        boxHSetUpEdgeWeight.add(btnEdgeAdd);
-        boxHSetUpEdgeWeight.add(Box.createHorizontalStrut(3));
-        boxVInputPanel.add(boxHSetUpEdgeWeight);
-
-        boxVInputPanel.add(Box.createVerticalStrut(50));
-        Box boxHSetUpRepaintBtn = Box.createHorizontalBox();
-        boxHSetUpRepaintBtn.add(btnRepaint);
-        boxVInputPanel.add(boxHSetUpRepaintBtn);
-
-        boxVInputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetUpFinishBtn = Box.createHorizontalBox();
-        boxHSetUpFinishBtn.add(btnGoToAlgorithm);
-        boxVInputPanel.add(boxHSetUpFinishBtn);
-
-        boxVInputPanel.add(Box.createVerticalStrut(64));
-        Box boxHSetUpResetBtn = Box.createHorizontalBox();
-        boxHSetUpResetBtn.add(btnResetInput);
-        boxVInputPanel.add(boxHSetUpResetBtn);
+        setUpSimpleButton(boxVInputPanel, btnManual);
+        setUpSimpleButton(boxVInputPanel, btnFromFile);
+        setUpSimpleButton(boxVInputPanel, btnSaveFile);
+        boxVInputPanel.add(Box.createVerticalStrut(20));
+        setUpLblTxtf(boxVInputPanel, lblNode, txtfNode, 80);
+        setUpSimpleButton(boxVInputPanel, btnNodeAdd);
+        setUpSimpleButton(boxVInputPanel, btnNodeRemove);
+        boxVInputPanel.add(Box.createVerticalStrut(20));
+        setUpTwoLblTxtf(boxVInputPanel, lblEdgeFrom, txtfEdgeFrom, lblEdgeTo, txtfEdgeTo, 20);
+        setUpLblTxtf(boxVInputPanel, lblWeight, txtfEdgeWeight, 60);
+        setUpSimpleButton(boxVInputPanel, btnEdgeAdd);
+        boxVInputPanel.add(Box.createVerticalStrut(20));
+        setUpSimpleButton(boxVInputPanel, btnRepaint);
+        setUpSimpleButton(boxVInputPanel, btnGoToAlgorithm);
+        setUpSimpleButton(boxVInputPanel, btnResetInput);
 
         boxVInputPanel.add(Box.createVerticalStrut((int)Double.POSITIVE_INFINITY));
+    }
+
+    private void layoutOutputSettings(){
+        boxVOutputPanel.setPreferredSize(new Dimension(150, 0));
+
+        setUpLblTxtf(boxVOutputPanel, lblStartNode, txtfStartNode, 10);
+        setUpSimpleButton(boxVOutputPanel, btnStartAlgorithm);
+        setUpSimpleButton(boxVOutputPanel, btnFinishAlgorithm);
+        boxVOutputPanel.add(Box.createVerticalStrut(30));
+        setUpSimpleButton(boxVOutputPanel, btnNextStep);
+        setUpSimpleButton(boxVOutputPanel, btnPreviousStep);
+        boxVOutputPanel.add(Box.createVerticalStrut(30));
+        setUpLblTxtf(boxVOutputPanel, lblAimNode, txtfAimNode, 60);
+        setUpSimpleButton(boxVOutputPanel, btnCalculateLength);
+        boxVOutputPanel.add(Box.createVerticalStrut(180));
+        setUpSimpleButton(boxVOutputPanel, btnResetOutput);
+        boxVOutputPanel.add(Box.createVerticalStrut((int)Double.POSITIVE_INFINITY));
     }
 
     private void layoutDrawingPanelSettings(){
@@ -603,69 +607,24 @@ public class MainWindow extends JFrame {
         drawingPanel.setBackground(new Color(230, 230, 230));
     }
 
-    private void layoutOutputSettings(){
-        boxVOutputPanel.setPreferredSize(new Dimension(150, 0));
-
-        boxVOutputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetUpStartNodeLbl = Box.createHorizontalBox();
-        boxHSetUpStartNodeLbl.add(Box.createHorizontalStrut(5));
-        boxHSetUpStartNodeLbl.add(lblStartNode);
-        boxHSetUpStartNodeLbl.add(Box.createHorizontalStrut(5));
-        boxHSetUpStartNodeLbl.add(txtfStartNode);
-        boxHSetUpStartNodeLbl.add(Box.createHorizontalStrut(5));
-        boxVOutputPanel.add(boxHSetUpStartNodeLbl);
-
-        boxVOutputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetStartAlgorithmBtn = Box.createHorizontalBox();
-        boxHSetStartAlgorithmBtn.add(btnStartAlgorithm);
-        boxVOutputPanel.add(boxHSetStartAlgorithmBtn);
-
-        boxVOutputPanel.add(Box.createVerticalStrut(40));
-        Box boxHSetUpAimNodeLbl = Box.createHorizontalBox();
-        boxHSetUpAimNodeLbl.add(Box.createHorizontalStrut(5));
-        boxHSetUpAimNodeLbl.add(lblAimNode);
-        boxHSetUpAimNodeLbl.add(Box.createHorizontalStrut(5));
-        boxHSetUpAimNodeLbl.add(txtfAimNode);
-        boxHSetUpAimNodeLbl.add(Box.createHorizontalStrut(45));
-        boxVOutputPanel.add(boxHSetUpAimNodeLbl);
-
-        boxVOutputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetUpLengthBtn = Box.createHorizontalBox();
-        boxHSetUpLengthBtn.add(btnCalculateLength);
-        boxVOutputPanel.add(boxHSetUpLengthBtn);
-
-        boxVOutputPanel.add(Box.createVerticalStrut(50));
-        Box boxHSetUpNextBtn = Box.createHorizontalBox();
-        boxHSetUpNextBtn.add(btnNextStep);
-        boxVOutputPanel.add(boxHSetUpNextBtn);
-
-        boxVOutputPanel.add(Box.createVerticalStrut(10));
-        Box boxHSetUpPreviousBtn = Box.createHorizontalBox();
-        boxHSetUpPreviousBtn.add(btnPreviousStep);
-        boxVOutputPanel.add(boxHSetUpPreviousBtn);
-
-        boxVOutputPanel.add(Box.createVerticalStrut(220));
-        Box boxHSetUpResetBtn = Box.createHorizontalBox();
-        boxHSetUpResetBtn.add(btnResetOutput);
-        boxVOutputPanel.add(boxHSetUpResetBtn);
-
-        boxVOutputPanel.add(Box.createVerticalStrut((int)Double.POSITIVE_INFINITY));
-    }
-
     private void parseGraph(File file) {
         JSONParser jsonParser = new JSONParser();
 
         try (FileReader reader = new FileReader(file))
         {
             JSONArray nodesList = (JSONArray) jsonParser.parse(reader);
-            nodesList.forEach( emp -> parseNodeObject( (JSONObject) emp ) );
-
-        } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "FILE NOT FOUND!");
+            try {
+                nodesList.forEach(emp -> parseNodeObject((JSONObject) emp));
+            }
+            catch (Throwable ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+                btnResetInput.doClick();
+                return;
+            }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "ERROR");
         } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "PARSE ERROR. MUST BE .JSON FILE FORMAT");
+            JOptionPane.showMessageDialog(null, "PARSE ERROR");
         }
     }
 
@@ -679,18 +638,21 @@ public class MainWindow extends JFrame {
         int x = xl.intValue();
         Long yl = (Long)(location.get(1));
         int y = yl.intValue();
+        if(x > BOUND_WIDTH || y > BOUND_HEIGHT || x < 0 || y < 0)
+            throw new IndexOutOfBoundsException("location don`t in bounds");
         graph.getNodeByIndex(graph.nodeCount()-1).setLocation(new Point(x, y));
 
         JSONArray adjacencyList = (JSONArray) node.get("adjacencyList");
-        ArrayList<Edge> adjacencyListForSetUp = new ArrayList<Edge>();
         Iterator adjListItr = adjacencyList.iterator();
         while ((adjListItr.hasNext())){
             JSONArray currentEdge = (JSONArray) adjListItr.next();
             Long  wl = (Long) currentEdge.get(1);
             int weight = wl.intValue();
-            adjacencyListForSetUp.add(new Edge(String.valueOf(currentEdge.get(0)).charAt(0), weight));
+            if(weight > 0) {
+                graph.addEdge(name.charAt(0), String.valueOf(currentEdge.get(0)).charAt(0), weight);
+            } else
+                throw new IndexOutOfBoundsException("Weight <= 0");
         }
-        graph.getNodeByIndex(graph.nodeCount()-1).setAdjacencyList(adjacencyListForSetUp);
     }
 
     private void saveIntoFile(File file){
@@ -760,6 +722,14 @@ public class MainWindow extends JFrame {
 
     public void setUpCloseMainThreadAlgorithm(){
         closeMainThreadAlgorithm = !closeMainThreadAlgorithm;
+    }
+
+    public void updateTimer(){
+        timer = new Timer();
+    }
+
+    public void unblockAlgorithm(){
+        isAlgorithhBlock = false;
     }
 }
 

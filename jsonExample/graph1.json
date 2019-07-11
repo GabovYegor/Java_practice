@@ -1,1 +1,1 @@
-[{"name":"g","location":[104,162],"adjacencyList":[["b",2],["n",1]]},{"name":"b","location":[315,137],"adjacencyList":[["n",2],["q",1]]},{"name":"n","location":[164,321],"adjacencyList":[["q",12]]},{"name":"q","location":[433,258],"adjacencyList":[]}]
+[{"name":"a","location":[104,162],"adjacencyList":[["b",2],["n",1],["o",7]]},{"name":"b","location":[315,137],"adjacencyList":[["n",2],["q",1]]},{"name":"n","location":[164,321],"adjacencyList":[["q",12]]},{"name":"q","location":[433,258],"adjacencyList":[]}]
