@@ -2,7 +2,6 @@ package DataClasses;
 
 import java.util.ArrayList;
 
-// структура данных для хранения графа
 public class Graph {
 
     private ArrayList<Node> nodeList;

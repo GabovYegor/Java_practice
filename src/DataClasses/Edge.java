@@ -10,8 +10,8 @@ public class Edge {
 
     public Edge(char endNodeName, int weight) {
         this.endNodeName = endNodeName;
-        if(weight <= 0)
-            throw new IndexOutOfBoundsException();
+        if (weight <= 0)
+            throw new IllegalArgumentException("Ребро должно иметь положительный вес.");
         this.weight = weight;
         color = Color.black;
     }
@@ -21,8 +21,10 @@ public class Edge {
         return endNodeName;
     }
 
-    // установитьт вес ребра
-    public void setWeight(int weight){
+
+    public void setWeight(int weight) {
+        if (weight <= 0)
+            throw new IllegalArgumentException("Ребро должно иметь положительный вес.");
         this.weight = weight;
     }
 
