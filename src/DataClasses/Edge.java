@@ -2,6 +2,7 @@ package DataClasses;
 
 import java.awt.*;
 
+// класс ребра
 public class Edge {
     private char endNodeName;
     private int weight;
@@ -15,9 +16,11 @@ public class Edge {
         color = Color.black;
     }
 
+    // получить вершину "куда"
     public char getEndNodeName(){
         return endNodeName;
     }
+
 
     public void setWeight(int weight) {
         if (weight <= 0)
@@ -25,14 +28,17 @@ public class Edge {
         this.weight = weight;
     }
 
+    // получить вес ребра
     public int getWeight(){
         return weight;
     }
-    
+
+    // установить цвет ребра
     public Color getColor() {
         return color;
     }
 
+    // склонировать значения ребра в новое ребро
     public Edge clone() {
         Edge cloneEdge = new Edge(endNodeName, weight);
         cloneEdge.color = color;

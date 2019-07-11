@@ -1,9 +1,14 @@
-package DataClasses;
+package Algorithm;
+
+import DataClasses.AlgorithmStepData;
+import DataClasses.Graph;
 
 import java.awt.*;
 import java.util.ArrayList;
 
+// класс для алгоритма Дейкстры
 public class Dijkstra {
+    // метод для алгоритма Дейктры
     public static ArrayList<AlgorithmStepData> dijkstra(Graph graph, char startNodeName) {
         Graph aGraph = graph.clone();
 

@@ -61,6 +61,7 @@ public class Graph {
         return getNodeByIndex(getIndexByName(name));
     }
 
+    // склонировать данные из файла графа
     public Graph clone() {
         Graph cloneGraph = new Graph();
         for (int i = 0; i < nodeCount(); i++)

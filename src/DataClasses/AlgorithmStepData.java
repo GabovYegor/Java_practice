@@ -1,5 +1,6 @@
 package DataClasses;
 
+// снимок итерации алгоритма дейкстры
 public class AlgorithmStepData {
     private Graph graph;
     private String str;
