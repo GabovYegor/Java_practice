@@ -314,6 +314,10 @@ public class AdapterMainWindow extends MainWindow{
                     drawingPanel.updateGraph(graphStates.get(graphStates.size() - 1).getGraph());
                     setIsAlgorithmBlock(false);
                     updateTimer();
+                    txtaLog.setText("");
+                    for(int i = 0; i <= algorithmStepNum; ++i){
+                        txtaLog.append(graphStates.get(i).getStr() + '\n' + '\n');
+                    }
                 }
                 else {
                     JOptionPane.showMessageDialog(null,"You must start algorithm!");

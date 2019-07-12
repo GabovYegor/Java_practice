@@ -94,7 +94,6 @@ public class Dijkstra {
             aGraph.getNodeByIndex(currentNodeIndex).setColor(Color.black);
             m++;
         }
-        result.add(new AlgorithmStepData(aGraph.clone(), strBuilder.toString()));
 
         for (int i = 0; i < aGraph.nodeCount(); i++) {
             for (int j = 0; j < aGraph.getNodeByIndex(i).edgeCount(); j++) {
