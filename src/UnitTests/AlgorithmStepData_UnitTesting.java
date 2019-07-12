@@ -1,4 +1,7 @@
-package DataClasses;
+package UnitTests;
+
+import DataClasses.AlgorithmStepData;
+import DataClasses.Graph;
 
 public class AlgorithmStepData_UnitTesting {
     public static void main(String[] args) {

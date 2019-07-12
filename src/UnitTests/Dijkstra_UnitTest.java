@@ -1,4 +1,8 @@
-package DataClasses;
+package UnitTests;
+
+import Algorithm.Dijkstra;
+import DataClasses.AlgorithmStepData;
+import DataClasses.Graph;
 
 import java.util.ArrayList;
 

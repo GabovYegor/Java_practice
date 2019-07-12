@@ -1,4 +1,6 @@
-package DataClasses;
+package UnitTests;
+
+import DataClasses.Graph;
 
 public class Graph_UnitTesting {
     public static void main(String[] args) {

@@ -1,4 +1,6 @@
-package DataClasses;
+package UnitTests;
+
+import DataClasses.Edge;
 
 public class Edge_UnitTesting {
     public static void main(String[] args) {

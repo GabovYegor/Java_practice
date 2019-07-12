@@ -1,4 +1,6 @@
-package DataClasses;
+package UnitTests;
+
+import DataClasses.Node;
 
 import java.awt.*;
 

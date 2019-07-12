@@ -404,7 +404,13 @@ public class AdapterMainWindow extends MainWindow{
                 panel.setPreferredSize(new Dimension(130, 0));
                 getContentPane().add(boxVInputPanel, BorderLayout.WEST);
 
+                algorithmStepNum = graphStates.size() - 1;
+                task.setStepCount(graphStates.size() - 1);
+                setIsAlgorithmBlock(false);
+                updateTimer();
+
                 graph = new Graph();
+                graphStates = new ArrayList<AlgorithmStepData>();
                 drawingPanel.setFalseIsAlgorithmValue();
                 drawingPanel.updateGraph(graph);
                 txtaLog.setText("Algorithm steps");
@@ -430,10 +436,7 @@ public class AdapterMainWindow extends MainWindow{
                 nodesList.forEach(emp -> parseNodeObject((JSONObject) emp));
             }
             catch (Throwable ex){
-                if(ex.getMessage().isEmpty())
-                    JOptionPane.showMessageDialog(null, "ERROR");
-                else
-                        JOptionPane.showMessageDialog(null, ex.getMessage());
+                JOptionPane.showMessageDialog(null, "JSON INPUT ERROR");
                 btnResetInput.doClick();
                 return;
             }
@@ -454,9 +457,9 @@ public class AdapterMainWindow extends MainWindow{
         int x = xl.intValue();
         Long yl = (Long)(location.get(1));
         int y = yl.intValue();
-        if(x > BOUND_WIDTH || y > BOUND_HEIGHT || x < 0 || y < 0)
+        if( x < 0 || y < 0 || x > BOUND_WIDTH + 200 || y > BOUND_HEIGHT + 200)
             throw new IndexOutOfBoundsException("location don`t in bounds");
-        graph.getNodeByIndex(graph.nodeCount()-1).setLocation(new Point(x, y));
+        graph.getNodeByName(name.charAt(0)).setLocation(new Point(x, y));
 
         JSONArray adjacencyList = (JSONArray) node.get("adjacencyList");
         Iterator adjListItr = adjacencyList.iterator();
