@@ -49,7 +49,9 @@ public class AdapterMainWindow extends MainWindow{
         closeMainThreadAlgorithm = false;
         graphStates = new ArrayList<>();
         drawingPanel = new DrawingPanel(graph, txtfNode);
+        task = new ScheduledTask(timer, 0, 0, thisAdapter);
         thisAdapter = this;
+        graphStates = new ArrayList<>();
     }
 
     // Инициализация положения поля для вывода графа
@@ -363,9 +365,10 @@ public class AdapterMainWindow extends MainWindow{
                         graph = graphStates.get(++algorithmStepNum).getGraph();
                         drawingPanel.updateGraph(graph);
                         txtaLog.setText("");
-                        for(int i = 0; i <= algorithmStepNum; ++i){
-                            txtaLog.append(graphStates.get(i).getStr() + '\n' + '\n');
-                        }
+//                        for(int i = 0; i <= algorithmStepNum; ++i){
+//                            txtaLog.append(graphStates.get(i).getStr() + '\n' + '\n');
+//                        }
+                        txtaLog.append(graphStates.get(algorithmStepNum).getStr());
                     }
                     else
                         JOptionPane.showMessageDialog(null, "Algorithm`s work end!");
@@ -385,13 +388,14 @@ public class AdapterMainWindow extends MainWindow{
                     return;
                 }
 
-                if(algorithmStepNum != 0){
+                if(algorithmStepNum != 0) {
                     graph = graphStates.get(--algorithmStepNum).getGraph();
                     drawingPanel.updateGraph(graph);
                     txtaLog.setText("");
-                    for(int i = 0; i <= algorithmStepNum; ++i){
-                        txtaLog.append(graphStates.get(i).getStr() + '\n' + '\n');
-                    }
+//                    for(int i = 0; i <= algorithmStepNum; ++i){
+//                        txtaLog.append(graphStates.get(i).getStr() + '\n' + '\n');
+//                   }
+                    txtaLog.append(graphStates.get(algorithmStepNum).getStr());
                 }
                 else
                     JOptionPane.showMessageDialog(null, "It`s already first step!");
@@ -535,9 +539,10 @@ public class AdapterMainWindow extends MainWindow{
                 graph = graphStates.get(++algorithmStepNum).getGraph();
                 drawingPanel.updateGraph(graph);
                 txtaLog.setText("");
-                for(int i = 0; i <= algorithmStepNum; ++i){
-                    txtaLog.append(graphStates.get(i).getStr() + '\n' + '\n');
-                }
+//                for(int i = 0; i <= algorithmStepNum; ++i){
+//                    txtaLog.append(graphStates.get(i).getStr() + '\n' + '\n');
+//                }
+                txtaLog.append(graphStates.get(algorithmStepNum).getStr());
             }
             else
                 JOptionPane.showMessageDialog(null, "Algorithm`s work end!");

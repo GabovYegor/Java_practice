@@ -48,14 +48,14 @@ public class Graph_UnitTesting {
         } catch (IndexOutOfBoundsException e) {
             exceptionTest = true;
         }
-        assert true : "getNodeByIndex() error.";
+        assert exceptionTest : "getNodeByIndex() error.";
         exceptionTest = false;
         try {
             graph.getNodeByIndex(99);
         } catch (IndexOutOfBoundsException e) {
             exceptionTest = true;
         }
-        assert true : "getNodeByIndex() error.";
+        assert exceptionTest : "getNodeByIndex() error.";
 
         graph.addEdge('n','a', 5);
         graph.addEdge('m','a', 8);
